@@ -22,13 +22,11 @@
 //     }
 // }
 
-
 pipeline {
     agent any
     environment {
         NVM_DIR = "$HOME/.nvm"
-        S3_BUCKET = "www.oinek.org"
-        AWS_REGION = "ap-south-1" // change to your region
+        PATH = "/usr/local/bin:${env.PATH}"
     }
     stages {
         stage('Install Node') {
@@ -48,9 +46,7 @@ pipeline {
         }
         stage('Deploy to S3') {
             steps {
-                sh '''
-                aws s3 sync out/ s3://$S3_BUCKET --region $AWS_REGION --delete
-                '''
+                sh 'export PATH="/usr/local/bin:$PATH" && aws s3 sync out/ s3://www.oinek.org --region ap-south-1 --delete'
             }
         }
     }
