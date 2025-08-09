@@ -4,8 +4,8 @@ pipeline {
     environment {
         NVM_DIR = "$HOME/.nvm"
         PATH = "$NVM_DIR/versions/node/v24.3.0/bin:$PATH"
-        AWS_DEFAULT_REGION = "ap-south-1" // change to your S3 bucket's region
-        S3_BUCKET = "your-s3-bucket-name" // change this
+        AWS_DEFAULT_REGION = "ap-south-1"
+        S3_BUCKET = "your-s3-bucket-name"
     }
 
     stages {
@@ -13,7 +13,7 @@ pipeline {
             steps {
                 sh '''
                 export NVM_DIR="$HOME/.nvm"
-                [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                 nvm use 24.3.0
                 node -v
                 npm -v
@@ -25,7 +25,7 @@ pipeline {
             steps {
                 sh '''
                 export NVM_DIR="$HOME/.nvm"
-                [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                 nvm use 24.3.0
                 npm install
                 '''
@@ -36,7 +36,7 @@ pipeline {
             steps {
                 sh '''
                 export NVM_DIR="$HOME/.nvm"
-                [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                 nvm use 24.3.0
                 npm run build
                 npm run export
