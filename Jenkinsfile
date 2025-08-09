@@ -148,12 +148,13 @@ pipeline {
         //         '''
         //     }
         // }
-        stage('Deploy to S3') {
+       stage('Deploy to S3') {
+    environment {
+        AWS_DEFAULT_REGION = 'ap-south-1'
+        S3_BUCKET = 'www.oinek.org'
+    }
     steps {
-        withCredentials([
-            string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
-            string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
-        ]) {
+        withCredentials([usernamePassword(credentialsId: 'aws-jenkins-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
             sh '''
                 export PATH="/usr/local/bin:$PATH"
                 aws s3 sync .next/export/ s3://$S3_BUCKET --region $AWS_DEFAULT_REGION --delete
@@ -161,6 +162,7 @@ pipeline {
         }
     }
 }
+
 
 
     }
