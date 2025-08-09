@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest",
-    "export": "next export"
+    "test": "jest"
+    
   },
-  
+
   "dependencies": {
     "@cosmjs/amino": "^0.34.0",
     "@cosmjs/launchpad": "^0.27.1",
