@@ -157,7 +157,8 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: 'aws-jenkins-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
             sh '''
                 export PATH="/usr/local/bin:$PATH"
-                aws s3 sync .next/export/ s3://$S3_BUCKET --region $AWS_DEFAULT_REGION --delete
+               aws s3 sync out/ s3://$S3_BUCKET --region $AWS_DEFAULT_REGION --delete
+
             '''
         }
     }
