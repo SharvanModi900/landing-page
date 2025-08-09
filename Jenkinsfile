@@ -136,17 +136,30 @@ pipeline {
             }
         }
 
+        // stage('Deploy to S3') {
+        //     environment {
+        //         AWS_ACCESS_KEY_ID = credentials('aws-access-key')
+        //         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+        //     }
+        //     steps {
+        //         sh '''
+        //             export PATH="/usr/local/bin:$PATH"
+        //             aws s3 sync out/ s3://$S3_BUCKET --region $AWS_DEFAULT_REGION --delete
+        //         '''
+        //     }
+        // }
         stage('Deploy to S3') {
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('aws-access-key')
-                AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
-            }
-            steps {
-                sh '''
-                    export PATH="/usr/local/bin:$PATH"
-                    aws s3 sync out/ s3://$S3_BUCKET --region $AWS_DEFAULT_REGION --delete
-                '''
-            }
-        }
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('aws-access-key')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+    }
+    steps {
+        sh '''
+            export PATH="/usr/local/bin:$PATH"
+            aws s3 sync .next/export/ s3://$S3_BUCKET --region $AWS_DEFAULT_REGION --delete
+        '''
+    }
+}
+
     }
 }
