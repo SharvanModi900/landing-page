@@ -125,13 +125,13 @@ pipeline {
             }
         }
 
-        stage('Build & Export') {
+        stage('Build ') {
             steps {
                 sh '''
                     . "$NVM_DIR/nvm.sh"
                     nvm use 24.3.0
                     npm run build
-                    npm run export
+                   
                 '''
             }
         }
