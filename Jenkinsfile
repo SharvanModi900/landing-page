@@ -1,47 +1,55 @@
 pipeline {
-  agent any
+    agent any
 
-  environment {
-    AWS_DEFAULT_REGION = 'ap-south-1'
-    S3_BUCKET = 'www.oinek.org'
-  }
-
-  stages {
-    stage('Checkout') {
-      steps {
-        checkout scm
-      }
+    environment {
+        NVM_DIR = "$HOME/.nvm"
+        PATH = "$NVM_DIR/versions/node/v24.3.0/bin:$PATH"
+        AWS_DEFAULT_REGION = "ap-south-1" // change to your S3 bucket's region
+        S3_BUCKET = "your-s3-bucket-name" // change this
     }
 
-    stage('Install dependencies') {
-     steps {
+    stages {
+        stage('Setup Node') {
+            steps {
                 sh '''
-                    export NVM_DIR="$HOME/.nvm"
-                    . "$NVM_DIR/nvm.sh"
-                    nvm use 24.3.0
-                    npm install
+                export NVM_DIR="$HOME/.nvm"
+                [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                nvm use 24.3.0
+                node -v
+                npm -v
                 '''
             }
-    }
-
-    stage('Build Next.js') {
-      steps {
-        sh 'npm run build'
-        sh 'npm run export'
-      }
-    }
-
-    stage('Deploy to S3') {
-      steps {
-        withCredentials([usernamePassword(credentialsId: 'aws-jenkins-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
-          sh '''
-            export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
-            export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
-            export AWS_DEFAULT_REGION=$AWS_DEFAULT_REGION
-            aws s3 sync out/ s3://$S3_BUCKET/ --delete --acl public-read
-          '''
         }
-      }
+
+        stage('Install dependencies') {
+            steps {
+                sh '''
+                export NVM_DIR="$HOME/.nvm"
+                [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                nvm use 24.3.0
+                npm install
+                '''
+            }
+        }
+
+        stage('Build Next.js') {
+            steps {
+                sh '''
+                export NVM_DIR="$HOME/.nvm"
+                [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+                nvm use 24.3.0
+                npm run build
+                npm run export
+                '''
+            }
+        }
+
+        stage('Deploy to S3') {
+            steps {
+                sh '''
+                aws s3 sync out/ s3://$S3_BUCKET --delete
+                '''
+            }
+        }
     }
-  }
 }
