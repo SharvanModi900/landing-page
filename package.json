@@ -10,6 +10,7 @@
     "test": "jest",
     "export": "next export"
   },
+  
   "dependencies": {
     "@cosmjs/amino": "^0.34.0",
     "@cosmjs/launchpad": "^0.27.1",
