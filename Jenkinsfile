@@ -2,10 +2,10 @@ pipeline {
   agent any
 
   environment {
-    AWS_ACCESS_KEY_ID = credentials('aws-access-key-id')
-    AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
-    AWS_DEFAULT_REGION = 'your-aws-region'
-    S3_BUCKET = 'your-s3-bucket-name'
+    AWS_ACCESS_KEY_ID = credentials('AKIAY5L4MPD27WXULBGA')
+    AWS_SECRET_ACCESS_KEY = credentials('6WyDhMxNKTKQwzMIlDvjIcTRWQIrnTjtstFj8EUC')
+    AWS_DEFAULT_REGION = 'ap-south-1'
+    S3_BUCKET = 'www.oinek.org'
   }
 
   stages {
