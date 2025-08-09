@@ -14,9 +14,14 @@ pipeline {
     }
 
     stage('Install dependencies') {
-      steps {
-        sh 'npm install'
-      }
+     steps {
+                sh '''
+                    export NVM_DIR="$HOME/.nvm"
+                    . "$NVM_DIR/nvm.sh"
+                    nvm use 24.3.0
+                    npm install
+                '''
+            }
     }
 
     stage('Build Next.js') {
