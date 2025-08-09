@@ -7,6 +7,7 @@ A modern, responsive landing page for the Proof of Problem Protocol - the decent
 
 ## 🚀 Features
 
+
 - **Modern Design**: Built with Next.js 15, TypeScript, and Tailwind CSS
 - **Responsive**: Optimized for all devices and screen sizes
 - **Interactive**: Smooth scrolling navigation and hover effects
