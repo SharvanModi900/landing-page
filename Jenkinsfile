@@ -2,8 +2,6 @@ pipeline {
   agent any
 
   environment {
-    AWS_ACCESS_KEY_ID = credentials('AKIAY5L4MPD27WXULBGA')
-    AWS_SECRET_ACCESS_KEY = credentials('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')
     AWS_DEFAULT_REGION = 'ap-south-1'
     S3_BUCKET = 'www.oinek.org'
   }
@@ -30,9 +28,14 @@ pipeline {
 
     stage('Deploy to S3') {
       steps {
-        sh '''
-          aws s3 sync out/ s3://$S3_BUCKET/ --delete --acl public-read
-        '''
+        withCredentials([usernamePassword(credentialsId: 'aws-jenkins-creds', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+          sh '''
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set default.region $AWS_DEFAULT_REGION
+            aws s3 sync out/ s3://$S3_BUCKET/ --delete --acl public-read
+          '''
+        }
       }
     }
   }
