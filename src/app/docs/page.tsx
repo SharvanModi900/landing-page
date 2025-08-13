@@ -1,29 +1,74 @@
+// app/docs/page.tsx
 "use client";
-
-import React from "react";
+import { useState } from "react";
+import { FiBookOpen, FiSettings, FiShield, FiServer, FiHelpCircle } from "react-icons/fi";
 
 const sections = [
-  { name: "Developer & User Docs", desc: "Guides, API, and more", icon: "📚", anchor: "docs" },
+  { id: "overview", label: "Overview", icon: <FiBookOpen /> },
+  { id: "policy", label: "Policy", icon: <FiShield /> },
+  { id: "governance", label: "Governance", icon: <FiSettings /> },
+  { id: "architecture", label: "Architecture", icon: <FiServer /> },
+  { id: "faq", label: "FAQs", icon: <FiHelpCircle /> }
 ];
 
 export default function DocsPage() {
+  const [activeSection, setActiveSection] = useState("overview");
+
   return (
-    <main className="min-h-screen w-full bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 flex flex-col items-center">
-      {/* Hero */}
-      <section className="w-full flex flex-col items-center justify-center pt-24 pb-16 relative overflow-hidden">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-white text-center z-10 drop-shadow-lg mb-4">Documentation</h1>
-        <p className="text-xl md:text-2xl text-gray-200 text-center z-10 max-w-2xl mb-6">Find guides, API references, and resources for building with PoPP.</p>
-      </section>
-      {/* Sections */}
-      <section className="w-full max-w-4xl flex flex-wrap justify-center gap-8 px-4 pb-24 z-10">
-        {sections.map((s) => (
-          <a key={s.name} href={`#${s.anchor}`} className="group relative bg-gradient-to-br from-gray-800/80 to-gray-900/90 border border-gray-700/40 rounded-2xl shadow-xl w-64 h-48 flex flex-col items-center justify-center p-6 transition-transform hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden">
-            <span className="text-4xl mb-3 drop-shadow-lg">{s.icon}</span>
-            <h2 className="text-2xl font-bold text-white mb-2 text-center drop-shadow-sm">{s.name}</h2>
-            <p className="text-base text-gray-300 text-center mb-2">{s.desc}</p>
-          </a>
-        ))}
-      </section>
-    </main>
+    <div className="min-h-screen bg-gradient-to-br from-[#0A0F1C] via-[#0F1A2B] to-[#151E38] mt-[80px] text-white flex">
+      
+      {/* Sidebar */}
+      <aside className="w-64 p-6 border-r border-white/10 bg-white/5 backdrop-blur-md">
+        <h2 className="text-xl font-bold mb-6">POPP Docs</h2>
+        <nav className="space-y-4">
+          {sections.map(sec => (
+            <button
+              key={sec.id}
+              onClick={() => setActiveSection(sec.id)}
+              className={`flex items-center gap-3 px-4 py-2 w-full rounded-lg transition-all ${
+                activeSection === sec.id ? "bg-[#FF7A00]/20 border-l-4 border-[#FF7A00]" : "hover:bg-white/10"
+              }`}
+            >
+              {sec.icon}
+              {sec.label}
+            </button>
+          ))}
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 p-10 space-y-10">
+        <section id="overview" className={`${activeSection === "overview" ? "block" : "hidden"}`}>
+          <h1 className="text-3xl font-bold mb-4">Overview</h1>
+          <p className="text-lg text-gray-300">
+            The Proof-of-Problem Protocol (POPP) is a decentralized mechanism for verifying...
+          </p>
+        </section>
+
+        <section id="policy" className={`${activeSection === "policy" ? "block" : "hidden"}`}>
+          <h1 className="text-3xl font-bold mb-4">Policy</h1>
+          <p className="text-lg text-gray-300">
+            POPP's policy ensures fairness, transparency, and inclusivity in problem verification...
+          </p>
+        </section>
+
+        <section id="governance" className={`${activeSection === "governance" ? "block" : "hidden"}`}>
+          <h1 className="text-3xl font-bold mb-4">Governance</h1>
+          <p className="text-lg text-gray-300">
+            Governance is handled by a decentralized council with voting mechanisms...
+          </p>
+        </section>
+      </main>
+
+      {/* TOC */}
+      <aside className="w-64 p-6 border-l border-white/10 bg-white/5 backdrop-blur-md hidden lg:block">
+        <h3 className="font-semibold text-sm mb-4 text-gray-400">On This Page</h3>
+        <ul className="space-y-2 text-gray-300 text-sm">
+          {sections.map(sec => (
+            <li key={sec.id} className="hover:text-[#FF7A00] cursor-pointer">{sec.label}</li>
+          ))}
+        </ul>
+      </aside>
+    </div>
   );
-} 
+}

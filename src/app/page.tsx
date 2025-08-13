@@ -32,52 +32,63 @@ export default function Home() {
             
       </section>
 
-      {/* PoPP vs Traditional Systems Comparison */}
-      <section className="py-20 px-6 bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              PoPP vs <span className="text-purple-400">Traditional Systems</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              A side-by-side comparison of trust, transparency, and transformation
-            </p>
-          </div>
+    {/* PoPP vs Traditional Systems Comparison */}
+<section className="py-20 px-6 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
+  <div className="max-w-6xl mx-auto">
+    <div className="text-center mb-16">
+      <h2 className="text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
+        PoPP vs <span className="text-purple-400">Traditional Systems</span>
+      </h2>
+      <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+        A side-by-side comparison of trust, transparency, and transformation
+      </p>
+    </div>
 
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <h3 className="text-lg font-semibold text-blue-400 mb-4">Feature</h3>
-              </div>
-              <div className="text-center">
-                <h3 className="text-lg font-semibold text-green-400 mb-4">PoPP</h3>
-              </div>
-              <div className="text-center">
-                <h3 className="text-lg font-semibold text-red-400 mb-4">Traditional Systems</h3>
-              </div>
+    <div className="bg-white/10 backdrop-blur-md rounded-3xl p-10 border border-white/20 shadow-lg">
+      <div className="grid md:grid-cols-3 gap-6 mb-6 text-center">
+        <h3 className="text-lg font-bold text-blue-400 border-b-2 border-blue-400 pb-2">Feature</h3>
+        <h3 className="text-lg font-bold text-green-400 border-b-2 border-green-400 pb-2">PoPP</h3>
+        <h3 className="text-lg font-bold text-red-400 border-b-2 border-red-400 pb-2">Traditional Systems</h3>
+      </div>
+
+      <div className="space-y-3">
+        {[
+          { feature: "Trust Source", popp: "Distributed Validators", traditional: "Centralized Authorities" },
+          { feature: "Openness", popp: "Anyone can submit", traditional: "Limited to official channels" },
+          { feature: "Verification", popp: "Community + AI + IoT", traditional: "Manual or bureaucratic" },
+          { feature: "Ledger", popp: "Public, Immutable", traditional: "Private, Editable" },
+          { feature: "Escalation", popp: "Smart Contracts + DAO", traditional: "Manual, Delayed" },
+          { feature: "Incentives", popp: "Tokens, PRS, Credits", traditional: "Rare, sometimes punishment" },
+          { feature: "Transparency", popp: "Open to audit", traditional: "Behind closed doors" },
+          { feature: "Data Provenance", popp: "Timestamped, Signed", traditional: "Editable, Unverified" },
+        ].map((row, idx) => (
+          <div
+            key={idx}
+            className={`grid md:grid-cols-3 gap-6 py-4 px-6 rounded-xl transition-all duration-300
+              ${idx % 2 === 0 ? "bg-white/5" : "bg-white/10"}
+              hover:bg-purple-900/30 hover:shadow-lg cursor-pointer`}
+          >
+            <div className="text-gray-300 font-semibold flex items-center">
+              <svg
+                className="w-5 h-5 text-purple-400 mr-2 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              {row.feature}
             </div>
-            
-            <div className="space-y-4">
-              {[
-                { feature: "Trust Source", popp: "Distributed Validators", traditional: "Centralized Authorities" },
-                { feature: "Openness", popp: "Anyone can submit", traditional: "Limited to official channels" },
-                { feature: "Verification", popp: "Community + AI + IoT", traditional: "Manual or bureaucratic" },
-                { feature: "Ledger", popp: "Public, Immutable", traditional: "Private, Editable" },
-                { feature: "Escalation", popp: "Smart Contracts + DAO", traditional: "Manual, Delayed" },
-                { feature: "Incentives", popp: "Tokens, PRS, Credits", traditional: "Rare, sometimes punishment" },
-                { feature: "Transparency", popp: "Open to audit", traditional: "Behind closed doors" },
-                { feature: "Data Provenance", popp: "Timestamped, Signed", traditional: "Editable, Unverified" }
-              ].map((row, index) => (
-                <div key={index} className="grid md:grid-cols-3 gap-6 py-3 border-b border-white/10">
-                  <div className="text-gray-300 font-medium">{row.feature}</div>
-                  <div className="text-green-400">{row.popp}</div>
-                  <div className="text-red-400">{row.traditional}</div>
-                </div>
-              ))}
-            </div>
+            <div className="text-green-400 font-medium">{row.popp}</div>
+            <div className="text-red-400 font-medium">{row.traditional}</div>
           </div>
-        </div>
-      </section>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Validator Types Section */}
       <section className="py-20 px-6">
@@ -585,93 +596,90 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Governance Model Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              Governance <span className="text-blue-400">Model</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Decentralized decision-making that evolves with the community
-            </p>
-          </div>
+{/* Governance Model Section */}
+<section className="relative py-20 px-6 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+  {/* Decorative background */}
+  <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
+  <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-purple-500/10 rounded-full blur-3xl"></div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-6">Decision-Making Process</h3>
-              <div className="space-y-4">
-                {[
-                  { 
-                    stage: "Proposal Submission", 
-                    desc: "Any staked participant can submit governance proposals",
-                    requirements: "Minimum stake threshold and community support"
-                  },
-                  { 
-                    stage: "Community Discussion", 
-                    desc: "Open forum for debate, feedback, and refinement",
-                    duration: "7-30 days depending on proposal complexity"
-                  },
-                  { 
-                    stage: "Validator Review", 
-                    desc: "Technical and economic impact assessment by validators",
-                    criteria: "Security, scalability, alignment with protocol values"
-                  },
-                  { 
-                    stage: "Token Holder Vote", 
-                    desc: "Weighted voting based on stake and reputation",
-                    threshold: "Super-majority required for protocol changes"
-                  }
-                ].map((stage, index) => (
-                  <div key={index} className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
-                    <h4 className="font-semibold text-white mb-2">{stage.stage}</h4>
-                    <p className="text-sm text-gray-300 mb-2">{stage.desc}</p>
-                    <div className="text-xs text-blue-400">
-                      {stage.requirements || stage.duration || stage.criteria || stage.threshold}
-                    </div>
-                  </div>
-                ))}
+  <div className="max-w-6xl mx-auto relative z-10">
+    {/* Heading */}
+    <div className="text-center mb-16">
+      <h2 className="text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
+        Governance <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Model</span>
+      </h2>
+      <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+        Decentralized decision-making that evolves with the community
+      </p>
+    </div>
+
+    {/* Two Columns */}
+    <div className="grid lg:grid-cols-2 gap-12">
+      {/* Decision-Making Process */}
+      <div>
+        <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+          <span className="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-sm">Process</span>
+          Decision-Making
+        </h3>
+        <div className="space-y-5">
+          {[
+            { stage: "Proposal Submission", desc: "Any staked participant can submit governance proposals", requirements: "Minimum stake threshold and community support" },
+            { stage: "Community Discussion", desc: "Open forum for debate, feedback, and refinement", duration: "7-30 days depending on proposal complexity" },
+            { stage: "Validator Review", desc: "Technical and economic impact assessment by validators", criteria: "Security, scalability, alignment with protocol values" },
+            { stage: "Token Holder Vote", desc: "Weighted voting based on stake and reputation", threshold: "Super-majority required for protocol changes" }
+          ].map((stage, index) => (
+            <div
+              key={index}
+              className="group bg-white/5 hover:bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/10 shadow-lg hover:shadow-blue-500/20 transition duration-300"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold text-sm">
+                  {index + 1}
+                </div>
+                <h4 className="font-semibold text-white text-lg">{stage.stage}</h4>
+              </div>
+              <p className="text-sm text-gray-300 mb-2">{stage.desc}</p>
+              <div className="text-xs text-blue-400">
+                {stage.requirements || stage.duration || stage.criteria || stage.threshold}
               </div>
             </div>
-
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-6">Governance Principles</h3>
-              <div className="space-y-4">
-                {[
-                  { 
-                    principle: "Transparency", 
-                    desc: "All governance activities are publicly recorded and auditable"
-                  },
-                  { 
-                    principle: "Inclusivity", 
-                    desc: "Multiple pathways for participation regardless of technical expertise"
-                  },
-                  { 
-                    principle: "Meritocracy", 
-                    desc: "Decisions weighted by contribution, not just token holdings"
-                  },
-                  { 
-                    principle: "Evolution", 
-                    desc: "Governance structures can adapt as the protocol matures"
-                  },
-                  { 
-                    principle: "Alignment", 
-                    desc: "Incentives structured to align individual and collective interests"
-                  }
-                ].map((principle, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-medium text-white">{principle.principle}</h4>
-                      <p className="text-sm text-gray-300">{principle.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
-      </section>
+      </div>
+
+      {/* Governance Principles */}
+      <div>
+        <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+          <span className="bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full text-sm">Principles</span>
+          Governance
+        </h3>
+        <div className="space-y-5">
+          {[
+            { principle: "Transparency", desc: "All governance activities are publicly recorded and auditable" },
+            { principle: "Inclusivity", desc: "Multiple pathways for participation regardless of technical expertise" },
+            { principle: "Meritocracy", desc: "Decisions weighted by contribution, not just token holdings" },
+            { principle: "Evolution", desc: "Governance structures can adapt as the protocol matures" },
+            { principle: "Alignment", desc: "Incentives structured to align individual and collective interests" }
+          ].map((principle, index) => (
+            <div
+              key={index}
+              className="group bg-white/5 hover:bg-white/10 backdrop-blur-md rounded-xl p-5 border border-white/10 shadow-lg hover:shadow-purple-500/20 transition duration-300"
+            >
+              <div className="flex items-center gap-3 mb-2">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 text-white font-bold text-sm">
+                  {index + 1}
+                </div>
+                <h4 className="font-semibold text-white text-lg">{principle.principle}</h4>
+              </div>
+              <p className="text-sm text-gray-300">{principle.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
       {/* Whitepaper CTA Section */}
       <section className="py-20 px-6 bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900">
