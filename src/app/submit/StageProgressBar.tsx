@@ -138,9 +138,9 @@ export default function StageProgressBar({ stages, current }) {
                     s.label
                   )}
                 </span>
-                <span className="text-xs text-cyan-300 leading-tight font-semibold">
+                {/* <span className="text-xs text-cyan-300 leading-tight font-semibold">
                   {s.subtitle}
-                </span>
+                </span> */}
               </div>
             </div>
           );
