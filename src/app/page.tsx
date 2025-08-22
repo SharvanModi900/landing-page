@@ -26,11 +26,11 @@ export default function Home() {
       </section>
 
       {/* 5-Layer Architecture Section */}
-      <section className="py-20 px-6">
+      {/* <section className="py-20 px-6">
         <img src="./popp-architecture.png" alt="5-Layer Architecture" className="w-full max-w-6xl mx-auto" />
            
             
-      </section>
+      </section> */}
 
     {/* PoPP vs Traditional Systems Comparison */}
 <section className="py-20 px-6 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">

@@ -355,7 +355,7 @@ export default function SubmissionForm({
         value={form.description}
         onChange={handleChange}
         className="rounded p-2 bg-[#0e1a2c] text-white border border-cyan-700"
-        placeholder="Describe the problem..."
+        placeholder="write problem with details it should mention all info about problem,pincode , area name,landmark"
         required
       />
 

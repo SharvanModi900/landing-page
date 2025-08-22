@@ -184,9 +184,9 @@ export default function MainInterface() {
   }, [submitted, currentStage, STAGES.length, advanceStage]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#0b0f1c] to-[#141e30] text-white p-8 flex items-center justify-center">
+    <main className="min-h-screen bg-gradient-to-br from-[#0b0f1c] to-[#141e30] text-white p-8 flex items-center justify-center ">
       {!submitted ? (
-        <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 bg-[#101a2e]/60 rounded-2xl border border-cyan-700/40 shadow-[0_0_32px_0_rgba(34,211,238,0.10)] p-12">
+        <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 bg-[#101a2e]/60 rounded-2xl border border-cyan-700/40 shadow-[0_0_32px_0_rgba(34,211,238,0.10)] p-12 mt-[100px]">
           {/* LEFT: Title, subtitle, stepper, problem preview */}
           <div className="flex flex-col justify-center gap-8">
             <div>
@@ -197,7 +197,7 @@ export default function MainInterface() {
                 Turn civic complaints into cryptographic proof
               </p>
               <h2 className="text-2xl font-bold text-white mb-2">
-                Your Civic Problem,<br />Verifiable in 7 Steps
+                Your Civic Problem,Verifiable in 7 Steps
               </h2>
             </div>
             <StageProgressBar stages={STAGES} current={0} completed={[]} />
@@ -259,7 +259,7 @@ export default function MainInterface() {
         </div>
       ) : (
         // After submission
-        <div className="w-full max-w-7xl flex flex-col md:flex-row gap-10 items-center justify-center">
+        <div className="w-full max-w-7xl flex flex-col md:flex-row gap-10 items-center justify-center mt-[100px]">
           {/* LEFT COLUMN */}
           <div className="flex flex-col w-[560px] flex-none bg-[#101a2e]/70 rounded-2xl p-0 overflow-hidden min-h-[420px]">
             <div className="w-full px-10 pt-8 pb-6">

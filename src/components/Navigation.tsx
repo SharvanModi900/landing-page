@@ -46,7 +46,7 @@ export const megaMenuSections = [
   {
     label: 'Impact',
     submenu: [
-      { title: 'Case Studies', desc: 'Real-world results and success stories', href: '/impact#cases', icon: ArrowTrendingUpIcon },
+      { title: 'Case Studies', desc: 'Real-world results and success stories', href: '/case-studies', icon: ArrowTrendingUpIcon },
       { title: 'Community', desc: 'Join our global community', href: '/impact#community', icon: UserGroupIcon },
       { title: 'Feedback', desc: 'Share your thoughts and ideas', href: '/feedback', icon: StarIcon },
       { title: 'Contribute', desc: 'Help build and improve PoPP', href: '/contribute', icon: GlobeAltIcon },
@@ -64,10 +64,14 @@ export const megaMenuSections = [
   {
     label: 'Resources',
     submenu: [
-      { title: 'Whitepaper', desc: 'Read the official PoPP protocol whitepaper', href: '/whitepaper', icon: BookOpenIcon },
+      { title: 'Whitepaper', desc: 'Read the official PoPP protocol whitepaper', href: '/whitepapers', icon: BookOpenIcon },
       { title: 'Documentation', desc: 'Technical and user guides', href: '/docs', icon: AcademicCapIcon },
       { title: 'API Reference', desc: 'Detailed API endpoints and usage', href: '/api', icon: GlobeAltIcon },
       { title: 'FAQ', desc: 'Frequently asked questions', href: '/faq', icon: LightBulbIcon },
+       { title: 'Blogs', desc: 'Detailed API endpoints and usage', href: '/api', icon: GlobeAltIcon },
+      { title: 'Events', desc: 'Frequently asked questions', href: '/faq', icon: LightBulbIcon },
+       { title: 'News', desc: 'Detailed API endpoints and usage', href: '/api', icon: GlobeAltIcon },
+      
     ],
   },
   {
@@ -84,7 +88,7 @@ export const megaMenuSections = [
     submenu: [
       { title: 'Academia & Research', desc: 'Collaborations with universities and institutions', href: '/academia-and-research', icon: AcademicCapIcon },
       { title: 'Student Zone', desc: 'Student resources and project support', href: '/students', icon: UsersIcon },
-      { title: 'Policy & Governance', desc: 'Frameworks for policymakers', href: '/policy', icon: ShieldCheckIcon },
+      { title: 'Policy & Governance', desc: 'Frameworks for policymakers', href: '/policy-and-governance', icon: ShieldCheckIcon },
       { title: 'Public Datasets', desc: 'Free and open datasets', href: '/datasets', icon: GlobeAltIcon },
       { title: 'Learning Resources', desc: 'Guides, videos, and documentation', href: '/learn', icon: BookOpenIcon },
     ],
@@ -234,12 +238,14 @@ export default function Navigation() {
                     <div key={sub.title} className="flex items-start gap-3">
                       <sub.icon className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
                       <div>
-                        <Link
-                          href={sub.href}
-                          className="block font-medium text-blue-700 hover:underline"
-                        >
-                          {sub.title}
-                        </Link>
+                       <Link
+  href={sub.href}
+  className="block font-medium text-blue-700 hover:underline"
+  onClick={() => setOpenIndex(null)} // close menu on click
+>
+  {sub.title}
+</Link>
+
                         <p className="text-gray-500 text-xs">{sub.desc}</p>
                       </div>
                     </div>

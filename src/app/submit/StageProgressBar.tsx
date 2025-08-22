@@ -111,7 +111,7 @@ export default function StageProgressBar({ stages, current }) {
                     isCompleted
                       ? "bg-[#101a2e]/80 border-cyan-400 shadow-[0_0_40px_12px_rgba(34,211,238,0.95)]"
                       : isCurrent
-                      ? "bg-[#101a2e]/90 border-yellow-400 shadow-[0_0_40px_16px_rgba(251,191,36,0.85)] animate-glow"
+                      ? "bg-[#101a2e]/90 border-yellow-400 animate-glow"
                       : "bg-[#101a2e]/60 border-cyan-800 shadow-[0_0_16px_4px_rgba(34,211,238,0.2)]"
                   }
                 `}
