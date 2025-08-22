@@ -4,19 +4,263 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+// import {
+//   BookOpenIcon,
+//   ShieldCheckIcon,
+//   UsersIcon,
+//   AcademicCapIcon,
+//   ChartBarIcon,
+//   UserGroupIcon,
+//   LightBulbIcon,
+//   StarIcon,
+//   GlobeAltIcon,
+//   ArrowTrendingUpIcon,
+// } from '@heroicons/react/24/outline';
+import Wallet from './wallet';
+
+// export const megaMenuSections = [
+//   {
+//     label: 'Origin',
+//     submenu: [
+//       { title: 'Our Story', desc: 'How PoPP began', href: '/origin/story', icon: BookOpenIcon },
+//       { title: 'Mission', desc: 'Our core mission and values', href: '/origin/mission', icon: LightBulbIcon },
+//       { title: 'Team', desc: 'Meet the people behind PoPP', href: '/origin/team', icon: UsersIcon },
+//     ],
+//   },
+//   {
+//     label: 'How It Works',
+//     submenu: [
+//       { title: 'Architecture', desc: 'The 5-layer PoPP protocol', href: '/how-it-works#architecture', icon: AcademicCapIcon },
+//       { title: 'Validation', desc: 'How proof and verification work', href: '/how-it-works#validation', icon: ShieldCheckIcon },
+//       { title: 'Security', desc: 'Decentralized trust and safety', href: '/how-it-works#security', icon: StarIcon },
+//     ],
+//   },
+//   {
+//     label: 'Using PoPP',
+//     submenu: [
+//       { title: 'For Users', desc: 'Submit and track problems', href: '/using-popp#users', icon: UserGroupIcon },
+//       { title: 'For Validators', desc: 'Validate and earn rewards', href: '/using-popp#validators', icon: ChartBarIcon },
+//       { title: 'For Partners', desc: 'Integrate PoPP into your systems', href: '/using-popp#partners', icon: GlobeAltIcon },
+//     ],
+//   },
+//   {
+//     label: 'Impact',
+//     submenu: [
+//       { title: 'Case Studies', desc: 'Real-world results and success stories', href: '/case-studies', icon: ArrowTrendingUpIcon },
+//       { title: 'Community', desc: 'Join our global community', href: '/community', icon: UserGroupIcon },
+//       { title: 'Feedback', desc: 'Share your thoughts and ideas', href: '/feedback', icon: StarIcon },
+//       { title: 'Contribute', desc: 'Help build and improve PoPP', href: '/contribute', icon: GlobeAltIcon },
+//       { title: 'Events', desc: 'Upcoming conferences and meetups', href: '/events', icon: ArrowTrendingUpIcon },
+//     ],
+//   },
+//   {
+//     label: 'Roadmap',
+//     submenu: [
+//       { title: 'roadmap', desc: 'What’s next for PoPP this year', href: '/roadmap', icon: LightBulbIcon },
+//       { title: 'Vision', desc: 'Our long-term goals and strategy', href: '/vision', icon: AcademicCapIcon },
+//       { title: 'Support', desc: 'Get help and customer support', href: '/support', icon: ShieldCheckIcon },
+//     ],
+//   },
+//   {
+//     label: 'Resources',
+//     submenu: [
+//       { title: 'Whitepaper', desc: 'Read the official PoPP protocol whitepaper', href: '/whitepapers', icon: BookOpenIcon },
+//       { title: 'Documentation', desc: 'Technical and user guides', href: '/docs', icon: AcademicCapIcon },
+//       { title: 'API Reference', desc: 'Detailed API endpoints and usage', href: '/api', icon: GlobeAltIcon },
+//       { title: 'FAQ', desc: 'Frequently asked questions', href: '/faqs', icon: LightBulbIcon },
+//        { title: 'Blogs', desc: 'Detailed API endpoints and usage', href: '/blogs', icon: GlobeAltIcon },
+//       { title: 'Events', desc: 'Frequently asked questions', href: '/events', icon: LightBulbIcon },
+//        { title: 'News', desc: 'Detailed API endpoints and usage', href: '/news', icon: GlobeAltIcon },
+      
+//     ],
+//   },
+//   {
+//     label: 'Products',
+//     submenu: [
+//       { title: 'Problem Explorer', desc: 'Browse and search submitted problems', href: '/explorer', icon: BookOpenIcon },
+//       { title: 'Truth NFT Viewer', desc: 'View and verify truth NFTs', href: '/nft-viewer', icon: AcademicCapIcon },
+//       { title: 'Validator Panel', desc: 'Manage validations and rewards', href: '/validator-panel', icon: ChartBarIcon },
+//       { title: 'Proposal & DAO Dashboard', desc: 'Participate in governance', href: '/dao-dashboard', icon: GlobeAltIcon },
+//     ],
+//   },
+//   {
+//     label: 'Knowledge Hub',
+//     submenu: [
+//       { title: 'Academia & Research', desc: 'Collaborations with universities and institutions', href: '/academia-and-research', icon: AcademicCapIcon },
+//       { title: 'Student Zone', desc: 'Student resources and project support', href: '/students', icon: UsersIcon },
+//       { title: 'Policy & Governance', desc: 'Frameworks for policymakers', href: '/policy-and-governance', icon: ShieldCheckIcon },
+//       { title: 'Public Datasets', desc: 'Free and open datasets', href: '/datasets', icon: GlobeAltIcon },
+//       { title: 'Learning Resources', desc: 'Guides, videos, and documentation', href: '/learn', icon: BookOpenIcon },
+//     ],
+//   },
+//   {
+//     label: 'Developer Hub',
+//     submenu: [
+//       { title: 'Developer Docs', desc: 'Full technical documentation', href: '/developer-docs', icon: AcademicCapIcon },
+//       { title: 'SDK', desc: 'PoPP software development kit', href: '/sdk', icon: ShieldCheckIcon },
+//       { title: 'CLI', desc: 'Command-line tools for developers', href: '/cli', icon: GlobeAltIcon },
+//       { title: 'Smart Contracts', desc: 'PoPP smart contract repository', href: '/smart-contracts', icon: BookOpenIcon },
+//       { title: 'Tools', desc: 'Utilities and dev tools', href: '/tools', icon: LightBulbIcon },
+//     ],
+//   },
+//   {
+//     label: 'Validators',
+//     submenu: [
+//       { title: 'validators Docs', desc: 'Full technical documentation', href: '/developer-docs', icon: AcademicCapIcon },
+//       { title: 'validators exam', desc: 'PoPP software development kit', href: '/sdk', icon: ShieldCheckIcon },
+//       { title: 'calidators certification', desc: 'Command-line tools for developers', href: '/cli', icon: GlobeAltIcon },
+//       { title: 'validators smart contracts', desc: 'PoPP smart contract repository', href: '/smart-contracts', icon: BookOpenIcon },
+//       { title: 'validators tools', desc: 'Utilities and dev tools', href: '/tools', icon: LightBulbIcon },
+//     ],
+//   },
+// ];
 import {
   BookOpenIcon,
-  ShieldCheckIcon,
+  LightBulbIcon,
   UsersIcon,
   AcademicCapIcon,
-  ChartBarIcon,
-  UserGroupIcon,
-  LightBulbIcon,
+  ShieldCheckIcon,
   StarIcon,
+  UserGroupIcon,
+  BuildingLibraryIcon,
+  NewspaperIcon,
+  ScaleIcon,
+  ChartBarIcon,
   GlobeAltIcon,
   ArrowTrendingUpIcon,
-} from '@heroicons/react/24/outline';
-import Wallet from './wallet';
+} from "@heroicons/react/24/outline"; // Update icons based on your project
+
+// export const megaMenuSections = [
+//   {
+//     label: "Origin",
+//     submenu: [
+//       { title: "Our Story", desc: "How PoPP began", href: "/origin/story", icon: BookOpenIcon },
+//       { title: "Mission", desc: "Our core mission and values", href: "/origin/mission", icon: LightBulbIcon },
+//       { title: "Team", desc: "Meet the people behind PoPP", href: "/origin/team", icon: UsersIcon },
+//     ],
+//   },
+//   {
+//     label: "How It Works",
+//     submenu: [
+//       { title: "Architecture", desc: "The 5-layer PoPP protocol", href: "/how-it-works#architecture", icon: AcademicCapIcon },
+//       { title: "Validation", desc: "How proof and verification work", href: "/how-it-works#validation", icon: ShieldCheckIcon },
+//       { title: "Security", desc: "Decentralized trust and safety", href: "/how-it-works#security", icon: StarIcon },
+//       { title: "Audits & Compliance", desc: "Third-party audits and protocol security", href: "/how-it-works#audits", icon: ShieldCheckIcon },
+//     ],
+//   },
+//   {
+//     label: "Using PoPP",
+//     submenu: [
+//       { title: "For Users", desc: "Submit and track problems", href: "/using-popp#users", icon: UserGroupIcon },
+//       { title: "For Validators", desc: "Validate and earn rewards", href: "/using-popp#validators", icon: ChartBarIcon },
+//       { title: "For Partners", desc: "Integrate PoPP into your systems", href: "/using-popp#partners", icon: GlobeAltIcon },
+//       { title: "Tutorials / Quickstart", desc: "Step-by-step guides to get started", href: "/using-popp#tutorials", icon: LightBulbIcon },
+//     ],
+//   },
+//   {
+//     label: "Governance",
+//     submenu: [
+//       { title: "DAO Overview", desc: "How PoPP governance works", href: "/governance/overview", icon: GlobeAltIcon },
+//       { title: "Proposals", desc: "Submit and vote on proposals", href: "/governance/proposals", icon: LightBulbIcon },
+//       { title: "Voting Guide", desc: "Understand voting mechanics and eligibility", href: "/governance/voting", icon: AcademicCapIcon },
+//       { title: "DAO Guidelines", desc: "Rules and frameworks for governance", href: "/governance/guidelines", icon: ShieldCheckIcon },
+//     ],
+//   },
+//   {
+//     label: "Impact",
+//     submenu: [
+//       { title: "Case Studies", desc: "Real-world results and success stories", href: "/case-studies", icon: ArrowTrendingUpIcon },
+//       { title: "Community", desc: "Join our global community", href: "/community", icon: UserGroupIcon },
+//       { title: "Feedback", desc: "Share your thoughts and ideas", href: "/feedback", icon: StarIcon },
+//       { title: "Contribute", desc: "Help build and improve PoPP", href: "/contribute", icon: GlobeAltIcon },
+//       { title: "Events", desc: "Upcoming conferences and meetups", href: "/events", icon: ArrowTrendingUpIcon },
+//     ],
+//   },
+//   {
+//     label: "Roadmap",
+//     submenu: [
+//       { title: "Roadmap", desc: "What’s next for PoPP this year", href: "/roadmap", icon: LightBulbIcon },
+//       { title: "Vision", desc: "Our long-term goals and strategy", href: "/vision", icon: AcademicCapIcon },
+//       { title: "Support", desc: "Get help and customer support", href: "/support", icon: ShieldCheckIcon },
+//     ],
+//   },
+//   {
+//     label: "Resources",
+//     submenu: [
+//       { title: "Whitepaper", desc: "Read the official PoPP protocol whitepaper", href: "/whitepapers", icon: BookOpenIcon },
+//       { title: "Documentation", desc: "Technical and user guides", href: "/docs", icon: AcademicCapIcon },
+//       { title: "API Reference", desc: "Detailed API endpoints and usage", href: "/api", icon: GlobeAltIcon },
+//       { title: "FAQ", desc: "Frequently asked questions", href: "/faqs", icon: LightBulbIcon },
+//       { title: "Blogs", desc: "Project updates and insights", href: "/blogs", icon: GlobeAltIcon },
+//       { title: "Events", desc: "PoPP events and meetups", href: "/events", icon: LightBulbIcon },
+//       { title: "News", desc: "Latest news and announcements", href: "/news", icon: GlobeAltIcon },
+//     ],
+//   },
+//   {
+//     label: "Products",
+//     submenu: [
+//       { title: "Problem Explorer", desc: "Browse and search submitted problems", href: "/explorer", icon: BookOpenIcon },
+//       { title: "Truth NFT Viewer", desc: "View and verify truth NFTs", href: "/nft-viewer", icon: AcademicCapIcon },
+//       { title: "Validator Panel", desc: "Manage validations and rewards", href: "/validator-panel", icon: ChartBarIcon },
+//       { title: "Proposal & DAO Dashboard", desc: "Participate in governance", href: "/dao-dashboard", icon: GlobeAltIcon },
+//     ],
+//   },
+//   {
+//     label: "Knowledge Hub",
+//     submenu: [
+//       { title: "Academia & Research", desc: "Collaborations with universities and institutions", href: "/academia-and-research", icon: AcademicCapIcon },
+//       { title: "Student Zone", desc: "Student resources and project support", href: "/students", icon: UsersIcon },
+//       { title: "Policy & Governance", desc: "Frameworks for policymakers", href: "/policy-and-governance", icon: ShieldCheckIcon },
+//       { title: "Public Datasets", desc: "Free and open datasets", href: "/datasets", icon: GlobeAltIcon },
+//       { title: "Learning Resources", desc: "Guides, videos, and documentation", href: "/learn", icon: BookOpenIcon },
+//     ],
+//   },
+//   {
+//     label: "Developer Hub",
+//     submenu: [
+//       { title: "Developer Docs", desc: "Full technical documentation", href: "/developer-docs", icon: AcademicCapIcon },
+//       { title: "SDK", desc: "PoPP software development kit", href: "/sdk", icon: ShieldCheckIcon },
+//       { title: "CLI", desc: "Command-line tools for developers", href: "/cli", icon: GlobeAltIcon },
+//       { title: "Smart Contracts", desc: "PoPP smart contract repository", href: "/smart-contracts", icon: BookOpenIcon },
+//       { title: "Tools", desc: "Utilities and dev tools", href: "/tools", icon: LightBulbIcon },
+//       { title: "Tutorials / Quickstart", desc: "Step-by-step setup and guides", href: "/developer-docs/tutorials", icon: LightBulbIcon },
+//     ],
+//   },
+//   {
+//     label: "Validators",
+//     submenu: [
+//       { title: "Validators Docs", desc: "Full technical documentation", href: "/validators/docs", icon: AcademicCapIcon },
+//       { title: "Validators Exam", desc: "Certification exam for validators", href: "/validators/exam", icon: ShieldCheckIcon },
+//       { title: "Validators Certification", desc: "Official validator accreditation", href: "/validators/certification", icon: GlobeAltIcon },
+//       { title: "Validators Smart Contracts", desc: "Smart contracts for validation processes", href: "/validators/smart-contracts", icon: BookOpenIcon },
+//       { title: "Validators Tools", desc: "Utilities and dev tools for validators", href: "/validators/tools", icon: LightBulbIcon },
+//     ],
+//   },{
+//   label: "Legal / Compliance",
+//   submenu: [
+//     { 
+//       title: "Terms of Use", 
+//       desc: "Official rules and conditions for using PoPP", 
+//       href: "/legal/terms-of-use", 
+//       icon: BookOpenIcon 
+//     },
+//     { 
+//       title: "Privacy Policy", 
+//       desc: "How user data is collected, used, and protected", 
+//       href: "/legal/privacy-policy", 
+//       icon: ShieldCheckIcon 
+//     },
+//     { 
+//       title: "Data Compliance", 
+//       desc: "Information on regulatory and compliance standards", 
+//       href: "/legal/data-compliance", 
+//       icon: GlobeAltIcon 
+//     },
+//   ],
+// },
+
+// ];
+
 
 export const megaMenuSections = [
   {
@@ -47,7 +291,7 @@ export const megaMenuSections = [
     label: 'Impact',
     submenu: [
       { title: 'Case Studies', desc: 'Real-world results and success stories', href: '/case-studies', icon: ArrowTrendingUpIcon },
-      { title: 'Community', desc: 'Join our global community', href: '/impact#community', icon: UserGroupIcon },
+      { title: 'Community', desc: 'Join our global community', href: '/community', icon: UserGroupIcon },
       { title: 'Feedback', desc: 'Share your thoughts and ideas', href: '/feedback', icon: StarIcon },
       { title: 'Contribute', desc: 'Help build and improve PoPP', href: '/contribute', icon: GlobeAltIcon },
       { title: 'Events', desc: 'Upcoming conferences and meetups', href: '/events', icon: ArrowTrendingUpIcon },
@@ -56,8 +300,8 @@ export const megaMenuSections = [
   {
     label: 'Roadmap',
     submenu: [
-      { title: '2024', desc: 'What’s next for PoPP this year', href: '/roadmap#2024', icon: LightBulbIcon },
-      { title: 'Vision', desc: 'Our long-term goals and strategy', href: '/roadmap#vision', icon: AcademicCapIcon },
+      { title: 'Roadmap', desc: 'What’s next for PoPP this year', href: '/roadmap', icon: LightBulbIcon },
+      { title: 'Vision', desc: 'Our long-term goals and strategy', href: '/vision', icon: AcademicCapIcon },
       { title: 'Support', desc: 'Get help and customer support', href: '/support', icon: ShieldCheckIcon },
     ],
   },
@@ -67,11 +311,10 @@ export const megaMenuSections = [
       { title: 'Whitepaper', desc: 'Read the official PoPP protocol whitepaper', href: '/whitepapers', icon: BookOpenIcon },
       { title: 'Documentation', desc: 'Technical and user guides', href: '/docs', icon: AcademicCapIcon },
       { title: 'API Reference', desc: 'Detailed API endpoints and usage', href: '/api', icon: GlobeAltIcon },
-      { title: 'FAQ', desc: 'Frequently asked questions', href: '/faq', icon: LightBulbIcon },
-       { title: 'Blogs', desc: 'Detailed API endpoints and usage', href: '/api', icon: GlobeAltIcon },
-      { title: 'Events', desc: 'Frequently asked questions', href: '/faq', icon: LightBulbIcon },
-       { title: 'News', desc: 'Detailed API endpoints and usage', href: '/api', icon: GlobeAltIcon },
-      
+      { title: 'FAQ', desc: 'Frequently asked questions', href: '/faqs', icon: LightBulbIcon },
+      { title: 'Blogs', desc: 'Project updates and articles', href: '/blogs', icon: GlobeAltIcon },
+      { title: 'News', desc: 'Latest developments and announcements', href: '/news', icon: GlobeAltIcon },
+      { title: 'Events', desc: 'Workshops, webinars, and meetups', href: '/events', icon: LightBulbIcon },
     ],
   },
   {
@@ -101,18 +344,87 @@ export const megaMenuSections = [
       { title: 'CLI', desc: 'Command-line tools for developers', href: '/cli', icon: GlobeAltIcon },
       { title: 'Smart Contracts', desc: 'PoPP smart contract repository', href: '/smart-contracts', icon: BookOpenIcon },
       { title: 'Tools', desc: 'Utilities and dev tools', href: '/tools', icon: LightBulbIcon },
+      { title: 'Sandbox / Testnet', desc: 'Try PoPP in a safe environment', href: '/sandbox', icon: GlobeAltIcon },
     ],
   },
   {
     label: 'Validators',
     submenu: [
-      { title: 'validators Docs', desc: 'Full technical documentation', href: '/developer-docs', icon: AcademicCapIcon },
-      { title: 'validators exam', desc: 'PoPP software development kit', href: '/sdk', icon: ShieldCheckIcon },
-      { title: 'calidators certification', desc: 'Command-line tools for developers', href: '/cli', icon: GlobeAltIcon },
-      { title: 'validators smart contracts', desc: 'PoPP smart contract repository', href: '/smart-contracts', icon: BookOpenIcon },
-      { title: 'validators tools', desc: 'Utilities and dev tools', href: '/tools', icon: LightBulbIcon },
+      { title: 'Validators Docs', desc: 'Full technical documentation', href: '/validator-docs', icon: AcademicCapIcon },
+      { title: 'Validator Exam', desc: 'Certification and exams for validators', href: '/validator-exam', icon: ShieldCheckIcon },
+      { title: 'Validator Smart Contracts', desc: 'Manage PoPP smart contracts', href: '/validator-smart-contracts', icon: BookOpenIcon },
+      { title: 'Validator Tools', desc: 'Utilities and dashboard tools', href: '/validator-tools', icon: LightBulbIcon },
+      { title: 'Leaderboards', desc: 'Top validators and contributor rankings', href: '/validator-leaderboards', icon: StarIcon },
     ],
   },
+  {
+    label: 'Security & Audits',
+    submenu: [
+      { title: 'Audit Reports', desc: 'Independent security audits', href: '/security/audits', icon: ShieldCheckIcon },
+      { title: 'Vulnerability Disclosures', desc: 'Report potential issues', href: '/security/vulnerabilities', icon: LightBulbIcon },
+      { title: 'Best Practices', desc: 'Guidelines for secure usage', href: '/security/best-practices', icon: BookOpenIcon },
+    ],
+  },
+  {
+    label: 'Token & Economics',
+    submenu: [
+      { title: 'Tokenomics', desc: 'PoPP token model and supply', href: '/tokenomics', icon: ChartBarIcon },
+      { title: 'Staking Mechanics', desc: 'Earn rewards by staking', href: '/staking', icon: StarIcon },
+      { title: 'Incentive Structures', desc: 'How contributors earn value', href: '/incentives', icon: GlobeAltIcon },
+    ],
+  },
+  {
+    label: 'Tutorials & Learning',
+    submenu: [
+      { title: 'Video Tutorials', desc: 'Step-by-step guides', href: '/tutorials/videos', icon: BookOpenIcon },
+      { title: 'Workshops', desc: 'Hands-on learning events', href: '/tutorials/workshops', icon: UsersIcon },
+      { title: 'Example Workflows', desc: 'Practical PoPP scenarios', href: '/tutorials/workflows', icon: LightBulbIcon },
+    ],
+  },
+  {
+    label: 'Legal / Compliance',
+    submenu: [
+      { title: 'Terms of Use', desc: 'Official rules and conditions', href: '/legal/terms-of-use', icon: BookOpenIcon },
+      { title: 'Privacy Policy', desc: 'User data protection policies', href: '/legal/privacy-policy', icon: ShieldCheckIcon },
+      { title: 'Data Compliance', desc: 'Regulatory and compliance standards', href: '/legal/data-compliance', icon: GlobeAltIcon },
+    ],
+  },
+  {
+  label: 'PoPP For',
+  submenu: [
+    { 
+      title: 'Civic Activists & NGOs', 
+      desc: 'Document issues, build evidence trails, escalate problems', 
+      href: '/popp-for/civic', 
+      icon: UsersIcon 
+    },
+    { 
+      title: 'Government Agencies', 
+      desc: 'Transparent issue tracking, public accountability, data-driven decisions', 
+      href: '/popp-for/government', 
+      icon: BuildingLibraryIcon 
+    },
+    { 
+      title: 'Media Organizations', 
+      desc: 'Verified stories, fact-checking, investigative leads', 
+      href: '/popp-for/media', 
+      icon: NewspaperIcon 
+    },
+    { 
+      title: 'Legal Professionals', 
+      desc: 'Evidence collection, case building, witness protection', 
+      href: '/popp-for/legal', 
+      icon: ScaleIcon 
+    },
+    { 
+      title: 'Academic Researchers', 
+      desc: 'Study civic engagement patterns and governance effectiveness', 
+      href: '/popp-for/academia', 
+      icon: AcademicCapIcon 
+    },
+  ],
+},
+
 ];
 
 

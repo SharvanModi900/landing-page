@@ -1,8 +1,13 @@
+"use client";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import PoPPLifecycle from "@/components/PoPPLifecycle";
 import { motion } from "framer-motion";
-
+import ValidatorSection from "@/components/validators/validators";
+import IntegrationModularity from "@/components/IntegrationModularity/IntegrationModularity";
+import PhilosophyVision from "@/components/PhilosophyAndVision/Philosophy-and-vision";
+import WhoNeedsPoPP from "@/components/WhoNeedsPoPP/WhoNeedsPoPP";
+import EconomicModelCosmicScale from "@/components/EconomicModel/EconomicModel";
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
@@ -90,113 +95,10 @@ export default function Home() {
   </div>
 </section>
 
-      {/* Validator Types Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              Who Can Be a <span className="text-blue-400">Validator?</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              PoPP allows any qualified participant to become a validator—as long as they earn it
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-3 gap-8">
-            {[
-              {
-                type: "Human Validators",
-                requirements: "Must stake PoPP tokens, pass onboarding quiz, build reputation",
-                benefits: "Higher rewards, governance voting rights, access to critical cases",
-                icon: "👥"
-              },
-              {
-                type: "AI Validators", 
-                requirements: "Open-source or audit-verified, run in trusted enclaves",
-                benefits: "Pattern detection, 24/7 availability, objective analysis",
-                icon: "🤖"
-              },
-              {
-                type: "IoT/Sensor Validators",
-                requirements: "Registered devices with metadata & calibration data",
-                benefits: "Real-world signals, objective measurements, continuous monitoring",
-                icon: "📡"
-              }
-            ].map((validator, index) => (
-              <div key={index} className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-                <div className="text-3xl mb-4">{validator.icon}</div>
-                <h3 className="text-xl font-semibold text-white mb-4">{validator.type}</h3>
-                <div className="space-y-3">
-                  <div>
-                    <h4 className="text-blue-400 font-medium mb-1">Requirements</h4>
-                    <p className="text-sm text-gray-300">{validator.requirements}</p>
-                  </div>
-                  <div>
-                    <h4 className="text-green-400 font-medium mb-1">Benefits</h4>
-                    <p className="text-sm text-gray-300">{validator.benefits}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Integration & Modularity Section */}
-      <section className="py-20 px-6 bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              Integration & <span className="text-purple-400">Modularity</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              PoPP is a composable infrastructure layer meant to be extended and embedded
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-6">Integration Components</h3>
-              <div className="space-y-4">
-                {[
-                  { name: "Webhook Support", desc: "Real-time alerts for institutions and civic organizations", icon: "🔗" },
-                  { name: "Public Data Feeds", desc: "Live feed of validated issues via GraphQL/REST APIs", icon: "📊" },
-                  { name: "Plugin Architecture", desc: "Embed PoPP modules directly into dApps and DAOs", icon: "🧩" },
-                  { name: "Industry Modules", desc: "Sector-focused plugins for healthcare, education, environment", icon: "🏭" }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-start gap-4">
-                    <div className="text-2xl">{item.icon}</div>
-                    <div>
-                      <h4 className="font-semibold text-white mb-1">{item.name}</h4>
-                      <p className="text-sm text-gray-300">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-6">Built For</h3>
-              <div className="space-y-4">
-                {[
-                  { target: "Governments & City Councils", icon: "🏛️" },
-                  { target: "NGOs & Humanitarian Groups", icon: "🤝" },
-                  { target: "Civic Tech Developers", icon: "👨‍💻" },
-                  { target: "Media Watchdogs", icon: "📢" },
-                  { target: "Transparency Activists", icon: "🔍" },
-                  { target: "Startups & Enterprises", icon: "🚀" }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center gap-4">
-                    <div className="text-2xl">{item.icon}</div>
-                    <span className="text-gray-300">{item.target}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
+  
+<ValidatorSection />
+<IntegrationModularity />
+     
       {/* Case Studies Section */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
@@ -310,154 +212,10 @@ export default function Home() {
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-20 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              Philosophy & <span className="text-blue-400">Vision</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              PoPP is more than a protocol—it's a civilization-layer storytelling engine
-            </p>
-          </div>
+     <PhilosophyVision />
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-6">The Four Pillars</h3>
-              <div className="space-y-4">
-                {[
-                  { name: "Courage", desc: "Truth is dangerous. It takes courage to escalate it.", color: "red" },
-                  { name: "Compassion", desc: "Problems are painful. The protocol must protect the weak.", color: "green" },
-                  { name: "Humility", desc: "Validators can be wrong. The system must be self-healing.", color: "yellow" },
-                  { name: "Duty", desc: "Memory is not optional. Remembering is a civic responsibility.", color: "blue" }
-                ].map((pillar, index) => (
-                  <div key={index} className="flex items-start gap-4">
-                    <div className={`w-8 h-8 bg-${pillar.color}-500 rounded-full flex-shrink-0 mt-1`}></div>
-                    <div>
-                      <h4 className="font-bold text-lg text-white">{pillar.name}</h4>
-                      <p className="text-gray-300">{pillar.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-6">Designing for 1,000 Years</h3>
-              <p className="text-gray-300 mb-6">
-                PoPP is not meant to be upgraded endlessly. It is meant to survive collapse, 
-                outlive obsolescence, and transmit truth across centuries.
-              </p>
-              <div className="space-y-3">
-                {[
-                  { icon: "📜", text: "Plaintext scroll format for libraries" },
-                  { icon: "🪵", text: "Woodcut and ceramic records" },
-                  { icon: "🧬", text: "DNA data encoding" },
-                  { icon: "🛰️", text: "Orbital memory satellites" }
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <span className="text-2xl">{item.icon}</span>
-                    <span className="text-gray-300">{item.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Target Audiences Section */}
-      <section className="py-20 px-6 bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              Who <span className="text-purple-400">Needs</span> PoPP?
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              From grassroots activists to government institutions, PoPP serves diverse stakeholders
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-6">Primary Users</h3>
-              <div className="space-y-4">
-                {[
-                  { 
-                    group: "Civic Activists & NGOs", 
-                    needs: "Document issues, build evidence trails, escalate problems",
-                    benefits: "Cryptographic proof, community validation, media amplification"
-                  },
-                  { 
-                    group: "Government Agencies", 
-                    needs: "Transparent issue tracking, public accountability, data-driven decisions",
-                    benefits: "Real-time monitoring, automated reporting, public trust"
-                  },
-                  { 
-                    group: "Media Organizations", 
-                    needs: "Verified stories, fact-checking, investigative leads",
-                    benefits: "Pre-validated content, source verification, community insights"
-                  },
-                  { 
-                    group: "Legal Professionals", 
-                    needs: "Evidence collection, case building, witness protection",
-                    benefits: "Immutable records, anonymous submissions, chain of custody"
-                  }
-                ].map((user, index) => (
-                  <div key={index} className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
-                    <h4 className="font-semibold text-white mb-2">{user.group}</h4>
-                    <div className="text-sm space-y-1">
-                      <div><span className="text-blue-400">Needs:</span> <span className="text-gray-300">{user.needs}</span></div>
-                      <div><span className="text-green-400">Benefits:</span> <span className="text-gray-300">{user.benefits}</span></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-6">Secondary Stakeholders</h3>
-              <div className="space-y-4">
-                {[
-                  { 
-                    group: "Academic Researchers", 
-                    desc: "Study civic engagement patterns and governance effectiveness"
-                  },
-                  { 
-                    group: "Policy Makers", 
-                    desc: "Data-driven policy formulation and impact assessment"
-                  },
-                  { 
-                    group: "International Organizations", 
-                    desc: "Cross-border transparency and human rights monitoring"
-                  },
-                  { 
-                    group: "Private Sector", 
-                    desc: "ESG compliance, stakeholder engagement, risk management"
-                  },
-                  { 
-                    group: "Individual Citizens", 
-                    desc: "Personal issue reporting and community participation"
-                  },
-                  { 
-                    group: "Technology Developers", 
-                    desc: "Build applications and integrations on PoPP infrastructure"
-                  }
-                ].map((stakeholder, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-purple-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-medium text-white">{stakeholder.group}</h4>
-                      <p className="text-sm text-gray-300">{stakeholder.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
+   
+<WhoNeedsPoPP />
       {/* Technical Architecture Section */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
@@ -512,89 +270,8 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* Economic Model Section */}
-      <section className="py-20 px-6 bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-              Economic <span className="text-purple-400">Model</span>
-            </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Aligned incentives that reward truth, punish falsehood, and sustain the ecosystem
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-6">Token Economics</h3>
-              <div className="space-y-4">
-                {[
-                  { 
-                    token: "PoPP Tokens", 
-                    purpose: "Staking, governance, validator rewards",
-                    distribution: "Validators, contributors, ecosystem fund"
-                  },
-                  { 
-                    token: "PRS Credits", 
-                    purpose: "Reputation scoring, validator ranking",
-                    distribution: "Earned through successful validations"
-                  },
-                  { 
-                    token: "Escalation Tokens", 
-                    purpose: "Priority processing, media amplification",
-                    distribution: "Purchased or earned through community contribution"
-                  }
-                ].map((token, index) => (
-                  <div key={index} className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10">
-                    <h4 className="font-semibold text-white mb-2">{token.token}</h4>
-                    <div className="text-sm space-y-1">
-                      <div><span className="text-blue-400">Purpose:</span> <span className="text-gray-300">{token.purpose}</span></div>
-                      <div><span className="text-green-400">Distribution:</span> <span className="text-gray-300">{token.distribution}</span></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-6">Incentive Mechanisms</h3>
-              <div className="space-y-4">
-                {[
-                  { 
-                    mechanism: "Validator Rewards", 
-                    desc: "Tokens for successful validations, penalties for false positives"
-                  },
-                  { 
-                    mechanism: "Reputation System", 
-                    desc: "PRS credits build validator authority and influence"
-                  },
-                  { 
-                    mechanism: "Escalation Funding", 
-                    desc: "Community-funded amplification for critical issues"
-                  },
-                  { 
-                    mechanism: "Governance Participation", 
-                    desc: "Voting rights and proposal submission for active participants"
-                  },
-                  { 
-                    mechanism: "Ecosystem Grants", 
-                    desc: "Funding for developers, researchers, and community initiatives"
-                  }
-                ].map((incentive, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-green-400 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-medium text-white">{incentive.mechanism}</h4>
-                      <p className="text-sm text-gray-300">{incentive.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+<EconomicModelCosmicScale />
+    
 
 {/* Governance Model Section */}
 <section className="relative py-20 px-6 overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">

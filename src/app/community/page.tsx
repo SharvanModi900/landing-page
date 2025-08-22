@@ -1,143 +1,116 @@
-export default function PremiumCommunityPage() {
+"use client";
+
+import { motion } from "framer-motion";
+import { Users, Globe2, Sparkles } from "lucide-react";
+
+export default function RoadmapPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-black text-gray-100 px-8 py-20 font-sans">
-      <div className="max-w-7xl mx-auto flex flex-col gap-28">
-
-        {/* Hero Section */}
-        <section className="text-center max-w-4xl mx-auto">
-          <h1 className="text-6xl font-serif font-extrabold tracking-tight mb-6 drop-shadow-lg">
-            Welcome to the <span className="text-purple-400">PoPP Community</span>
-          </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed">
-            Connect with forward-thinkers, innovators, and problem-solvers dedicated to a transparent decentralized future.
-          </p>
-          <a
-            href="#join"
-            className="inline-block bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-4 px-12 rounded-full font-semibold text-lg shadow-lg hover:shadow-indigo-600 transition-shadow"
-          >
-            Join Us Now
-          </a>
-        </section>
-
-        {/* Values & Features */}
-        <section className="grid md:grid-cols-3 gap-16 max-w-6xl mx-auto">
-          {[
-            {
-              title: "Transparency",
-              desc: "Every action is visible and verifiable by anyone.",
-              icon: (
-                <svg
-                  className="w-14 h-14 text-purple-400 mb-6 mx-auto"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-4.553a2 2 0 0 0-2.828-2.828L12 7.172 9.879 5.05a2 2 0 0 0-2.828 2.828L10 10m0 0-7 7" />
-                </svg>
-              ),
-            },
-            {
-              title: "Collaboration",
-              desc: "Work alongside validators, developers, and community members globally.",
-              icon: (
-                <svg
-                  className="w-14 h-14 text-purple-400 mb-6 mx-auto"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 0 1-8 0M12 21v-2m6-2a6 6 0 0 1-12 0M12 11v2m0-6v2" />
-                </svg>
-              ),
-            },
-            {
-              title: "Innovation",
-              desc: "Leveraging AI, IoT, and smart contracts for real-world problem-solving.",
-              icon: (
-                <svg
-                  className="w-14 h-14 text-purple-400 mb-6 mx-auto"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3v3m4.5-3v3M6 14a6 6 0 1 0 12 0 6 6 0 0 0-12 0z" />
-                </svg>
-              ),
-            },
-          ].map(({ title, desc, icon }, i) => (
-            <div key={i} className="bg-gradient-to-br from-indigo-900 via-purple-800 to-indigo-900 rounded-3xl p-10 text-center shadow-lg shadow-purple-900/60 hover:shadow-purple-700/90 transition-shadow">
-              {icon}
-              <h3 className="text-2xl font-serif font-semibold mb-3">{title}</h3>
-              <p className="text-gray-300">{desc}</p>
-            </div>
-          ))}
-        </section>
-
-        {/* Testimonials */}
-        <section className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-serif font-extrabold mb-12 text-center text-purple-400 drop-shadow-lg">
-            What Our Community Says
-          </h2>
-          <div className="space-y-10">
-            {[
-              {
-                name: "Anita S.",
-                quote: "PoPP has transformed how I engage with decentralized projects. The transparency and collaboration are unmatched.",
-                avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-              },
-              {
-                name: "Rahul K.",
-                quote: "Being part of PoPP's community means contributing to real-world impact using cutting-edge tech.",
-                avatar: "https://randomuser.me/api/portraits/men/45.jpg",
-              },
-            ].map(({ name, quote, avatar }, i) => (
-              <div key={i} className="bg-indigo-900 rounded-2xl p-8 flex items-center gap-8 shadow-xl hover:shadow-purple-600 transition-shadow">
-                <img
-                  src={avatar}
-                  alt={name}
-                  className="w-20 h-20 rounded-full object-cover border-2 border-purple-500 shadow-md"
-                />
-                <div>
-                  <p className="italic text-gray-300 mb-2">"{quote}"</p>
-                  <p className="font-semibold text-purple-400">{name}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Call to Action */}
-        <section
-          id="join"
-          className="max-w-3xl mx-auto text-center bg-gradient-to-r from-purple-700 to-indigo-700 rounded-3xl p-14 shadow-2xl shadow-purple-900/70"
+    <div className="min-h-screen bg-gradient-to-b from-[#0b0e11] to-[#14181d] text-white">
+      {/* Hero Section */}
+      <section className="max-w-7xl mx-auto px-6 py-24 flex flex-col md:flex-row items-center gap-16">
+        {/* Left Content */}
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.9 }}
+          className="flex-1"
         >
-          <h2 className="text-4xl font-serif font-extrabold mb-6 text-white drop-shadow-md">
-            Ready to join the revolution?
-          </h2>
-          <p className="text-gray-300 mb-8 max-w-xl mx-auto">
-            Become a part of the PoPP community and help us build the future of decentralized problem-solving.
-          </p>
-          <form className="flex flex-col sm:flex-row gap-6 max-w-xl mx-auto">
-            <input
-              type="email"
-              placeholder="Your email address"
-              className="flex-grow p-4 rounded-full text-gray-900 font-semibold"
-            />
-            <button
-              type="submit"
-              className="bg-purple-600 hover:bg-purple-700 transition rounded-full py-4 px-10 font-bold text-white shadow-lg"
-            >
-              Subscribe Now
-            </button>
-          </form>
-        </section>
-      </div>
-    </main>
+          <h1 className="text-5xl md:text-6xl font-extrabold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent leading-tight">
+  Continuum
+</h1>
+<p className="mt-6 text-lg text-gray-300 max-w-lg">
+  PoPP is built by the community, for the community.  
+  Our roadmap reflects collective growth — from early adopters  
+  to a global movement of decentralized problem solvers.
+</p>
+
+        </motion.div>
+
+        {/* Right Abstract Illusion */}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.9 }}
+          className="flex-1 flex justify-center relative"
+        >
+          {/* Glowing Illusion Shapes */}
+          <div className="absolute w-72 h-72 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 rounded-full blur-3xl opacity-30 animate-pulse" />
+          <div className="absolute w-56 h-56 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full blur-2xl opacity-40 top-10 right-10 animate-ping" />
+          <div className="absolute w-44 h-44 bg-gradient-to-r from-orange-400 via-red-500 to-purple-600 rounded-full blur-2xl opacity-40 bottom-10 left-10 animate-pulse" />
+
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="relative z-10 p-20 rounded-full bg-gradient-to-r from-purple-500/20 to-orange-500/20 border border-white/10 shadow-2xl backdrop-blur-xl"
+          >
+            <Sparkles className="w-20 h-20 text-orange-300 animate-spin-slow" />
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Roadmap Cards */}
+      <section className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-3 gap-10">
+        {[
+          {
+            icon: <Users className="w-8 h-8 text-pink-400" />,
+            title: "Phase 1 – Community Formation",
+            desc: "Bring together early adopters, innovators, and builders to shape the PoPP ecosystem.",
+          },
+          {
+            icon: <Sparkles className="w-8 h-8 text-purple-400" />,
+            title: "Phase 2 – Collaborative Validation",
+            desc: "Launch problem validation through collective participation, reputation, and transparency.",
+          },
+          {
+            icon: <Globe2 className="w-8 h-8 text-orange-400" />,
+            title: "Phase 3 – Global Network",
+            desc: "Scale to a worldwide decentralized community solving real-world problems together.",
+          },
+        ].map((phase, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: i * 0.2 }}
+            className="p-8 rounded-2xl bg-gradient-to-b from-[#1a1f25] to-[#0f1317] border border-white/10 hover:border-purple-400/30 transition group shadow-lg shadow-black/40"
+          >
+            <div className="mb-4">{phase.icon}</div>
+            <h3 className="text-xl font-bold text-white mb-3">{phase.title}</h3>
+            <p className="text-gray-400 text-sm">{phase.desc}</p>
+          </motion.div>
+        ))}
+      </section>
+
+      {/* Closing CTA */}
+      <section className="relative bg-gradient-to-r from-purple-600/20 via-pink-600/10 to-orange-600/20 py-24 px-6 text-center">
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-orange-500/10 blur-3xl" />
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.9 }}
+          className="relative text-4xl md:text-5xl font-extrabold mb-6"
+        >
+          Join the Community
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="relative text-gray-300 max-w-2xl mx-auto mb-8"
+        >
+          The future of decentralized problem validation is built by people like you. 
+          Be part of the collective force shaping tomorrow.
+        </motion.p>
+        <motion.button
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.95 }}
+          className="relative px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl font-semibold shadow-lg hover:shadow-purple-500/30 transition"
+        >
+          Join Us
+        </motion.button>
+      </section>
+    </div>
   );
 }
