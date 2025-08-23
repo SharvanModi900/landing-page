@@ -115,14 +115,14 @@ function Section({
 }) {
   return (
     <section id={id} className="relative mx-auto w-full max-w-7xl px-6 py-14">
-      <motion.div {...fadeUp} className="mb-8 flex items-center gap-3">
+      <motion.div  className="mb-8 flex items-center gap-3">
         <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/5 ring-1 ring-white/10 backdrop-blur">
           {icon}
         </div>
         <h2 className="text-2xl font-semibold tracking-tight text-white/95">{title}</h2>
       </motion.div>
       {description && (
-        <motion.p {...fadeUp} className="-mt-6 mb-8 max-w-3xl text-white/70">
+        <motion.p  className="-mt-6 mb-8 max-w-3xl text-white/70">
           {description}
         </motion.p>
       )}
@@ -157,7 +157,7 @@ export default function AcademiaResearchPage() {
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(0deg,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:36px_36px]"></div>
         </div>
         <div className="mx-auto grid max-w-7xl grid-cols-12 gap-8 px-6 py-20">
-          <motion.div {...fadeUp} className="col-span-12 md:col-span-7">
+          <motion.div  className="col-span-12 md:col-span-7">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
               <GraduationCap size={14} /> Academia & Research
             </div>
@@ -183,7 +183,7 @@ export default function AcademiaResearchPage() {
               </Link>
             </div>
           </motion.div>
-          <motion.div {...fadeUp} className="col-span-12 md:col-span-5">
+          <motion.div  className="col-span-12 md:col-span-5">
             <div className="relative h-64 w-full rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/0 p-6 backdrop-blur">
               <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/10"></div>
               <div className="grid h-full w-full place-items-center">

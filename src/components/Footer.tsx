@@ -1,27 +1,66 @@
 
+
 // 'use client';
 
 // import Link from 'next/link';
-// import { megaMenuSections } from './Navigation'; // Import your existing menu data
+// import { megaMenuSections } from './Navigation';
+// import { Mail, Twitter, Linkedin, Github } from 'lucide-react';
 
 // export default function Footer() {
 //   return (
-//     <footer className="bg-gray-900 text-gray-300 mt-16">
+//     <footer className="relative bg-[#010519] text-gray-300 overflow-hidden">
+//       {/* Gradient Background */}
+//       <div className="absolute inset-0">
+//         <div className="absolute -top-40 left-0 w-[600px] h-[600px] rounded-full bg-purple-600/20 blur-3xl animate-pulse-slow"></div>
+//         <div className="absolute -bottom-40 right-0 w-[700px] h-[700px] rounded-full bg-blue-500/20 blur-3xl animate-pulse-slower"></div>
+//       </div>
+
+//       {/* CTA Section */}
+//       <div className="relative max-w-7xl mx-auto px-6 md:px-16 py-16 text-center">
+//         <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+//           Join the PoPP Movement
+//         </h2>
+//         <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
+//           Stay connected with the Proof of Problem Protocol. Get updates, insights, and exclusive community invitations.
+//         </p>
+
+//         {/* Newsletter Input */}
+//         <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+//           <input
+//             type="email"
+//             placeholder="Enter your email"
+//             className="px-4 py-3 rounded-xl bg-white/5 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm w-full sm:w-96"
+//           />
+//           <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg hover:scale-105 transition font-semibold">
+//             Subscribe
+//           </button>
+//         </div>
+
+//         {/* Social Links */}
+//         <div className="flex justify-center gap-6 mt-8">
+//           {[Twitter, Linkedin, Github, Mail].map((Icon, idx) => (
+//             <a key={idx} href="#" className="p-3 rounded-full bg-white/5 hover:bg-gradient-to-r from-blue-500 to-purple-600 transition">
+//               <Icon className="w-5 h-5" />
+//             </a>
+//           ))}
+//         </div>
+//       </div>
+
 //       {/* Footer Links */}
-//       <div className="max-w-7xl mx-auto px-8 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
+//       <div className="relative max-w-7xl mx-auto px-6 md:px-16 py-12 grid sm:grid-cols-2 md:grid-cols-5 gap-10 border-t border-white/10">
 //         {megaMenuSections.map((section) => (
 //           <div key={section.label}>
-//             <h3 className="text-lg font-semibold text-white mb-4">
+//             <h6 className="text-sm font-bold text-white mb-5 uppercase tracking-wider">
 //               {section.label}
-//             </h3>
-//             <ul className="space-y-2">
+//             </h6>
+//             <ul className="space-y-3">
 //               {section.submenu.map((item) => (
-//                 <li key={item.title} className="flex items-center gap-2">
-//                   <item.icon className="w-4 h-4 text-blue-400" />
+//                 <li key={item.title}>
 //                   <Link
 //                     href={item.href}
-//                     className="hover:text-orange-400 transition-colors"
+//                     className="relative text-sm text-gray-400 hover:text-white transition group"
 //                   >
+//                     <span className="bg-gradient-to-r from-blue-400 to-purple-500 absolute left-0 bottom-0 h-[1px] w-0 group-hover:w-full transition-all"></span>
 //                     {item.title}
 //                   </Link>
 //                 </li>
@@ -32,9 +71,23 @@
 //       </div>
 
 //       {/* Bottom Bar */}
-//       <div className="border-t border-gray-700 py-4 text-center text-sm text-gray-500">
-//         © {new Date().getFullYear()} PoPP. All rights reserved.
+//       <div className="relative text-center text-xs text-gray-500 border-t border-white/10 py-6">
+//         <p>© {new Date().getFullYear()} PoPP. All rights reserved.</p>
+//         <p className="text-gray-400 mt-2">Built with 🔮 to reimagine problem-solving.</p>
 //       </div>
+
+//       <style jsx>{`
+//         @keyframes pulse-slow {
+//           0%, 100% { opacity: 0.4; }
+//           50% { opacity: 0.9; }
+//         }
+//         @keyframes pulse-slower {
+//           0%, 100% { opacity: 0.3; }
+//           50% { opacity: 0.7; }
+//         }
+//         .animate-pulse-slow { animation: pulse-slow 6s infinite; }
+//         .animate-pulse-slower { animation: pulse-slower 10s infinite; }
+//       `}</style>
 //     </footer>
 //   );
 // }
@@ -43,32 +96,84 @@
 
 import Link from 'next/link';
 import { megaMenuSections } from './Navigation';
+import { Mail, Twitter, Linkedin, Github } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="relative bg-gradient-to-t from-[#010519] via-[#0a0e23] to-[#010519] text-gray-300 pt-16 pb-8 overflow-hidden">
-      
-      {/* Glowing gradient lines for futuristic effect */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/2 w-[400px] h-[2px] bg-gradient-to-r from-blue-400 to-purple-500/50 -translate-x-1/2 animate-pulse-slow"></div>
-        <div className="absolute bottom-0 left-1/3 w-[600px] h-[2px] bg-gradient-to-r from-green-400 to-blue-400/50 -translate-x-1/2 animate-pulse-slower"></div>
+    <footer className="relative bg-[#010519] text-gray-300 overflow-hidden">
+      {/* Gradient Background */}
+      <div className="absolute inset-0">
+        <div className="absolute -top-40 left-0 w-[600px] h-[600px] rounded-full bg-purple-600/20 blur-3xl animate-pulse-slow"></div>
+        <div className="absolute -bottom-40 right-0 w-[700px] h-[700px] rounded-full bg-blue-500/20 blur-3xl animate-pulse-slower"></div>
+      </div>
+
+      {/* ✨ Animated Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {Array.from({ length: 25 }).map((_, i) => (
+          <span
+            key={i}
+            className="absolute w-1 h-1 bg-white/70 rounded-full animate-float"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              animationDuration: `${4 + Math.random() * 6}s`,
+              animationDelay: `${Math.random() * 5}s`,
+              opacity: 0.6,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* CTA Section */}
+      <div className="relative max-w-7xl mx-auto px-6 md:px-16 py-16 text-center z-10">
+        <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+          Join the PoPP Movement
+        </h2>
+        <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
+          Stay connected with the Proof of Problem Protocol. Get updates, insights, and exclusive community invitations.
+        </p>
+
+        {/* Newsletter Input */}
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            className="px-4 py-3 rounded-xl bg-white/5 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm w-full sm:w-96"
+          />
+          <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg hover:scale-105 transition font-semibold">
+            Subscribe
+          </button>
+        </div>
+
+        {/* Social Links */}
+        <div className="flex justify-center gap-6 mt-8">
+          {[Twitter, Linkedin, Github, Mail].map((Icon, idx) => (
+            <a
+              key={idx}
+              href="#"
+              className="p-3 rounded-full bg-white/5 hover:bg-gradient-to-r from-blue-500 to-purple-600 transition"
+            >
+              <Icon className="w-5 h-5" />
+            </a>
+          ))}
+        </div>
       </div>
 
       {/* Footer Links */}
-      <div className="relative max-w-7xl mx-auto px-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10 z-10">
+      <div className="relative max-w-7xl mx-auto px-6 md:px-16 py-12 grid sm:grid-cols-2 md:grid-cols-5 gap-10 border-t border-white/10 z-10">
         {megaMenuSections.map((section) => (
           <div key={section.label}>
-            <h3 className="text-lg font-bold text-white mb-5 border-b border-blue-400/20 pb-2 uppercase tracking-wide">
+            <h6 className="text-sm font-bold text-white mb-5 uppercase tracking-wider">
               {section.label}
-            </h3>
+            </h6>
             <ul className="space-y-3">
               {section.submenu.map((item) => (
-                <li key={item.title} className="flex items-center gap-2 group">
-                  <item.icon className="w-5 h-5 text-gradient group-hover:animate-pulse" />
+                <li key={item.title}>
                   <Link
                     href={item.href}
-                    className="hover:text-blue-400 transition-colors text-sm font-medium"
+                    className="relative text-sm text-gray-400 hover:text-white transition group"
                   >
+                    <span className="bg-gradient-to-r from-blue-400 to-purple-500 absolute left-0 bottom-0 h-[1px] w-0 group-hover:w-full transition-all"></span>
                     {item.title}
                   </Link>
                 </li>
@@ -79,25 +184,12 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="relative mt-12 text-center text-sm text-gray-500 border-t border-gray-700 pt-6 z-10">
-        <p className="mb-2">© {new Date().getFullYear()} PoPP. All rights reserved.</p>
-        <p className="text-gray-400 text-xs">
-          Crafted with 🔮 for the Proof of Problem Protocol ecosystem
-        </p>
-      </div>
-
-      {/* Neon Glow Effects */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-20 -left-20 w-[300px] h-[300px] rounded-full bg-purple-500/10 blur-3xl animate-pulse-slow"></div>
-        <div className="absolute -bottom-16 right-0 w-[400px] h-[400px] rounded-full bg-blue-500/10 blur-3xl animate-pulse-slower"></div>
+      <div className="relative text-center text-xs text-gray-500 border-t border-white/10 py-6 z-10">
+        <p>© {new Date().getFullYear()} PoPP. All rights reserved.</p>
+        <p className="text-gray-400 mt-2">Built with 🔮 to reimagine problem-solving.</p>
       </div>
 
       <style jsx>{`
-        .text-gradient {
-          background: linear-gradient(90deg, #5dcfff, #c77dff, #ff884d);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
         @keyframes pulse-slow {
           0%, 100% { opacity: 0.4; }
           50% { opacity: 0.9; }
@@ -106,12 +198,14 @@ export default function Footer() {
           0%, 100% { opacity: 0.3; }
           50% { opacity: 0.7; }
         }
-        .animate-pulse-slow {
-          animation: pulse-slow 4s infinite;
+        @keyframes float {
+          0% { transform: translateY(0) translateX(0); opacity: 0.6; }
+          50% { transform: translateY(-20px) translateX(10px); opacity: 1; }
+          100% { transform: translateY(0) translateX(0); opacity: 0.6; }
         }
-        .animate-pulse-slower {
-          animation: pulse-slower 6s infinite;
-        }
+        .animate-pulse-slow { animation: pulse-slow 6s infinite; }
+        .animate-pulse-slower { animation: pulse-slower 10s infinite; }
+        .animate-float { animation: float infinite ease-in-out; }
       `}</style>
     </footer>
   );
