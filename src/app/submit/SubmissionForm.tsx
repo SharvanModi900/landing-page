@@ -273,10 +273,19 @@ export default function SubmissionForm({
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [locationStatus, setLocationStatus] = useState<"idle" | "detecting" | "denied" | "success">("idle");
 
   // Auto detect location on mount
   useEffect(() => {
+    // Only attempt geolocation if fields are empty
+    if (!form.latitude && !form.longitude) {
+      detectLocation();
+    }
+  }, []);
+
+  const detectLocation = () => {
     if ("geolocation" in navigator) {
+      setLocationStatus("detecting");
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           setForm((prev) => ({
@@ -284,15 +293,19 @@ export default function SubmissionForm({
             latitude: pos.coords.latitude.toString(),
             longitude: pos.coords.longitude.toString(),
           }));
+          setLocationStatus("success");
         },
         (err) => {
           console.warn("Location access denied:", err.message);
+          setLocationStatus("denied");
+          // Don't show error to user automatically, let them choose to enable it
         }
       );
     } else {
       console.warn("Geolocation not supported");
+      setLocationStatus("denied");
     }
-  }, []);
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -333,7 +346,7 @@ export default function SubmissionForm({
       onSuccess(data);
 
       // reset after success
-      setForm({ description: "", latitude: form.latitude, longitude: form.longitude });
+      setForm({ description: "", latitude: "", longitude: "" });
       setFile(null);
     } catch (err: any) {
       setError(err.message || "Unknown error");
@@ -345,7 +358,6 @@ export default function SubmissionForm({
   return (
     <form
       className="bg-[#101a2e] rounded-xl p-3 w-full shadow-lg border border-cyan-500/20 flex flex-col gap-4"
-     
       onSubmit={handleSubmit}
     >
       <h2 className="text-xl font-bold text-cyan-300 mb-2">Problem Submission</h2>
@@ -355,7 +367,7 @@ export default function SubmissionForm({
         value={form.description}
         onChange={handleChange}
         className="rounded p-2 bg-[#0e1a2c] text-white border border-cyan-700"
-        placeholder="write problem with details it should mention all info about problem,pincode , area name,landmark"
+        placeholder="Write problem with details. Include pincode, area name, landmark, and any other relevant information."
         required
       />
 
@@ -380,6 +392,32 @@ export default function SubmissionForm({
           step="any"
           required
         />
+      </div>
+
+      {/* Location detection button */}
+      <div className="flex items-center gap-2">
+        {locationStatus === "detecting" ? (
+          <button
+            type="button"
+            className="text-xs bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded"
+            disabled
+          >
+            Detecting location...
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={detectLocation}
+            className="text-xs bg-cyan-900/50 hover:bg-cyan-800 text-cyan-300 px-2 py-1 rounded"
+          >
+            {locationStatus === "success" ? "📍 Location Detected" : "📍 Detect My Location"}
+          </button>
+        )}
+        {locationStatus === "denied" && (
+          <span className="text-xs text-amber-400">
+            Location access denied. Enable in browser settings.
+          </span>
+        )}
       </div>
 
       {/* File Upload */}

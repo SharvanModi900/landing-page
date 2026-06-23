@@ -12,7 +12,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
       <Navigation />
-      <HeroSection />
+      <div className="pt-20">
+        <HeroSection />
+      </div>
 
       {/* Platform vs Protocol Section 
       <section className="py-16 px-6 bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900">

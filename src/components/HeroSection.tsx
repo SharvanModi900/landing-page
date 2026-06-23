@@ -5,67 +5,342 @@ import { motion } from 'framer-motion';
 function PoPPVisualizer() {
   return (
     <div className="relative w-[420px] h-[420px] flex items-center justify-center">
-      {/* Core Crystal */}
-      <motion.div
-        animate={{ scale: [1, 1.1, 1] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="w-32 h-32 rounded-xl bg-gradient-to-br from-purple-500 via-pink-500 to-yellow-400 shadow-[0_0_60px_rgba(255,200,100,0.8)]"
-      />
-
-      {/* Inflow Problems (red sparks) */}
-      {[...Array(6)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-3 h-3 bg-red-500 rounded-full shadow-lg"
-          initial={{ opacity: 0, x: 0, y: 0 }}
-          animate={{
-            opacity: [0, 1, 1, 0],
-            x: Math.cos((i / 6) * 2 * Math.PI) * 180,
-            y: Math.sin((i / 6) * 2 * Math.PI) * 180
+      <svg width="420" height="420" viewBox="0 0 420 420" className="w-full h-full">
+        <defs>
+          {/* Gradients for premium look */}
+          <linearGradient id="coreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#7E22CE" />
+            <stop offset="50%" stopColor="#A855F7" />
+            <stop offset="100%" stopColor="#C084FC" />
+          </linearGradient>
+          
+          <linearGradient id="problemGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#DC2626" />
+            <stop offset="100%" stopColor="#EF4444" />
+          </linearGradient>
+          
+          <linearGradient id="proofGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#2563EB" />
+            <stop offset="100%" stopColor="#3B82F6" />
+          </linearGradient>
+          
+          <linearGradient id="validatorGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#059669" />
+            <stop offset="100%" stopColor="#10B981" />
+          </linearGradient>
+          
+          <linearGradient id="rewardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#D97706" />
+            <stop offset="100%" stopColor="#F59E0B" />
+          </linearGradient>
+          
+          <linearGradient id="dataFlowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#60A5FA" />
+            <stop offset="100%" stopColor="#A78BFA" />
+          </linearGradient>
+          
+          {/* Glow effects for premium feel */}
+          <filter id="coreGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur" />
+            <feFlood floodColor="#A855F7" floodOpacity="0.6" result="glowColor" />
+            <feComposite in="glowColor" in2="blur" operator="in" result="glow" />
+            <feBlend in="SourceGraphic" in2="glow" mode="screen" />
+          </filter>
+          
+          <filter id="problemGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur" />
+            <feFlood floodColor="#EF4444" floodOpacity="0.5" result="glowColor" />
+            <feComposite in="glowColor" in2="blur" operator="in" result="glow" />
+            <feBlend in="SourceGraphic" in2="glow" mode="screen" />
+          </filter>
+          
+          <filter id="proofGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur" />
+            <feFlood floodColor="#3B82F6" floodOpacity="0.5" result="glowColor" />
+            <feComposite in="glowColor" in2="blur" operator="in" result="glow" />
+            <feBlend in="SourceGraphic" in2="glow" mode="screen" />
+          </filter>
+          
+          <filter id="validatorGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur" />
+            <feFlood floodColor="#10B981" floodOpacity="0.5" result="glowColor" />
+            <feComposite in="glowColor" in2="blur" operator="in" result="glow" />
+            <feBlend in="SourceGraphic" in2="glow" mode="screen" />
+          </filter>
+          
+          <filter id="rewardGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur" />
+            <feFlood floodColor="#F59E0B" floodOpacity="0.5" result="glowColor" />
+            <feComposite in="glowColor" in2="blur" operator="in" result="glow" />
+            <feBlend in="SourceGraphic" in2="glow" mode="screen" />
+          </filter>
+          
+          {/* Drop shadow for depth */}
+          <filter id="elementShadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#000000" floodOpacity="0.3" />
+          </filter>
+        </defs>
+        
+        {/* Background subtle grid pattern for premium feel */}
+        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1E293B" strokeWidth="0.5" opacity="0.3"/>
+        </pattern>
+        <rect width="100%" height="100%" fill="url(#grid)" />
+        
+        {/* Central Core - Hexagonal design for tech feel */}
+        <motion.g
+          animate={{ 
+            scale: [1, 1.03, 1],
+            rotate: [0, 5, 0]
           }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            delay: i * 0.6
+          transition={{ 
+            duration: 6, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
           }}
+        >
+          <polygon 
+            points="210,160 250,185 250,235 210,260 170,235 170,185" 
+            fill="url(#coreGradient)" 
+            filter="url(#coreGlow)" 
+            style={{ filter: "url(#elementShadow)" }}
+          />
+          <text 
+            x="210" 
+            y="215" 
+            textAnchor="middle" 
+            fill="white" 
+            fontSize="16" 
+            fontWeight="bold" 
+            fontFamily="sans-serif"
+            style={{ textShadow: "0 2px 4px rgba(0,0,0,0.3)" }}
+          >
+            PoPP
+          </text>
+        </motion.g>
+        
+        {/* Problem Submission - Document with warning icon */}
+        <motion.g
+          animate={{ 
+            y: [0, -8, 0],
+            scale: [1, 1.05, 1]
+          }}
+          transition={{ 
+            duration: 4, 
+            repeat: Infinity, 
+            ease: "easeInOut" 
+          }}
+        >
+          <g filter="url(#elementShadow)">
+            <rect x="70" y="70" width="40" height="50" rx="4" fill="url(#problemGradient)" filter="url(#problemGlow)" />
+            <path d="M80 80 L100 80 M80 90 L100 90 M80 100 L90 100" stroke="white" strokeWidth="2" strokeLinecap="round" />
+            <circle cx="90" cy="110" r="6" fill="#FECACA" />
+            <text x="90" y="114" textAnchor="middle" fill="#DC2626" fontSize="10" fontWeight="bold" fontFamily="sans-serif">!</text>
+          </g>
+          <text 
+            x="90" 
+            y="135" 
+            textAnchor="middle" 
+            fill="#FECACA" 
+            fontSize="11" 
+            fontWeight="600" 
+            fontFamily="sans-serif"
+          >
+            Problem
+          </text>
+        </motion.g>
+        
+        {/* Proof Generation - Shield with lock */}
+        <motion.g
+          animate={{ 
+            y: [0, 8, 0],
+            scale: [1, 1.05, 1]
+          }}
+          transition={{ 
+            duration: 4, 
+            repeat: Infinity, 
+            ease: "easeInOut",
+            delay: 1
+          }}
+        >
+          <g filter="url(#elementShadow)">
+            <path 
+              d="M310 70 L350 70 L350 100 Q350 110 330 120 Q310 110 310 100 Z" 
+              fill="url(#proofGradient)" 
+              filter="url(#proofGlow)" 
+            />
+            <rect x="325" y="85" width="10" height="8" rx="1" fill="#BFDBFE" />
+            <circle cx="330" cy="83" r="1.5" fill="#BFDBFE" />
+          </g>
+          <text 
+            x="330" 
+            y="135" 
+            textAnchor="middle" 
+            fill="#BFDBFE" 
+            fontSize="11" 
+            fontWeight="600" 
+            fontFamily="sans-serif"
+          >
+            Proof
+          </text>
+        </motion.g>
+        
+        {/* Validator Nodes - Multiple nodes in orbit */}
+        {[...Array(5)].map((_, i) => {
+          const angle = (i / 5) * Math.PI * 2;
+          const x = 210 + Math.cos(angle) * 110;
+          const y = 210 + Math.sin(angle) * 110;
+          
+          return (
+            <motion.g
+              key={i}
+              animate={{ 
+                scale: [1, 1.1, 1],
+                opacity: [0.8, 1, 0.8]
+              }}
+              transition={{ 
+                duration: 3, 
+                repeat: Infinity, 
+                ease: "easeInOut",
+                delay: i * 0.2
+              }}
+            >
+              <g filter="url(#elementShadow)">
+                <circle cx={x} cy={y} r="16" fill="url(#validatorGradient)" filter="url(#validatorGlow)" />
+                <path 
+                  d={`M${x-6} ${y-2} L${x-2} ${y+4} L${x+6} ${y-4}`} 
+                  stroke="white" 
+                  strokeWidth="2" 
+                  fill="none" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                />
+              </g>
+            </motion.g>
+          );
+        })}
+        
+        {/* Reward Distribution - Coins with upward arrows */}
+        <motion.g
+          animate={{ 
+            y: [0, -8, 0],
+            scale: [1, 1.05, 1]
+          }}
+          transition={{ 
+            duration: 4, 
+            repeat: Infinity, 
+            ease: "easeInOut",
+            delay: 2
+          }}
+        >
+          <g filter="url(#elementShadow)">
+            <circle cx="90" cy="310" r="12" fill="url(#rewardGradient)" filter="url(#rewardGlow)" />
+            <circle cx="82" cy="305" r="8" fill="url(#rewardGradient)" filter="url(#rewardGlow)" opacity="0.8" />
+            <circle cx="98" cy="305" r="8" fill="url(#rewardGradient)" filter="url(#rewardGlow)" opacity="0.8" />
+            <path d="M85 305 L85 295 M85 295 L82 298 M85 295 L88 298" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+          </g>
+          <text 
+            x="90" 
+            y="340" 
+            textAnchor="middle" 
+            fill="#FDE68A" 
+            fontSize="11" 
+            fontWeight="600" 
+            fontFamily="sans-serif"
+          >
+            Rewards
+          </text>
+        </motion.g>
+        
+        {/* Escalation Path - Arrow with upward direction */}
+        <motion.g
+          animate={{ 
+            y: [0, 8, 0],
+            scale: [1, 1.05, 1]
+          }}
+          transition={{ 
+            duration: 4, 
+            repeat: Infinity, 
+            ease: "easeInOut",
+            delay: 3
+          }}
+        >
+          <g filter="url(#elementShadow)">
+            <path 
+              d="M330 300 L350 300 L340 285 Z" 
+              fill="url(#rewardGradient)" 
+              filter="url(#rewardGlow)" 
+            />
+            <rect x="335" y="300" width="10" height="15" fill="url(#rewardGradient)" filter="url(#rewardGlow)" />
+          </g>
+          <text 
+            x="340" 
+            y="340" 
+            textAnchor="middle" 
+            fill="#FDE68A" 
+            fontSize="11" 
+            fontWeight="600" 
+            fontFamily="sans-serif"
+          >
+            Escalate
+          </text>
+        </motion.g>
+        
+        {/* Data Flow Connections - Curved paths with animated particles */}
+        <motion.path 
+          d="M110 95 Q210 60 310 95" 
+          fill="none" 
+          stroke="url(#dataFlowGradient)" 
+          strokeWidth="2" 
+          opacity="0.6"
         />
-      ))}
-
-      {/* Outflow Rewards (gold sparks) */}
-      {[...Array(8)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute w-2 h-2 bg-yellow-300 rounded-full shadow-[0_0_12px_rgba(255,220,120,0.9)]"
-          animate={{
-            x: [0, Math.cos((i / 8) * 2 * Math.PI) * 200],
-            y: [0, Math.sin((i / 8) * 2 * Math.PI) * 200],
-            opacity: [0, 1, 0]
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            delay: i * 0.5
-          }}
+        <motion.path 
+          d="M310 125 Q210 150 210 160" 
+          fill="none" 
+          stroke="url(#dataFlowGradient)" 
+          strokeWidth="2" 
+          opacity="0.6"
         />
-      ))}
-
-      {/* Validator Orbit (cyan nodes) */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        className="absolute w-[380px] h-[380px] border border-white/10 rounded-full"
-      >
-        {[...Array(6)].map((_, i) => (
-          <motion.div
+        <motion.path 
+          d="M210 260 Q210 280 310 310" 
+          fill="none" 
+          stroke="url(#dataFlowGradient)" 
+          strokeWidth="2" 
+          opacity="0.6"
+        />
+        <motion.path 
+          d="M210 260 Q210 280 90 310" 
+          fill="none" 
+          stroke="url(#dataFlowGradient)" 
+          strokeWidth="2" 
+          opacity="0.6"
+        />
+        
+        {/* Animated data particles */}
+        {[...Array(3)].map((_, i) => (
+          <motion.circle
             key={i}
-            className="absolute w-4 h-4 bg-cyan-400 rounded-full shadow-[0_0_16px_rgba(0,255,255,0.6)]"
-            style={{
-              top: "50%", left: "50%",
-              transform: `rotate(${i * 60}deg) translate(190px)`
+            cx="210"
+            cy="210"
+            r="3"
+            fill="#A78BFA"
+            initial={{ 
+              cx: 110,
+              cy: 95
+            }}
+            animate={{ 
+              cx: [110, 210, 310, 310, 210, 210, 210, 90],
+              cy: [95, 60, 95, 125, 160, 260, 310, 310]
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              delay: i * 2,
+              ease: "linear"
             }}
           />
         ))}
-      </motion.div>
+      </svg>
     </div>
   );
 }

@@ -186,7 +186,7 @@ export default function MainInterface() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-[#0b0f1c] to-[#141e30] text-white p-8 flex items-center justify-center ">
       {!submitted ? (
-        <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 bg-[#101a2e]/60 rounded-2xl border border-cyan-700/40 shadow-[0_0_32px_0_rgba(34,211,238,0.10)] p-12 mt-[100px]">
+        <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 gap-16 bg-[#101a2e]/60 rounded-2xl border border-cyan-700/40 shadow-[0_0_32px_0_rgba(34,211,238,0.10)] p-12 mt-20">
           {/* LEFT: Title, subtitle, stepper, problem preview */}
           <div className="flex flex-col justify-center gap-8">
             <div>
@@ -200,7 +200,7 @@ export default function MainInterface() {
                 Your Civic Problem,Verifiable in 7 Steps
               </h2>
             </div>
-            <StageProgressBar stages={STAGES} current={0} completed={[]} />
+            <StageProgressBar stages={STAGES} current={0} />
             {/* Problem preview card */}
             <div className="bg-[#0b172a] border border-cyan-700/50 rounded-xl p-6 shadow-cyan-400/10 flex flex-col gap-2 max-w-md">
               <div className="flex items-center gap-3 mb-2">
@@ -266,7 +266,6 @@ export default function MainInterface() {
               <StageProgressBar
                 stages={STAGES}
                 current={currentStage}
-                completed={completed}
               />
             </div>
             <div className="flex flex-row w-full items-center px-6 pb-10">
