@@ -26,38 +26,39 @@ const blogs = [
 
 export default function BlogsPage() {
   return (
-    <div className="min-h-screen bg-[#0b0e11] text-white px-6 py-24">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold mb-2">Blogs</h1>
+    <div className="min-h-screen bg-[#030712] text-white">
+      <div className="pt-16 max-w-5xl mx-auto px-6 py-12">
+        <h1 className="text-4xl font-bold mb-2">
+          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Blogs
+          </span>
+        </h1>
         <p className="text-gray-400 mb-8">
           Insights, thought pieces, and updates from the PoPP ecosystem.
         </p>
 
         {/* Blog Cards Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {blogs.map((blog, idx) => (
             <div
               key={idx}
-              className="bg-[#14181d] rounded-xl overflow-hidden border border-transparent hover:border-orange-500 transition"
+              className="rounded-xl overflow-hidden bg-white/5 border border-white/10 hover:border-cyan-500/30 transition"
             >
-              {/* CDN Image */}
-              <div className="relative w-full h-48">
+              <div className="relative w-full h-40">
                 <Image
                   src={''}
                   alt={blog.title}
                   fill
                   className="object-cover"
-                  priority={idx < 2} // lazy-load except first 2
+                  priority={idx < 2}
                 />
               </div>
-
-              {/* Blog Content */}
-              <div className="p-5">
-                <h2 className="text-lg font-semibold mb-2">{blog.title}</h2>
-                <p className="text-gray-400 text-sm mb-1">By {blog.author}</p>
-                <p className="text-gray-500 text-xs">{blog.date}</p>
-                <button className="mt-3 text-orange-500 text-sm font-medium hover:underline">
-                  Read More →
+              <div className="p-4">
+                <h2 className="text-base font-semibold mb-1">{blog.title}</h2>
+                <p className="text-gray-500 text-sm">By {blog.author}</p>
+                <p className="text-gray-600 text-xs">{blog.date}</p>
+                <button className="mt-2 text-cyan-400 text-sm font-medium hover:underline">
+                  Read More
                 </button>
               </div>
             </div>

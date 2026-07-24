@@ -71,75 +71,55 @@ export default function PrivacyPolicyPage() {
   ];
 
   return (
-    <div className="bg-slate-950 text-gray-100 min-h-screen">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-b border-slate-800 overflow-hidden">
-        {/* Background pattern */}
-        <div className="absolute inset-0 bg-[url('/patterns/security-pattern.svg')] opacity-5 bg-cover bg-center"></div>
-
-        {/* Glow aura */}
-        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-3xl"></div>
-
-        <div className="max-w-6xl mx-auto px-6 md:px-12 py-24 relative grid md:grid-cols-2 gap-12 items-center">
-          {/* Left: Content */}
-          <div>
-            <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-blue-300 to-purple-300">
-              Privacy Policy
+    <div className="bg-[#030712] text-gray-100 min-h-screen">
+      <div className="pt-16">
+        {/* Hero Section */}
+        <div className="border-b border-white/10">
+          <div className="max-w-5xl mx-auto px-6 py-12">
+            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                Privacy Policy
+              </span>
             </h1>
-            <p className="text-lg text-gray-400 mt-6 max-w-xl">
+            <p className="text-gray-400 mt-4 max-w-xl">
               We are committed to safeguarding your personal information while ensuring 
               transparency in how your data is collected, stored, and used.
             </p>
-            <p className="mt-8 text-sm text-gray-500">Last Updated: August 2025</p>
-          </div>
-
-          {/* Right: Illustration */}
-          <div className="relative flex justify-center md:justify-end">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              className="w-64 h-64 text-cyan-300/80"
-              fill="currentColor"
-            >
-              {/* Shield Lock Illustration */}
-              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 6c1.65 0 3 1.35 3 3 0 .74-.27 1.41-.72 1.93L12 18l-2.28-6.07A2.996 2.996 0 019 10c0-1.65 1.35-3 3-3z"/>
-            </svg>
+            <p className="mt-4 text-sm text-gray-500">Last Updated: August 2025</p>
           </div>
         </div>
-      </div>
 
-      {/* Table of Contents */}
-      <div className="max-w-5xl mx-auto px-6 md:px-12 py-12">
-        <h2 className="text-2xl font-bold text-white mb-6">Table of Contents</h2>
-        <ul className="grid sm:grid-cols-2 gap-4 text-gray-400">
+        {/* Table of Contents */}
+        <div className="max-w-5xl mx-auto px-6 py-8">
+          <h2 className="text-xl font-bold text-white mb-4">Table of Contents</h2>
+          <ul className="grid sm:grid-cols-2 gap-3 text-gray-400">
+            {sections.map((s) => (
+              <li key={s.id}>
+                <a
+                  href={`#${s.id}`}
+                  className="hover:text-cyan-400 transition-colors"
+                >
+                  {s.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Sections */}
+        <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
           {sections.map((s) => (
-            <li key={s.id}>
-              <a
-                href={`#${s.id}`}
-                className="hover:text-cyan-400 transition-colors"
-              >
+            <div key={s.id} id={s.id} className="scroll-mt-24">
+              <h3 className="text-xl font-semibold text-cyan-400 mb-3">
                 {s.title}
-              </a>
-            </li>
+              </h3>
+              <p className="text-gray-400 leading-relaxed whitespace-pre-line">
+                {s.content}
+              </p>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
-
-      {/* Sections */}
-      <div className="max-w-5xl mx-auto px-6 md:px-12 py-12 space-y-16">
-        {sections.map((s) => (
-          <div key={s.id} id={s.id} className="scroll-mt-24">
-            <h3 className="text-2xl font-semibold text-cyan-300 mb-4">
-              {s.title}
-            </h3>
-            <p className="text-gray-300 leading-relaxed whitespace-pre-line">
-              {s.content}
-            </p>
-          </div>
-        ))}
-      </div>
-
-    
     </div>
   );
 }

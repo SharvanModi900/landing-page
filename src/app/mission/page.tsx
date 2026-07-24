@@ -1,93 +1,87 @@
 "use client";
-import Image from "next/image";
+
+import React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function MissionPage() {
   return (
-    <main className="bg-black text-white min-h-screen">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
-        <Image
-          src=""
-          alt="Mission Background"
-          fill
-          className="object-cover opacity-40"
-          priority
-        />
-        {/* Overlay Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/90"></div>
+    <div className="min-h-screen bg-[#030712] text-white">
+      <div className="pt-16">
+        {/* Hero Section */}
+        <section className="py-20 px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-4xl mx-auto"
+          >
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
+              Our{" "}
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                Mission
+              </span>
+            </h1>
+            <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              To redefine innovation through relentless pursuit of excellence,
+              harnessing technology to solve humanity&apos;s most complex challenges.
+            </p>
+            <div className="mt-8">
+              <Link
+                href="#learn-more"
+                className="px-8 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 font-semibold text-white hover:shadow-lg hover:shadow-cyan-500/20 transition-all"
+              >
+                Learn More
+              </Link>
+            </div>
+          </motion.div>
+        </section>
 
-        {/* Content */}
-        <div className="relative z-10 text-center max-w-4xl px-6">
-          <h1 className="text-6xl font-extrabold tracking-tight bg-gradient-to-r from-orange-500 via-yellow-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg">
-            Our Mission
-          </h1>
-          <p className="mt-6 text-lg md:text-xl text-gray-300 leading-relaxed">
-            To redefine innovation through relentless pursuit of excellence, 
-            harnessing technology to solve humanity’s most complex challenges.
-          </p>
-          <div className="mt-8">
-            <a
-              href="#learn-more"
-              className="px-8 py-4 bg-orange-500 hover:bg-orange-600 rounded-full font-semibold text-lg shadow-lg transition-all duration-300"
+        {/* Values Section */}
+        <section id="learn-more" className="py-16 px-6">
+          <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
+            {[
+              { title: "Innovation", desc: "We push boundaries, challenge norms, and constantly seek new ways to create value." },
+              { title: "Integrity", desc: "Our actions are guided by strong ethics, transparency, and accountability." },
+              { title: "Impact", desc: "Every step we take aims to positively impact people, communities, and the planet." },
+            ].map((v, i) => (
+              <motion.div
+                key={v.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white/5 border border-white/10 rounded-xl p-6"
+              >
+                <h3 className="text-xl font-bold text-cyan-400 mb-4">{v.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{v.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Vision Statement */}
+        <section className="py-16 px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
             >
-              Learn More
-            </a>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+                Driving the Future Forward
+              </h2>
+              <p className="text-gray-400 leading-relaxed max-w-3xl mx-auto">
+                We believe in empowering the world with tools, knowledge, and
+                technology that inspire progress and transform lives. Our mission is
+                not just a statement — it&apos;s a commitment to shaping a better
+                tomorrow.
+              </p>
+            </motion.div>
           </div>
-        </div>
-      </section>
-
-      {/* Values Section */}
-      <section
-        id="learn-more"
-        className="py-20 px-6 bg-gradient-to-br from-zinc-900 via-black to-zinc-950"
-      >
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12">
-          <div className="p-6 bg-zinc-800/60 backdrop-blur-md rounded-2xl border border-zinc-700 shadow-xl hover:scale-105 transition-transform duration-300">
-            <h3 className="text-2xl font-bold text-orange-400 mb-4">
-              Innovation
-            </h3>
-            <p className="text-gray-300">
-              We push boundaries, challenge norms, and constantly seek new ways
-              to create value.
-            </p>
-          </div>
-          <div className="p-6 bg-zinc-800/60 backdrop-blur-md rounded-2xl border border-zinc-700 shadow-xl hover:scale-105 transition-transform duration-300">
-            <h3 className="text-2xl font-bold text-orange-400 mb-4">
-              Integrity
-            </h3>
-            <p className="text-gray-300">
-              Our actions are guided by strong ethics, transparency, and
-              accountability.
-            </p>
-          </div>
-          <div className="p-6 bg-zinc-800/60 backdrop-blur-md rounded-2xl border border-zinc-700 shadow-xl hover:scale-105 transition-transform duration-300">
-            <h3 className="text-2xl font-bold text-orange-400 mb-4">
-              Impact
-            </h3>
-            <p className="text-gray-300">
-              Every step we take aims to positively impact people, communities,
-              and the planet.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Vision Statement */}
-      <section className="py-24 px-6 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-orange-900/10 to-black"></div>
-        <div className="relative max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-extrabold text-orange-500">
-            Driving the Future Forward
-          </h2>
-          <p className="mt-6 text-lg text-gray-300 leading-relaxed">
-            We believe in empowering the world with tools, knowledge, and
-            technology that inspire progress and transform lives. Our mission is
-            not just a statement – it’s a commitment to shaping a better
-            tomorrow.
-          </p>
-        </div>
-      </section>
-    </main>
+        </section>
+      </div>
+    </div>
   );
 }

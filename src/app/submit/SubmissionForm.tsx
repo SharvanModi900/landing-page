@@ -357,16 +357,16 @@ export default function SubmissionForm({
 
   return (
     <form
-      className="bg-[#101a2e] rounded-xl p-3 w-full shadow-lg border border-cyan-500/20 flex flex-col gap-4"
+      className="bg-white/[0.03] border border-white/10 rounded-xl p-4 w-full flex flex-col gap-4"
       onSubmit={handleSubmit}
     >
-      <h2 className="text-xl font-bold text-cyan-300 mb-2">Problem Submission</h2>
+      <h2 className="text-lg font-bold text-cyan-400 mb-2">Problem Submission</h2>
 
       <textarea
         name="description"
         value={form.description}
         onChange={handleChange}
-        className="rounded p-2 bg-[#0e1a2c] text-white border border-cyan-700"
+        className="rounded-lg p-3 bg-white/5 text-white border border-white/10 focus:border-cyan-500/50 focus:outline-none transition-colors placeholder:text-gray-600"
         placeholder="Write problem with details. Include pincode, area name, landmark, and any other relevant information."
         required
       />
@@ -376,7 +376,7 @@ export default function SubmissionForm({
           name="latitude"
           value={form.latitude}
           onChange={handleChange}
-          className="rounded p-2 bg-[#0e1a2c] text-white border border-cyan-700 w-1/2"
+          className="rounded-lg p-3 bg-white/5 text-white border border-white/10 focus:border-cyan-500/50 focus:outline-none transition-colors placeholder:text-gray-600 w-1/2"
           placeholder="Latitude"
           type="number"
           step="any"
@@ -386,7 +386,7 @@ export default function SubmissionForm({
           name="longitude"
           value={form.longitude}
           onChange={handleChange}
-          className="rounded p-2 bg-[#0e1a2c] text-white border border-cyan-700 w-1/2"
+          className="rounded-lg p-3 bg-white/5 text-white border border-white/10 focus:border-cyan-500/50 focus:outline-none transition-colors placeholder:text-gray-600 w-1/2"
           placeholder="Longitude"
           type="number"
           step="any"
@@ -399,7 +399,7 @@ export default function SubmissionForm({
         {locationStatus === "detecting" ? (
           <button
             type="button"
-            className="text-xs bg-cyan-900/50 text-cyan-300 px-2 py-1 rounded"
+            className="text-xs bg-white/5 border border-white/10 text-gray-400 px-3 py-1.5 rounded-lg"
             disabled
           >
             Detecting location...
@@ -408,9 +408,9 @@ export default function SubmissionForm({
           <button
             type="button"
             onClick={detectLocation}
-            className="text-xs bg-cyan-900/50 hover:bg-cyan-800 text-cyan-300 px-2 py-1 rounded"
+            className="text-xs bg-white/5 border border-white/10 hover:bg-white/10 text-gray-300 px-3 py-1.5 rounded-lg transition-colors"
           >
-            {locationStatus === "success" ? "📍 Location Detected" : "📍 Detect My Location"}
+            {locationStatus === "success" ? "Location Detected" : "Detect My Location"}
           </button>
         )}
         {locationStatus === "denied" && (
@@ -425,21 +425,21 @@ export default function SubmissionForm({
         type="file"
         accept="image/*,video/*,.pdf,audio/*"
         onChange={handleFileChange}
-        className="rounded p-2 bg-[#0e1a2c] text-white border border-cyan-700"
+        className="rounded-lg p-3 bg-white/5 text-gray-300 border border-white/10 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-white/10 file:text-gray-300 file:text-sm file:cursor-pointer"
       />
 
       {file && (
-        <div className="text-cyan-400 text-sm">{file.name}</div>
+        <div className="text-sm text-gray-400">{file.name}</div>
       )}
 
       {error && <div className="text-red-400 text-sm">{error}</div>}
 
       <button
         type="submit"
-        className="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded mt-2 disabled:opacity-60"
+        className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold px-4 py-2.5 rounded-lg mt-2 disabled:opacity-60 hover:shadow-lg hover:shadow-cyan-500/20 transition-all"
         disabled={loading}
       >
-        {loading ? "Processing..." : "Process"}
+        {loading ? "Processing..." : "Submit Problem"}
       </button>
     </form>
   );

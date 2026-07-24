@@ -56,7 +56,6 @@ const Faq: React.FC = () => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
-  // For smooth height animation: set maxHeight dynamically
   useEffect(() => {
     if (activeIndex !== null) {
       const el = contentRefs.current[activeIndex];
@@ -72,43 +71,49 @@ const Faq: React.FC = () => {
   }, [activeIndex]);
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12 mt-[70px]">
-      <h1 className="text-5xl font-extrabold text-center mb-12 text-gradient bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-500 bg-clip-text text-transparent">
-        Frequently Asked Questions
-      </h1>
+    <div className="bg-[#030712] min-h-screen text-white">
+      <div className="pt-16 max-w-3xl mx-auto px-6 py-12">
+        <h1 className="text-3xl font-extrabold text-center mb-8">
+          <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            Frequently Asked Questions
+          </span>
+        </h1>
 
-      <div className="space-y-5">
-        {faqs.map(({ question, answer }, index) => (
-          <div
-            key={index}
-            className="border border-gray-200 dark:border-gray-700 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 bg-white dark:bg-gray-900"
-          >
-            <button
-              aria-expanded={activeIndex === index}
-              aria-controls={`faq-answer-${index}`}
-              id={`faq-question-${index}`}
-              onClick={() => toggle(index)}
-              className="flex justify-between items-center w-full px-6 py-5 text-lg font-semibold text-gray-800 dark:text-gray-200 focus:outline-none"
-            >
-              <span>{question}</span>
-              <ChevronDownIcon
-                className={`w-6 h-6 text-indigo-600 dark:text-indigo-400 transform transition-transform duration-300 ${
-                  activeIndex === index ? "rotate-180" : "rotate-0"
-                }`}
-              />
-            </button>
-
+        <div className="space-y-3">
+          {faqs.map(({ question, answer }, index) => (
             <div
-              id={`faq-answer-${index}`}
-              role="region"
-              aria-labelledby={`faq-question-${index}`}
-              ref={(el) => (contentRefs.current[index] = el)}
-              className="px-6 pb-5 overflow-hidden max-h-0 transition-max-height duration-500 ease-in-out text-gray-700 dark:text-gray-300"
+              key={index}
+              className="border border-white/10 rounded-xl bg-white/5"
             >
-              <p className="whitespace-pre-line">{answer}</p>
+              <button
+                aria-expanded={activeIndex === index}
+                aria-controls={`faq-answer-${index}`}
+                id={`faq-question-${index}`}
+                onClick={() => toggle(index)}
+                className="flex justify-between items-center w-full px-5 py-4 text-base font-semibold text-white focus:outline-none"
+              >
+                <span>{question}</span>
+                <ChevronDownIcon
+                  className={`w-5 h-5 text-cyan-400 shrink-0 transform transition-transform duration-300 ${
+                    activeIndex === index ? "rotate-180" : "rotate-0"
+                  }`}
+                />
+              </button>
+
+              <div
+                id={`faq-answer-${index}`}
+                role="region"
+                aria-labelledby={`faq-question-${index}`}
+                ref={(el) => {
+                  if (el) contentRefs.current[index] = el;
+                }}
+                className="px-5 pb-4 overflow-hidden max-h-0 transition-max-height duration-500 ease-in-out text-gray-400"
+              >
+                <p className="whitespace-pre-line text-sm">{answer}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

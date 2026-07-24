@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 export default function OriginStoryPage() {
@@ -8,144 +9,199 @@ export default function OriginStoryPage() {
     {
       year: "2023",
       title: "The Spark",
-      description: "A simple pothole complaint in Bengaluru sparked a realization - ignored civic issues are not just annoyances, but data points of systemic failures. What if these complaints could be transformed into verifiable truth?",
-      icon: "💡"
+      description:
+        "A simple pothole complaint in Bengaluru sparked a realization — ignored civic issues are not just annoyances, but data points of systemic failures. What if these complaints could be transformed into verifiable truth?",
+      icon: "💡",
     },
     {
       year: "2024",
       title: "The Vision",
-      description: "Our founders envisioned a decentralized protocol where problems become provable facts. They recognized that complaints, when validated and elevated, could become the foundation for real societal change.",
-      icon: "👁️"
+      description:
+        "Our founders envisioned a decentralized protocol where problems become provable facts. They recognized that complaints, when validated and elevated, could become the foundation for real societal change.",
+      icon: "👁️",
     },
     {
       year: "2025",
       title: "The Protocol",
-      description: "PoPP was born - a protocol that transforms civic complaints into cryptographic proof through AI validation, decentralized verification, and blockchain immutability. Truth became computable.",
-      icon: "🔗"
-    }
+      description:
+        "PoPP was born — a protocol that transforms civic complaints into cryptographic proof through AI validation, decentralized verification, and blockchain immutability. Truth became computable.",
+      icon: "🔗",
+    },
   ];
 
   return (
-    <main className="min-h-screen w-full bg-gradient-to-b from-indigo-950 via-purple-900 to-gray-950 flex flex-col items-center">
-      {/* Hero Section */}
-      <section className="w-full flex flex-col items-center justify-center pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCBMIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgxMDAsMTAwLDEwMCwwLjEpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')]" opacity-20></div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="relative z-10 text-center max-w-4xl px-6"
-        >
-          <div className="inline-block px-4 py-1 bg-indigo-800/30 border border-indigo-600/50 rounded-full text-sm text-indigo-300 mb-6">
-            Origin Story
-          </div>
-          <h1 className="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 mb-6">
-            Our Journey
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
-            From a simple frustration to a global protocol for decentralized truth validation
-          </p>
-        </motion.div>
-      </section>
-
-      {/* Story Timeline */}
-      <section className="w-full max-w-6xl px-6 pb-32 relative">
-        <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-cyan-500/30 via-purple-500/30 to-pink-500/30 rounded-full"></div>
-        
-        <div className="space-y-24">
-          {storyPoints.map((point, index) => (
+    <div className="min-h-screen bg-[#030712] text-white">
+      <div className="pt-16">
+        {/* Hero Section */}
+        <section className="py-20 px-6">
+          <div className="max-w-4xl mx-auto text-center">
             <motion.div
-              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="inline-block px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-sm text-gray-400 mb-6">
+                Origin Story
+              </div>
+              <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
+                Our{" "}
+                <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                  Journey
+                </span>
+              </h1>
+              <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+                From a simple frustration to a global protocol for decentralized truth validation
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Story Timeline */}
+        <section className="py-16 px-6">
+          <div className="max-w-5xl mx-auto relative">
+            {/* Vertical line */}
+            <div className="absolute left-6 md:left-1/2 md:-translate-x-1/2 top-0 bottom-0 w-px bg-white/[0.06]" />
+
+            <div className="space-y-16">
+              {storyPoints.map((point, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.15 }}
+                  viewport={{ once: true }}
+                  className={`relative flex items-start gap-8 md:gap-16 ${
+                    index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                  }`}
+                >
+                  {/* Timeline node */}
+                  <div className="absolute left-6 md:left-1/2 md:-translate-x-1/2 w-3 h-3 rounded-full bg-cyan-500 border-2 border-[#030712] z-10 mt-6" />
+
+                  {/* Content */}
+                  <div className="w-full md:w-5/12 pl-14 md:pl-0">
+                    <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                      <div className="text-sm font-semibold text-cyan-400 mb-2">
+                        {point.year}
+                      </div>
+                      <h3 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                        <span className="text-lg">{point.icon}</span>
+                        {point.title}
+                      </h3>
+                      <p className="text-gray-400 leading-relaxed text-sm">
+                        {point.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Spacer for the other side */}
+                  <div className="hidden md:block w-5/12" />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Founding Vision Section */}
+        <section className="py-16 px-6">
+          <div className="max-w-5xl mx-auto">
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: index * 0.2 }}
+              transition={{ duration: 0.6 }}
               viewport={{ once: true }}
-              className={`flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} relative`}
+              className="bg-white/5 border border-white/10 rounded-xl p-8 md:p-12"
             >
-              {/* Timeline Node */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 border-4 border-gray-900 shadow-lg z-10 flex items-center justify-center">
-                <span className="text-lg">{point.icon}</span>
-              </div>
-              
-              {/* Content Card */}
-              <div className={`w-full md:w-5/12 ${index % 2 === 0 ? 'md:pr-16' : 'md:pl-16'}`}>
-                <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 backdrop-blur-lg rounded-2xl shadow-2xl p-8 border border-gray-700/50 hover:border-indigo-500/50 transition-all duration-300">
-                  <div className="text-cyan-400 font-bold text-lg mb-2">{point.year}</div>
-                  <h3 className="text-2xl font-bold text-white mb-4">{point.title}</h3>
-                  <p className="text-gray-300 leading-relaxed">{point.description}</p>
-                </div>
-              </div>
-              
-              {/* Spacer */}
-              <div className="w-2/12"></div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Founding Vision Section */}
-      <section className="w-full max-w-6xl px-6 pb-32">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="bg-gradient-to-r from-indigo-900/50 via-purple-900/50 to-pink-900/50 backdrop-blur-lg rounded-3xl shadow-2xl p-12 border border-indigo-700/30"
-        >
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold text-white mb-6">
-                The <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Core Insight</span>
-              </h2>
-              <p className="text-xl text-gray-300 mb-6 leading-relaxed">
-                Complaints are not noise—they are the raw data of broken systems. When validated and elevated through decentralized consensus, they become the foundation for real societal change.
-              </p>
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 flex items-center justify-center">
-                  <span className="text-xl">🔍</span>
-                </div>
+              <div className="grid md:grid-cols-2 gap-10 items-center">
                 <div>
-                  <h4 className="text-lg font-semibold text-white">Validation Through Consensus</h4>
-                  <p className="text-gray-400">Truth emerges when multiple validators agree on a problem's existence and characteristics</p>
+                  <h2 className="text-3xl font-bold text-white mb-6">
+                    The{" "}
+                    <span className="text-cyan-400">Core Insight</span>
+                  </h2>
+                  <p className="text-gray-400 mb-6 leading-relaxed">
+                    Complaints are not noise — they are the raw data of broken systems. When validated and elevated through decentralized consensus, they become the foundation for real societal change.
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center shrink-0">
+                      <span className="text-lg">🔍</span>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-white">
+                        Validation Through Consensus
+                      </h4>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        Truth emerges when multiple validators agree on a problem&apos;s existence
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="flex justify-center">
-              <div className="relative">
-                <div className="w-64 h-64 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-2xl absolute inset-0"></div>
-                <div className="relative w-64 h-64 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 flex items-center justify-center shadow-2xl">
-                  <div className="text-center p-6">
-                    <div className="text-5xl mb-4">🌐</div>
-                    <h3 className="text-xl font-bold text-white mb-2">Decentralized Truth</h3>
-                    <p className="text-gray-400 text-sm">Proof of Problem Protocol</p>
+
+                <div className="flex justify-center">
+                  <div className="w-56 h-56 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-center">
+                    <div className="text-center p-6">
+                      <div className="text-4xl mb-3">🌐</div>
+                      <h3 className="text-base font-bold text-white mb-1">
+                        Decentralized Truth
+                      </h3>
+                      <p className="text-xs text-gray-500">
+                        Proof of Problem Protocol
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Mission Statement */}
+        <section className="py-16 px-6">
+          <div className="max-w-3xl mx-auto text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
+                Our{" "}
+                <span className="text-cyan-400">Mission</span>
+              </h2>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-8 md:p-10">
+                <blockquote className="text-xl md:text-2xl text-gray-300 italic leading-relaxed">
+                  &ldquo;To transform complaints into civilization&apos;s building blocks through cryptographic proof, decentralized validation, and incentivized truth.&rdquo;
+                </blockquote>
+                <div className="mt-8 w-16 h-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto rounded-full" />
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="py-16 px-6 text-center">
+          <div className="max-w-3xl mx-auto">
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Be Part of the Story
+            </h3>
+            <p className="text-gray-400 mb-8">
+              Join the protocol that turns every problem into provable truth.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                href="/submit"
+                className="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 font-semibold text-white hover:shadow-lg hover:shadow-cyan-500/20 transition-all"
+              >
+                Submit a Problem
+              </Link>
+              <Link
+                href="/validators"
+                className="px-6 py-3 rounded-lg bg-white/5 border border-white/15 hover:bg-white/10 font-semibold text-gray-300 transition-colors"
+              >
+                Become a Validator
+              </Link>
             </div>
           </div>
-        </motion.div>
-      </section>
-
-      {/* Mission Statement */}
-      <section className="w-full max-w-4xl px-6 pb-32 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-400">Mission</span>
-          </h2>
-          <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-lg rounded-2xl shadow-xl p-10 border border-gray-700/40">
-            <blockquote className="text-2xl md:text-3xl text-gray-200 italic leading-relaxed max-w-3xl mx-auto">
-              "To transform complaints into civilization's building blocks through cryptographic proof, decentralized validation, and incentivized truth."
-            </blockquote>
-            <div className="mt-8 w-24 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 mx-auto rounded-full"></div>
-          </div>
-        </motion.div>
-      </section>
-    </main>
+        </section>
+      </div>
+    </div>
   );
 }

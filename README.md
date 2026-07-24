@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# landing-page
-=======
 # Proof of Problem Protocol (PoPP) Landing Page
 
 A modern, responsive landing page for the Proof of Problem Protocol - the decentralized protocol for verifiable truth validation and problem-solving.
@@ -140,4 +137,3 @@ For support, please open an issue in the GitHub repository or contact the develo
 ---
 
 **Proof of Problem Protocol** - Turning complaints into civilization's building blocks.
->>>>>>> 1ce49c5 (jenkins file added)
