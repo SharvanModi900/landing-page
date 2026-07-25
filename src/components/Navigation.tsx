@@ -230,15 +230,10 @@ export default function Navigation() {
           : "bg-transparent"
       }`}
     >
-      <div className="w-full max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
+      <div className="w-full max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
         {/* ---- Logo ---- */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center text-white font-extrabold text-sm leading-none">
-            P
-          </div>
-          <span className="font-bold text-lg text-white tracking-tight">
-            PoPP
-          </span>
+        <Link href="/" className="flex items-center group">
+          <img src="/logo.png" alt="PoPP" className="h-20 w-auto object-contain" />
         </Link>
 
         {/* ---- Desktop nav ---- */}
