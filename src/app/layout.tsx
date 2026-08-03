@@ -4,6 +4,7 @@ import "./globals.css";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
 import ReduxProvider from "./Provider";
+import { WalletProvider } from "@/lib/wallet";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -54,11 +55,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navigation />
-        <ReduxProvider>
-          {children}
-        </ReduxProvider>
-        <Footer />
+        <WalletProvider>
+          <Navigation />
+          <ReduxProvider>
+            {children}
+          </ReduxProvider>
+          <Footer />
+        </WalletProvider>
       </body>
     </html>
   );

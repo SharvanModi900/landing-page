@@ -1,20 +1,5 @@
-"use client";
+import LoadingRedirect from '@/components/LoadingRedirect';
 
-import React from "react";
-
-export default function OriginTeamPage() {
-  return (
-    <main className="min-h-screen w-full bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 flex flex-col items-center">
-      <section className="w-full flex flex-col items-center justify-center pt-24 pb-16 relative overflow-hidden">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-white text-center z-10 drop-shadow-lg mb-4">Our Team</h1>
-        <p className="text-xl md:text-2xl text-gray-200 text-center z-10 max-w-2xl mb-6">Meet the people behind PoPP: visionaries, builders, and truth-seekers.</p>
-      </section>
-      <section className="w-full max-w-3xl px-6 pb-24 z-10">
-        <div className="bg-gray-900/80 rounded-2xl shadow-xl p-8 border border-gray-700/40">
-          <h2 className="text-2xl font-bold text-white mb-4">The PoPP Team</h2>
-          <p className="text-lg text-gray-300 mb-4">Our team brings together expertise in cryptography, governance, product design, and community building. We are united by a shared belief: that every problem, when validated, can become a catalyst for positive change.</p>
-        </div>
-      </section>
-    </main>
-  );
-} 
+export default function TeamPage() {
+  return <LoadingRedirect to="/about-us" message="Loading About Us" />;
+}

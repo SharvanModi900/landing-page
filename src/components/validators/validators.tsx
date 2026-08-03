@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function ValidatorSection() {
   const validators = [
@@ -9,82 +10,83 @@ export default function ValidatorSection() {
       requirements: "Must stake PoPP tokens, pass onboarding quiz, build reputation",
       benefits: "Higher rewards, governance voting rights, access to critical cases",
       icon: "👥",
-      gradient: "from-purple-500 via-pink-500 to-red-500"
+      color: "#a855f7",
     },
     {
       type: "AI Validators",
       requirements: "Open-source or audit-verified, run in trusted enclaves",
       benefits: "Pattern detection, 24/7 availability, objective analysis",
       icon: "🤖",
-      gradient: "from-blue-500 via-cyan-500 to-teal-500"
+      color: "#22d3ee",
     },
     {
-      type: "IoT/Sensor Validators",
-      requirements: "Registered devices with metadata & calibration data",
+      type: "IoT / Sensor Validators",
+      requirements: "Registered devices with metadata and calibration data",
       benefits: "Real-world signals, objective measurements, continuous monitoring",
       icon: "📡",
-      gradient: "from-green-400 via-lime-400 to-yellow-300"
-    }
+      color: "#10b981",
+    },
   ];
 
   return (
-    <section className="py-24 px-6 bg-gradient-to-b from-[#0b0e11] to-[#14181d]">
-      <div className="max-w-7xl mx-auto">
+    <section className="py-24 px-6">
+      <div className="max-w-6xl mx-auto">
         {/* Heading */}
-        <div className="text-center mb-20">
-          <h2 className="text-5xl lg:text-6xl font-bold text-white mb-4">
-            Who Can Be a <span className="text-blue-400">Validator?</span>
+        <div className="text-center mb-16">
+          <h2 className="text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
+            Who Can <span className="text-green-400">Validate?</span>
           </h2>
-          <p className="text-lg lg:text-xl text-gray-400 max-w-3xl mx-auto">
-            PoPP allows any qualified participant to become a validator—as long as they earn it
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+            PoPP allows any qualified participant to become a validator &mdash; as long as they earn it through stake, skill, or device registration.
           </p>
         </div>
 
-        {/* Premium Panel */}
-        <div className="flex flex-col lg:flex-row gap-8">
+        {/* Validator cards */}
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
           {validators.map((validator, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              className="relative flex-1 group rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-white/5 to-white/2 shadow-lg hover:shadow-xl transition-all duration-300"
+              transition={{ duration: 0.5, delay: index * 0.15 }}
+              className="bg-white/5 border border-white/10 rounded-xl p-6"
             >
-              {/* Left Gradient Sidebar */}
-              <div
-                className={`absolute left-0 top-0 h-full w-2 bg-gradient-to-b ${validator.gradient} animate-pulse-slow`}
-              ></div>
-
-              {/* Content */}
-              <div className="p-8 flex flex-col justify-between h-full">
-                {/* Icon + Type */}
-                <div className="flex items-center gap-4 mb-6">
-                  <div
-                    className={`w-16 h-16 flex items-center justify-center text-3xl bg-gradient-to-tr ${validator.gradient} rounded-full shadow-lg`}
-                  >
-                    {validator.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold text-white">{validator.type}</h3>
-                </div>
-
-                {/* Requirements & Benefits */}
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="text-blue-400 font-semibold mb-1 uppercase tracking-wide text-sm">Requirements</h4>
-                    <p className="text-gray-300 text-sm">{validator.requirements}</p>
-                  </div>
-                  <div>
-                    <h4 className="text-green-400 font-semibold mb-1 uppercase tracking-wide text-sm">Benefits</h4>
-                    <p className="text-gray-300 text-sm">{validator.benefits}</p>
-                  </div>
-                </div>
-
-                {/* Bottom Glow Line */}
-                <div className={`mt-6 h-1 w-full bg-gradient-to-r ${validator.gradient} rounded-full animate-pulse-slow`} />
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-3xl">{validator.icon}</span>
+                <h3 className="text-xl font-bold text-white">{validator.type}</h3>
               </div>
+
+              <div className="space-y-3">
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Requirements</h4>
+                  <p className="text-sm text-gray-400">{validator.requirements}</p>
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">Benefits</h4>
+                  <p className="text-sm text-gray-400">{validator.benefits}</p>
+                </div>
+              </div>
+
+              <div
+                className="mt-5 h-px w-full rounded-full"
+                style={{ background: `linear-gradient(to right, ${validator.color}, transparent)` }}
+              />
             </motion.div>
           ))}
+        </div>
+
+        {/* CTA */}
+        <div className="text-center">
+          <Link
+            href="/validators"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/15 hover:bg-white/10 rounded-lg font-semibold text-gray-300 transition-colors"
+          >
+            Become a Validator
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
         </div>
       </div>
     </section>

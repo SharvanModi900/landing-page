@@ -1,4 +1,4 @@
-// src/app/smart-contracts/page.tsx
+
 "use client";
 
 import { useState } from "react";

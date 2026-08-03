@@ -7,25 +7,21 @@ export default function LegalProfessionalsPage() {
       title: "Verified Case Evidence",
       desc: "Access problems and disputes validated through PoPP's protocol for legal accuracy.",
       icon: "⚖️",
-      gradient: "from-blue-500 to-indigo-500",
     },
     {
       title: "Compliance Insights",
       desc: "Get actionable recommendations for regulatory and data compliance.",
       icon: "📜",
-      gradient: "from-purple-500 to-pink-500",
     },
     {
       title: "Efficient Documentation",
       desc: "Organize problem reports, proofs, and legal notes securely and systematically.",
       icon: "🗂️",
-      gradient: "from-green-400 to-teal-400",
     },
     {
       title: "Collaboration & Advisory",
       desc: "Work with civic activists, NGOs, and government agencies to provide guidance.",
       icon: "🤝",
-      gradient: "from-yellow-400 to-orange-400",
     },
   ];
 
@@ -33,7 +29,7 @@ export default function LegalProfessionalsPage() {
     {
       step: "1",
       title: "Receive Verified Problems",
-      desc: "Access issues verified by PoPP’s decentralized protocol, ready for legal review.",
+      desc: "Access issues verified by PoPP's decentralized protocol, ready for legal review.",
       icon: "📩",
     },
     {
@@ -57,105 +53,61 @@ export default function LegalProfessionalsPage() {
   ];
 
   return (
-    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-black text-white">
-      {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 md:px-16 py-24 grid md:grid-cols-2 gap-12 items-center">
-        {/* Left Content */}
-        <div className="space-y-6">
-          <h1 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">
-            Empower Legal Professionals
-          </h1>
-          <p className="text-gray-300 text-lg md:text-xl">
-            PoPP equips lawyers, compliance officers, and legal teams with verified problem reports,
-            secure documentation, and insights to ensure lawful resolution and compliance.
-          </p>
-          <div className="flex gap-4 mt-6">
-            <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl shadow-lg hover:scale-105 transition-transform font-semibold">
-              Access Verified Cases
-            </button>
-            <button className="px-6 py-3 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition font-semibold">
-              Learn More
-            </button>
+    <div className="min-h-screen bg-[#030712] text-white pt-16">
+      <section className="max-w-7xl mx-auto px-6 py-10">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="space-y-4">
+            <h1 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+              Empower Legal Professionals
+            </h1>
+            <p className="text-gray-400 text-lg">
+              PoPP equips lawyers, compliance officers, and legal teams with verified problem reports,
+              secure documentation, and insights to ensure lawful resolution and compliance.
+            </p>
+            <div className="flex gap-3">
+              <button className="px-5 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold">
+                Access Verified Cases
+              </button>
+              <button className="px-5 py-2 bg-white/5 border border-white/10 rounded-xl font-semibold">
+                Learn More
+              </button>
+            </div>
           </div>
-        </div>
-
-        {/* Right Side SVG Process */}
-        <div className="relative flex justify-center">
-          <svg viewBox="0 0 400 400" className="w-96 h-96">
-            <circle cx="200" cy="200" r="150" fill="url(#grad1)" opacity="0.2" />
-            <defs>
-              <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#4f46e5" />
-                <stop offset="100%" stopColor="#8b5cf6" />
-              </linearGradient>
-              <radialGradient id="gradGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.6" />
-                <stop offset="100%" stopColor="#4f46e5" stopOpacity="0" />
-              </radialGradient>
-            </defs>
-            <path
-              d="M50 200 C120 100, 280 100, 350 200 C280 300, 120 300, 50 200"
-              stroke="#8b5cf6"
-              strokeWidth="4"
-              fill="none"
-              strokeLinecap="round"
-            />
-            {[0, 1, 2, 3].map((i) => (
-              <circle
-                key={i}
-                cx={50 + i * 75}
-                cy={200}
-                r="12"
-                fill="url(#gradGlow)"
-                className={`animate-[moveProblem_6s_linear_infinite]`}
-                style={{ animationDelay: `${i * 1.5}s` }}
-              />
-            ))}
-            <style jsx>{`
-              @keyframes moveProblem_6s_linear_infinite {
-                0% { offset-distance: 0%; }
-                100% { offset-distance: 100%; }
-              }
-              circle {
-                offset-path: path("M50 200 C120 100, 280 100, 350 200 C280 300, 120 300, 50 200");
-                offset-rotate: auto;
-              }
-            `}</style>
-          </svg>
+          <div className="flex justify-center">
+            <div className="w-48 h-48 border-4 border-cyan-500/30 rounded-full flex items-center justify-center text-5xl">
+              ⚖️
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Process Section */}
-      <section className="max-w-7xl mx-auto px-6 md:px-16 py-20">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-500">
-          PoPP Process Flow for Legal Teams
-        </h2>
-        <div className="grid md:grid-cols-4 gap-8 text-center">
-          {processSteps.map((s, idx) => (
-            <div
-              key={idx}
-              className="bg-[#0B0F1E]/80 p-6 rounded-2xl shadow-lg border border-white/10 hover:scale-105 transition-transform"
-            >
-              <div className="text-4xl mb-4">{s.icon}</div>
-              <h3 className="font-bold text-xl mb-2">{s.title}</h3>
-              <p className="text-gray-300 text-sm">{s.desc}</p>
+      <div className="bg-white/[0.03] border-y border-white/[0.06] py-10">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-2xl font-bold text-center mb-8 text-cyan-400">
+            PoPP Process Flow for Legal Teams
+          </h2>
+          <div className="grid md:grid-cols-4 gap-5">
+            {processSteps.map((s, idx) => (
+              <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-5 text-center">
+                <div className="text-3xl mb-3">{s.icon}</div>
+                <h3 className="font-bold text-lg mb-2">{s.title}</h3>
+                <p className="text-gray-400 text-sm">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <section className="max-w-7xl mx-auto px-6 py-10">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {features.map((f, idx) => (
+            <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-5">
+              <div className="text-3xl mb-3">{f.icon}</div>
+              <h3 className="font-bold text-lg mb-2">{f.title}</h3>
+              <p className="text-gray-400 text-sm">{f.desc}</p>
             </div>
           ))}
         </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="max-w-7xl mx-auto px-6 md:px-16 py-20 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        {features.map((f, idx) => (
-          <div
-            key={idx}
-            className={`p-6 rounded-2xl bg-gradient-to-br ${f.gradient} shadow-lg hover:scale-105 transition-transform`}
-          >
-            <div className="text-4xl mb-4">{f.icon}</div>
-            <h3 className="font-bold text-xl mb-2">{f.title}</h3>
-            <p className="text-gray-100 text-sm">{f.desc}</p>
-          </div>
-        ))}
       </section>
     </div>
   );

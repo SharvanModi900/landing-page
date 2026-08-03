@@ -416,8 +416,8 @@ export default function IndustrialFoundryWheel() {
                 <circle cx="0" cy="0" r="20" fill="url(#metalB)" stroke="#0b1220" strokeWidth="6" />
                 {Array.from({ length: 10 }).map((_, i) => {
                   const a = (i / 10) * 2 * Math.PI;
-                  const x = Math.cos(a) * 30;
-                  const y = Math.sin(a) * 30;
+                  const x = parseFloat((Math.cos(a) * 30).toFixed(6));
+                  const y = parseFloat((Math.sin(a) * 30).toFixed(6));
                   return <rect key={i} x={x - 4} y={y - 6} width="8" height="12" rx="2" fill="#3f3f46" transform={`rotate(${(i / 10) * 360} ${x} ${y})`} />;
                 })}
               </g>
@@ -448,8 +448,8 @@ export default function IndustrialFoundryWheel() {
                 <circle cx="0" cy="0" r="18" fill="url(#metalB)" stroke="#0b1220" strokeWidth="5" />
                 {Array.from({ length: 9 }).map((_, i) => {
                   const a = (i / 9) * 2 * Math.PI;
-                  const x = Math.cos(a) * 28;
-                  const y = Math.sin(a) * 28;
+                  const x = parseFloat((Math.cos(a) * 28).toFixed(6));
+                  const y = parseFloat((Math.sin(a) * 28).toFixed(6));
                   return <rect key={i} x={x - 3.5} y={y - 6} width="7" height="11" rx="2" fill="#3f3f46" transform={`rotate(${(i / 9) * 360} ${x} ${y})`} />;
                 })}
               </g>
@@ -480,8 +480,8 @@ export default function IndustrialFoundryWheel() {
                 <circle cx="0" cy="0" r="20" fill="url(#metalB)" stroke="#0b1220" strokeWidth="6" />
                 {Array.from({ length: 11 }).map((_, i) => {
                   const a = (i / 11) * 2 * Math.PI;
-                  const x = Math.cos(a) * 32;
-                  const y = Math.sin(a) * 32;
+                  const x = parseFloat((Math.cos(a) * 32).toFixed(6));
+                  const y = parseFloat((Math.sin(a) * 32).toFixed(6));
                   return <rect key={i} x={x - 4} y={y - 6} width="8" height="12" rx="2" fill="#3f3f46" transform={`rotate(${(i / 11) * 360} ${x} ${y})`} />;
                 })}
               </g>

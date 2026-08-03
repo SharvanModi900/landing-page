@@ -24,3 +24,38 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ─── Custom Scrollbar ─────────────────────────────────────────────────── */
+
+/* Width */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #030712;
+}
+
+/* Thumb */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #06b6d4, #3b82f6);
+  border-radius: 4px;
+}
+
+/* Thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #22d3ee, #60a5fa);
+}
+
+/* Corner piece */
+::-webkit-scrollbar-corner {
+  background: #030712;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #06b6d4 #030712;
+}

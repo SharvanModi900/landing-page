@@ -46,7 +46,7 @@ export default function DesignYourWorkflowPage() {
   ];
 
   return (
-    <main className="bg-slate-950 text-white">
+    <main className="min-h-screen bg-[#030712] text-white pt-16">
       {/* ============= HERO (Split) ============= */}
       <section className="relative overflow-hidden">
         {/* subtle background grid lines */}
@@ -56,9 +56,9 @@ export default function DesignYourWorkflowPage() {
         />
         {/* gradient glows */}
         <div aria-hidden className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl" />
-        <div aria-hidden className="absolute -bottom-32 -right-24 h-96 w-96 rounded-full bg-purple-500/20 blur-3xl" />
+        <div aria-hidden className="absolute -bottom-32 -right-24 h-96 w-96 rounded-full bg-blue-500/20 blur-3xl" />
 
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-20 md:grid-cols-2 md:py-28 lg:px-10">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-12 md:grid-cols-2 md:py-16 lg:px-10">
           {/* Left: copy */}
           <div className="z-10 flex max-w-xl flex-col gap-6">
             <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-gray-300">
@@ -67,7 +67,7 @@ export default function DesignYourWorkflowPage() {
             </span>
             <h1 className="text-4xl font-extrabold leading-tight md:text-5xl">
               Design Your Own{' '}
-              <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-fuchsia-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 PoPP Workflow
               </span>
             </h1>
@@ -115,8 +115,8 @@ export default function DesignYourWorkflowPage() {
       </section>
 
       {/* ============= HORIZONTAL PROCESS STEPS (non-centered) ============= */}
-      <section className="border-t border-white/10 bg-slate-950/60">
-        <div className="mx-auto max-w-7xl px-6 py-14 lg:px-10">
+      <section className="border-t border-white/[0.06] bg-white/[0.03]">
+        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
           <h2 className="mb-6 text-2xl font-bold text-gray-100">How it works</h2>
           <div className="no-scrollbar flex snap-x gap-6 overflow-x-auto pb-2">
             {roleSteps.map((s, i) => (
@@ -134,8 +134,8 @@ export default function DesignYourWorkflowPage() {
       </section>
 
       {/* ============= READ-ONLY PREVIEW (interactive hover) ============= */}
-      <section className="relative border-t border-white/10 bg-slate-950/70">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-16 md:grid-cols-2 lg:px-10">
+      <section className="relative border-t border-white/[0.06] bg-white/[0.03]">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-12 md:grid-cols-2 lg:px-10">
           <div className="max-w-lg">
             <h3 className="text-2xl font-bold">Preview a workflow</h3>
             <p className="mt-3 text-gray-300">
@@ -162,8 +162,8 @@ export default function DesignYourWorkflowPage() {
       </section>
 
       {/* ============= TEMPLATE LIBRARY (non-centered grid) ============= */}
-      <section className="border-t border-white/10 bg-slate-950">
-        <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10">
+      <section className="border-t border-white/[0.06]">
+        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-10">
           <div className="mb-8 flex items-end justify-between">
             <div>
               <h3 className="text-2xl font-bold">Templates library</h3>
@@ -203,8 +203,8 @@ export default function DesignYourWorkflowPage() {
       </section>
 
       {/* ============= ADVANCED FEATURES (split) ============= */}
-      <section className="border-t border-white/10 bg-slate-950/60">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-6 py-16 md:grid-cols-2 lg:px-10">
+      <section className="border-t border-white/[0.06] bg-white/[0.03]">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-12 md:grid-cols-2 lg:px-10">
           <div className="max-w-xl">
             <h3 className="text-2xl font-bold">Advanced capabilities</h3>
             <ul className="mt-6 space-y-4 text-gray-300">
@@ -247,8 +247,8 @@ export default function DesignYourWorkflowPage() {
       </section>
 
       {/* ============= CTA ============= */}
-      <section className="relative border-t border-white/10 bg-gradient-to-r from-cyan-700/20 via-slate-900 to-fuchsia-700/20">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-6 py-16 md:grid-cols-2 lg:px-10">
+      <section className="relative border-t border-white/[0.06] bg-white/[0.03]">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-6 py-12 md:grid-cols-2 lg:px-10">
           <div>
             <h3 className="text-3xl font-extrabold">Turn ideas into provable workflows</h3>
             <p className="mt-3 max-w-xl text-gray-300">

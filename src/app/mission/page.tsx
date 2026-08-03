@@ -1,93 +1,147 @@
 "use client";
-import Image from "next/image";
+
+import React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Shield, Eye, Users, Scale } from "lucide-react";
+
+const pillars = [
+  {
+    icon: <Shield className="w-6 h-6 text-cyan-400" />,
+    title: "Verify Every Problem",
+    desc: "Ensure that no legitimate problem goes unheard. PoPP provides cryptographic proof that makes complaints verifiable and immutable.",
+  },
+  {
+    icon: <Users className="w-6 h-6 text-blue-400" />,
+    title: "Empower Communities",
+    desc: "Give communities the tools to validate, escalate, and resolve problems collectively — without relying on centralized gatekeepers.",
+  },
+  {
+    icon: <Scale className="w-6 h-6 text-emerald-400" />,
+    title: "Ensure Accountability",
+    desc: "Validators stake reputation and tokens. Every action is auditable. Problems cannot be silently suppressed or manipulated.",
+  },
+  {
+    icon: <Eye className="w-6 h-6 text-purple-400" />,
+    title: "Transparent Governance",
+    desc: "DAO-driven decisions, open proposals, and community voting ensure the protocol evolves with the people it serves.",
+  },
+];
+
+const commitments = [
+  "Decentralized verification — no single point of control",
+  "Open-source protocol — auditable by anyone, anytime",
+  "Incentivized validators — stake-based reputation and rewards",
+  "Privacy-preserving — zero-knowledge proofs and selective disclosure",
+  "Community-first governance — token-weighted voting and proposals",
+];
 
 export default function MissionPage() {
   return (
-    <main className="bg-black text-white min-h-screen">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
-        <Image
-          src=""
-          alt="Mission Background"
-          fill
-          className="object-cover opacity-40"
-          priority
-        />
-        {/* Overlay Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/90"></div>
+    <div className="min-h-screen bg-[#030712] text-white">
+      <div className="pt-16">
+        {/* Hero */}
+        <section className="py-20 px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-4xl mx-auto"
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full bg-white/5 border border-white/10 text-sm text-gray-400">
+              Our Mission
+            </div>
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
+              A World Where Problems{" "}
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                Cannot Be Silenced
+              </span>
+            </h1>
+            <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              PoPP exists to ensure that every real-world problem is cryptographically
+              verified, transparently validated, and escalated to those who can act —
+              without censorship, without silence.
+            </p>
+          </motion.div>
+        </section>
 
-        {/* Content */}
-        <div className="relative z-10 text-center max-w-4xl px-6">
-          <h1 className="text-6xl font-extrabold tracking-tight bg-gradient-to-r from-orange-500 via-yellow-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg">
-            Our Mission
-          </h1>
-          <p className="mt-6 text-lg md:text-xl text-gray-300 leading-relaxed">
-            To redefine innovation through relentless pursuit of excellence, 
-            harnessing technology to solve humanity’s most complex challenges.
-          </p>
-          <div className="mt-8">
-            <a
-              href="#learn-more"
-              className="px-8 py-4 bg-orange-500 hover:bg-orange-600 rounded-full font-semibold text-lg shadow-lg transition-all duration-300"
+        {/* Pillars */}
+        <section className="py-16 px-6">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl font-bold text-center mb-12">Our Pillars</h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {pillars.map((p, i) => (
+                <motion.div
+                  key={p.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  viewport={{ once: true }}
+                  className="bg-white/5 border border-white/10 rounded-xl p-6"
+                >
+                  <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-lg bg-white/5 border border-white/10">
+                    {p.icon}
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-2">{p.title}</h3>
+                  <p className="text-sm text-gray-400">{p.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Commitments */}
+        <section className="py-16 px-6">
+          <div className="max-w-3xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="bg-white/5 border border-white/10 rounded-xl p-8"
             >
-              Learn More
-            </a>
+              <h2 className="text-2xl font-bold text-white mb-6">Our Commitments</h2>
+              <ul className="space-y-4">
+                {commitments.map((c, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="w-1.5 h-1.5 mt-2 rounded-full bg-cyan-400 shrink-0" />
+                    <span className="text-gray-400">{c}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Values Section */}
-      <section
-        id="learn-more"
-        className="py-20 px-6 bg-gradient-to-br from-zinc-900 via-black to-zinc-950"
-      >
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-12">
-          <div className="p-6 bg-zinc-800/60 backdrop-blur-md rounded-2xl border border-zinc-700 shadow-xl hover:scale-105 transition-transform duration-300">
-            <h3 className="text-2xl font-bold text-orange-400 mb-4">
-              Innovation
-            </h3>
-            <p className="text-gray-300">
-              We push boundaries, challenge norms, and constantly seek new ways
-              to create value.
-            </p>
+        {/* CTA */}
+        <section className="py-16 px-6 text-center">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl p-8 md:p-12">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                Join the Mission
+              </h2>
+              <p className="text-white/80 max-w-xl mx-auto mb-6">
+                Whether you validate problems, build the protocol, or report issues —
+                every contribution strengthens the network of truth.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Link
+                  href="/whitepapers"
+                  className="px-6 py-3 rounded-lg bg-white text-cyan-600 font-semibold hover:bg-white/90 transition-colors"
+                >
+                  Read Whitepaper
+                </Link>
+                <Link
+                  href="/contribute"
+                  className="px-6 py-3 rounded-lg bg-white/10 border border-white/20 text-white font-semibold hover:bg-white/20 transition-colors"
+                >
+                  Contribute
+                </Link>
+              </div>
+            </div>
           </div>
-          <div className="p-6 bg-zinc-800/60 backdrop-blur-md rounded-2xl border border-zinc-700 shadow-xl hover:scale-105 transition-transform duration-300">
-            <h3 className="text-2xl font-bold text-orange-400 mb-4">
-              Integrity
-            </h3>
-            <p className="text-gray-300">
-              Our actions are guided by strong ethics, transparency, and
-              accountability.
-            </p>
-          </div>
-          <div className="p-6 bg-zinc-800/60 backdrop-blur-md rounded-2xl border border-zinc-700 shadow-xl hover:scale-105 transition-transform duration-300">
-            <h3 className="text-2xl font-bold text-orange-400 mb-4">
-              Impact
-            </h3>
-            <p className="text-gray-300">
-              Every step we take aims to positively impact people, communities,
-              and the planet.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Vision Statement */}
-      <section className="py-24 px-6 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-orange-900/10 to-black"></div>
-        <div className="relative max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-extrabold text-orange-500">
-            Driving the Future Forward
-          </h2>
-          <p className="mt-6 text-lg text-gray-300 leading-relaxed">
-            We believe in empowering the world with tools, knowledge, and
-            technology that inspire progress and transform lives. Our mission is
-            not just a statement – it’s a commitment to shaping a better
-            tomorrow.
-          </p>
-        </div>
-      </section>
-    </main>
+        </section>
+      </div>
+    </div>
   );
 }
