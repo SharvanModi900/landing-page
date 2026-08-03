@@ -5,11 +5,11 @@ import { Wrench, Code2, Search, Shield, Cpu, Activity } from "lucide-react";
 export default function ToolsPage() {
   const tools = [
     { icon: <Wrench className="w-7 h-7 text-cyan-400" />, title: "Problem Explorer", desc: "Browse, filter, and analyze real-world problems submitted to PoPP.", link: "/explorer" },
-    { icon: <Search className="w-7 h-7 text-cyan-400" />, title: "Validator Dashboard", desc: "Track validation tasks, staking rewards, and governance activity.", link: "/validators" },
+    { icon: <Search className="w-7 h-7 text-cyan-400" />, title: "Validator Panel", desc: "Track validation tasks, staking rewards, and governance activity.", link: "/validator-panel" },
     { icon: <Shield className="w-7 h-7 text-cyan-400" />, title: "Security Scanner", desc: "Run vulnerability scans on smart contracts and integrations.", link: "/security" },
-    { icon: <Code2 className="w-7 h-7 text-cyan-400" />, title: "Code Playground", desc: "Experiment with the PoPP SDK using live code snippets.", link: "/playground" },
-    { icon: <Cpu className="w-7 h-7 text-cyan-400" />, title: "Node Monitor", desc: "Monitor network health, validator uptime, and testnet performance.", link: "/monitor" },
-    { icon: <Activity className="w-7 h-7 text-cyan-400" />, title: "Analytics Hub", desc: "Visualize problem trends, validator activity, and governance metrics.", link: "/analytics" },
+    { icon: <Code2 className="w-7 h-7 text-cyan-400" />, title: "SDK", desc: "Integrate PoPP using the software development kit.", link: "/sdk" },
+    { icon: <Cpu className="w-7 h-7 text-cyan-400" />, title: "Sandbox & Testnet", desc: "Test workflows in a safe sandbox environment.", link: "/sandbox-or-testnet" },
+    { icon: <Activity className="w-7 h-7 text-cyan-400" />, title: "Explorer", desc: "Browse problems, validator activity, and network metrics.", link: "/explorer" },
   ];
 
   return (

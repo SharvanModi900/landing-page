@@ -12,150 +12,97 @@ import {
   UserGroupIcon,
   BuildingLibraryIcon,
   NewspaperIcon,
-  ScaleIcon,
   ChartBarIcon,
   GlobeAltIcon,
   ArrowTrendingUpIcon,
 } from "@heroicons/react/24/outline";
 import { Wallet, ChevronDown, X } from "lucide-react";
+import { useWallet } from "@/lib/wallet";
+import WalletModal from "./WalletModal";
 
 /* ------------------------------------------------------------------ */
-/*  Mega-menu data (unchanged)                                        */
+/*  Mega-menu data — consolidated into 7 logical groups               */
 /* ------------------------------------------------------------------ */
-export const megaMenuSections = [
+
+interface MegaItem {
+  title: string;
+  desc: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+interface MegaSection {
+  label: string;
+  submenu: MegaItem[];
+}
+
+export const megaMenuSections: MegaSection[] = [
   {
-    label: "Origin",
+    label: "Explore",
     submenu: [
-      { title: "Our Story", desc: "How PoPP began", href: "/origin/story", icon: BookOpenIcon },
-      { title: "Mission", desc: "Our core mission and values", href: "/origin/mission", icon: LightBulbIcon },
-      { title: "Team", desc: "Meet the people behind PoPP", href: "/origin/team", icon: UsersIcon },
+      { title: "Our Story", desc: "How PoPP began", href: "/our-story", icon: BookOpenIcon },
+      { title: "Mission", desc: "Core mission and values", href: "/mission", icon: LightBulbIcon },
+      { title: "About Us", desc: "Meet the team", href: "/about-us", icon: UsersIcon },
+      { title: "Roadmap", desc: "What's next for PoPP", href: "/roadmap", icon: ArrowTrendingUpIcon },
+      { title: "Case Studies", desc: "Real-world impact stories", href: "/case-studies", icon: StarIcon },
+      { title: "Community", desc: "Join the global community", href: "/community", icon: UserGroupIcon },
     ],
   },
   {
-    label: "How It Works",
+    label: "Protocol",
     submenu: [
-      { title: "Architecture", desc: "The 5-layer PoPP protocol", href: "/how-it-works/architecture", icon: AcademicCapIcon },
-      { title: "Validation", desc: "How proof and verification work", href: "/how-it-works/validation", icon: ShieldCheckIcon },
-      { title: "Security", desc: "Decentralized trust and safety", href: "/security", icon: StarIcon },
-    ],
-  },
-  {
-    label: "Using PoPP",
-    submenu: [
-      { title: "For Users", desc: "Submit and track problems", href: "/using-popp#users", icon: UserGroupIcon },
-      { title: "For Validators", desc: "Validate and earn rewards", href: "/using-popp#validators", icon: ChartBarIcon },
-      { title: "For Partners", desc: "Integrate PoPP into your systems", href: "/using-popp#partners", icon: GlobeAltIcon },
+      { title: "How It Works", desc: "The 5-layer PoPP protocol", href: "/how-it-works", icon: AcademicCapIcon },
+      { title: "Using PoPP", desc: "Guide for users, validators, partners", href: "/using-popp", icon: UserGroupIcon },
+      { title: "Security", desc: "Decentralized trust and safety", href: "/security", icon: ShieldCheckIcon },
+      { title: "Tokenomics", desc: "Token model and supply", href: "/tokenomics", icon: ChartBarIcon },
+      { title: "Staking", desc: "Earn rewards by staking", href: "/staking-mechanics", icon: StarIcon },
     ],
   },
   {
     label: "Products",
     submenu: [
-      { title: "Problem Explorer", desc: "Browse and search submitted problems", href: "/explorer", icon: BookOpenIcon },
-      { title: "Truth NFT Viewer", desc: "View and verify truth NFTs", href: "/nft-viewer", icon: AcademicCapIcon },
-      { title: "Validator Panel", desc: "Manage validations and rewards", href: "/validator-panel", icon: ChartBarIcon },
-      { title: "Proposal & DAO Dashboard", desc: "Participate in governance", href: "/dao-dashboard", icon: GlobeAltIcon },
-    ],
-  },
-  {
-    label: "Roadmap",
-    submenu: [
-      { title: "Roadmap", desc: "What's next for PoPP this year", href: "/roadmap", icon: LightBulbIcon },
-      { title: "Vision", desc: "Our long-term goals and strategy", href: "/vision", icon: AcademicCapIcon },
-      { title: "Support", desc: "Get help and customer support", href: "/support", icon: ShieldCheckIcon },
-    ],
-  },
-  {
-    label: "Impact",
-    submenu: [
-      { title: "Case Studies", desc: "Real-world results and success stories", href: "/case-studies", icon: ArrowTrendingUpIcon },
-      { title: "Community", desc: "Join our global community", href: "/community", icon: UserGroupIcon },
-      { title: "Feedback", desc: "Share your thoughts and ideas", href: "/feedback", icon: StarIcon },
-      { title: "Contribute", desc: "Help build and improve PoPP", href: "/contribute", icon: GlobeAltIcon },
-      { title: "Events", desc: "Upcoming conferences and meetups", href: "/events", icon: ArrowTrendingUpIcon },
-    ],
-  },
-  {
-    label: "Resources",
-    submenu: [
-      { title: "Whitepaper", desc: "Read the official PoPP protocol whitepaper", href: "/whitepapers", icon: BookOpenIcon },
-      { title: "API Reference", desc: "Detailed API endpoints and usage", href: "/api-references", icon: GlobeAltIcon },
-      { title: "FAQ", desc: "Frequently asked questions", href: "/faqs", icon: LightBulbIcon },
-      { title: "Blogs", desc: "Project updates and articles", href: "/blogs", icon: GlobeAltIcon },
-      { title: "News", desc: "Latest developments and announcements", href: "/news", icon: GlobeAltIcon },
-      { title: "Events", desc: "Workshops, webinars, and meetups", href: "/events", icon: LightBulbIcon },
-    ],
-  },
-  {
-    label: "Knowledge Hub",
-    submenu: [
-      { title: "Academia & Research", desc: "Collaborations with universities and institutions", href: "/academia-and-research", icon: AcademicCapIcon },
-      { title: "Student Zone", desc: "Student resources and project support", href: "/students", icon: UsersIcon },
-      { title: "Policy & Governance", desc: "Frameworks for policymakers", href: "/policy-and-governance", icon: ShieldCheckIcon },
-      { title: "Public Datasets", desc: "Free and open datasets", href: "/datasets", icon: GlobeAltIcon },
-      { title: "Learning Resources", desc: "Guides, videos, and documentation", href: "/learn", icon: BookOpenIcon },
-    ],
-  },
-  {
-    label: "Developer Hub",
-    submenu: [
-      { title: "Developer Docs", desc: "Full technical documentation", href: "/developer-docs", icon: AcademicCapIcon },
-      { title: "SDK", desc: "PoPP software development kit", href: "/sdk", icon: ShieldCheckIcon },
-      { title: "CLI", desc: "Command-line tools for developers", href: "/cli", icon: GlobeAltIcon },
-      { title: "Smart Contracts", desc: "PoPP smart contract repository", href: "/smart-contracts", icon: BookOpenIcon },
-      { title: "Tools", desc: "Utilities and dev tools", href: "/tools", icon: LightBulbIcon },
-      { title: "Sandbox / Testnet", desc: "Try PoPP in a safe environment", href: "/sandbox-or-testnet", icon: GlobeAltIcon },
+      { title: "Problem Explorer", desc: "Browse submitted problems", href: "/explorer", icon: BookOpenIcon },
+      { title: "Validator Panel", desc: "Live dashboard and analytics", href: "/validator-panel", icon: ChartBarIcon },
+      { title: "DAO Dashboard", desc: "Governance and proposals", href: "/dao-dashboard", icon: GlobeAltIcon },
+      { title: "Submit Problem", desc: "Report a real-world issue", href: "/report", icon: ArrowTrendingUpIcon },
     ],
   },
   {
     label: "Validators",
     submenu: [
-      { title: "Validators Docs", desc: "Full technical documentation", href: "/validator-docs", icon: AcademicCapIcon },
-      { title: "Validator Exam", desc: "Certification and exams for validators", href: "/validator-exam", icon: ShieldCheckIcon },
-      { title: "Validator Smart Contracts", desc: "Manage PoPP smart contracts", href: "/validator-smart-contracts", icon: BookOpenIcon },
-      { title: "Validator Tools", desc: "Utilities and dashboard tools", href: "/validator-tools", icon: LightBulbIcon },
-      { title: "Leaderboards", desc: "Top validators and contributor rankings", href: "/validator-leaderboards", icon: StarIcon },
+      { title: "Become a Validator", desc: "Overview and requirements", href: "/validators", icon: AcademicCapIcon },
+      { title: "Validator Panel", desc: "Live dashboard and rewards", href: "/validator-panel", icon: ChartBarIcon },
+      { title: "Smart Contracts", desc: "Contract details and ABIs", href: "/smart-contracts", icon: BookOpenIcon },
+      { title: "Best Practices", desc: "Guidelines for secure usage", href: "/best-practices", icon: ShieldCheckIcon },
     ],
   },
   {
-    label: "Security & Audits",
+    label: "Developers",
     submenu: [
-      { title: "Audit Reports", desc: "Independent security audits", href: "/audit-reports", icon: ShieldCheckIcon },
-      { title: "Vulnerability Disclosures", desc: "Report potential issues", href: "/vulnerability-disclosures", icon: LightBulbIcon },
-      { title: "Best Practices", desc: "Guidelines for secure usage", href: "/best-practices", icon: BookOpenIcon },
+      { title: "Documentation", desc: "Full technical docs", href: "/docs", icon: AcademicCapIcon },
+      { title: "API Reference", desc: "REST API endpoints", href: "/api-references", icon: GlobeAltIcon },
+      { title: "SDK", desc: "Software development kit", href: "/sdk", icon: ShieldCheckIcon },
+      { title: "CLI", desc: "Command-line tools", href: "/cli", icon: GlobeAltIcon },
+      { title: "Sandbox", desc: "Try PoPP in a safe env", href: "/sandbox-or-testnet", icon: LightBulbIcon },
     ],
   },
   {
-    label: "Token & Economics",
+    label: "Resources",
     submenu: [
-      { title: "Tokenomics", desc: "PoPP token model and supply", href: "/tokenomics", icon: ChartBarIcon },
-      { title: "Staking Mechanics", desc: "Earn rewards by staking", href: "/staking-mechanics", icon: StarIcon },
-      { title: "Incentive Structures", desc: "How contributors earn value", href: "/incentive-structures", icon: GlobeAltIcon },
-    ],
-  },
-  {
-    label: "Tutorials & Learning",
-    submenu: [
-      { title: "Video Tutorials", desc: "Step-by-step guides", href: "/videos", icon: BookOpenIcon },
-      { title: "Workshops", desc: "Hands-on learning events", href: "/workshops", icon: UsersIcon },
+      { title: "Whitepaper", desc: "Official protocol paper", href: "/whitepapers", icon: BookOpenIcon },
+      { title: "Blogs & News", desc: "Updates and articles", href: "/blogs", icon: GlobeAltIcon },
+      { title: "Learning Resources", desc: "Guides and videos", href: "/learning-resources", icon: BookOpenIcon },
       { title: "Example Workflows", desc: "Practical PoPP scenarios", href: "/example-workflows", icon: LightBulbIcon },
-    ],
-  },
-  {
-    label: "Legal / Compliance",
-    submenu: [
-      { title: "Terms of Use", desc: "Official rules and conditions", href: "/terms-of-use", icon: BookOpenIcon },
-      { title: "Privacy Policy", desc: "User data protection policies", href: "/privacy-policy", icon: ShieldCheckIcon },
-      { title: "Data Compliance", desc: "Regulatory and compliance standards", href: "/data-compliance", icon: GlobeAltIcon },
+      { title: "Events", desc: "Conferences and meetups", href: "/events", icon: ArrowTrendingUpIcon },
     ],
   },
   {
     label: "PoPP For",
     submenu: [
-      { title: "Civic Activists & NGOs", desc: "Document issues, build evidence trails, escalate problems", href: "/civic-activists-and-ngos", icon: UsersIcon },
-      { title: "Government Agencies", desc: "Transparent issue tracking, public accountability, data-driven decisions", href: "/government-agencies", icon: BuildingLibraryIcon },
-      { title: "Media Organizations", desc: "Verified stories, fact-checking, investigative leads", href: "/media-organizations", icon: NewspaperIcon },
-      { title: "Legal Professionals", desc: "Evidence collection, case building, witness protection", href: "/legal-professionals", icon: ScaleIcon },
-      { title: "Academic Researchers", desc: "Study civic engagement patterns and governance effectiveness", href: "/academic-researchers", icon: AcademicCapIcon },
+      { title: "Civic Activists & NGOs", desc: "Document and escalate issues", href: "/civic-activists-and-ngos", icon: UsersIcon },
+      { title: "Government Agencies", desc: "Transparent issue tracking", href: "/government-agencies", icon: BuildingLibraryIcon },
+      { title: "Media Organizations", desc: "Verified stories and leads", href: "/media-organizations", icon: NewspaperIcon },
+      { title: "Academia & Research", desc: "University collaborations", href: "/academia-and-research", icon: AcademicCapIcon },
     ],
   },
 ];
@@ -163,7 +110,10 @@ export const megaMenuSections = [
 const mainNavLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about-us" },
-  { label: "Submit", href: "/submit" },
+  { label: "Report", href: "/report" },
+  { label: "Validators", href: "/validators" },
+  { label: "Explorer", href: "/explorer" },
+  { label: "Docs", href: "/docs" },
 ];
 
 /* ================================================================== */
@@ -173,9 +123,13 @@ export default function Navigation() {
   const [megaOpen, setMegaOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const { connected, address } = useWallet();
+
+  const shortAddr = address ? `${address.slice(0, 6)}...${address.slice(-4)}` : null;
 
   /* prefetch all routes when mega menu opens */
   const prefetchRoutes = useCallback(() => {
@@ -224,16 +178,18 @@ export default function Navigation() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-[#030712]/90 backdrop-blur-xl border-b border-white/[0.06]"
+          ? "bg-[#030712]/95 backdrop-blur-xl shadow-[0_1px_0_rgba(255,255,255,0.04)]"
           : "bg-transparent"
       }`}
     >
       <div className="w-full max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
         {/* ---- Logo ---- */}
         <Link href="/" className="flex items-center group">
-          <img src="/logo.png" alt="PoPP" className="h-20 w-auto object-contain" />
+          <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            PoPP
+          </span>
         </Link>
 
         {/* ---- Desktop nav ---- */}
@@ -262,14 +218,27 @@ export default function Navigation() {
 
           {/* Right-side actions */}
           <div className="flex items-center gap-3 ml-4">
-            <button className="p-2 text-gray-400 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors">
+            <button
+              onClick={() => setWalletModalOpen(true)}
+              className={`inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all ${
+                connected
+                  ? "bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20"
+                  : "text-gray-400 hover:text-white hover:bg-white/[0.06]"
+              }`}
+            >
               <Wallet className="w-[18px] h-[18px]" />
+              {connected && shortAddr && (
+                <span className="hidden lg:inline">{shortAddr}</span>
+              )}
             </button>
             <Link
-              href="/submit"
-              className="px-4 py-2 text-sm font-semibold rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:shadow-lg hover:shadow-cyan-500/20 transition-all"
+              href="/report"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:scale-105 transition-all"
             >
-              Get Started
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              Report Problem
             </Link>
           </div>
         </div>
@@ -289,20 +258,40 @@ export default function Navigation() {
       </div>
 
       {/* ============================================================ */}
-      {/*  Mega Menu (desktop) — compact multi-column                  */}
+      {/*  Mega Menu (desktop) — animated slide-down                   */}
       {/* ============================================================ */}
-      {megaOpen && (
-        <div className="hidden md:block fixed left-0 right-0 top-16 z-50" ref={megaMenuRef}>
-          <div className="bg-[#0a0f1e]/95 backdrop-blur-xl border-b border-white/[0.06] shadow-2xl shadow-black/40">
-            <div className="max-w-7xl mx-auto px-6 py-5 max-h-[80vh] overflow-y-auto">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 gap-y-5">
-                {megaMenuSections.map((section) => (
-                  <div key={section.label} className="flex flex-col gap-1.5">
-                    {/* Category header */}
-                    <div className="text-[11px] font-bold uppercase tracking-wider text-cyan-400/70 pb-1.5 mb-1 border-b border-white/[0.06]">
+      <div
+        ref={megaMenuRef}
+        className={`hidden md:block fixed left-0 right-0 top-16 z-50 transition-all duration-300 ease-out ${
+          megaOpen
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-2 pointer-events-none"
+        }`}
+        style={{ visibility: megaOpen ? "visible" : "hidden" }}
+      >
+        <div className="bg-[#0a0f1e]/95 backdrop-blur-xl shadow-2xl shadow-black/40 rounded-b-2xl border-t border-white/[0.04]">
+          <div className="max-w-7xl mx-auto px-6 py-6 max-h-[75vh] overflow-y-auto">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-6">
+              {megaMenuSections.map((section, sIdx) => (
+                <div
+                  key={section.label}
+                  className="flex flex-col"
+                  style={{
+                    transition: "opacity 0.25s ease, transform 0.25s ease",
+                    transitionDelay: megaOpen ? `${sIdx * 40}ms` : "0ms",
+                    opacity: megaOpen ? 1 : 0,
+                    transform: megaOpen ? "translateY(0)" : "translateY(8px)",
+                  }}
+                >
+                  {/* Section header */}
+                  <div className="flex items-center gap-2 pb-2 mb-2 border-b border-white/[0.06]">
+                    <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-300">
                       {section.label}
-                    </div>
-                    {/* Links — compact, no icons/descriptions */}
+                    </span>
+                  </div>
+                  {/* Links with icons and descriptions */}
+                  <div className="flex flex-col gap-0.5">
                     {section.submenu.map((sub) => (
                       <Link
                         key={sub.title}
@@ -310,19 +299,26 @@ export default function Navigation() {
                         prefetch={true}
                         onClick={() => setMegaOpen(false)}
                         onMouseEnter={() => router.prefetch(sub.href)}
-                        className="text-sm text-gray-400 hover:text-white py-1 transition-colors truncate"
-                        title={sub.desc}
+                        className="group flex items-start gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/[0.05] transition-colors"
                       >
-                        {sub.title}
+                        <sub.icon className="w-3.5 h-3.5 text-gray-500 group-hover:text-cyan-400 mt-0.5 flex-shrink-0 transition-colors" />
+                        <div className="min-w-0">
+                          <div className="text-sm text-gray-300 group-hover:text-white transition-colors leading-tight">
+                            {sub.title}
+                          </div>
+                          <div className="text-[11px] text-gray-500 leading-tight truncate">
+                            {sub.desc}
+                          </div>
+                        </div>
                       </Link>
                     ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      )}
+      </div>
 
       {/* ============================================================ */}
       {/*  Mobile menu (full-screen overlay)                           */}
@@ -354,21 +350,36 @@ export default function Navigation() {
             ))}
 
             {/* Bottom actions */}
-            <div className="pt-4 border-t border-white/[0.06] flex gap-3">
+            <div className="pt-4 border-t border-white/[0.06] flex flex-col gap-3">
               <Link
-                href="/submit"
+                href="/report"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex-1 text-center px-4 py-3 text-sm font-semibold rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-white"
+                className="flex items-center justify-center gap-2 px-4 py-3.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20"
               >
-                Get Started
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                Report a Problem
               </Link>
-              <button className="px-4 py-3 rounded-lg bg-white/[0.05] border border-white/[0.08] text-gray-300">
+              <button
+                onClick={() => { setIsMobileMenuOpen(false); setWalletModalOpen(true); }}
+                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl border transition-colors ${
+                  connected
+                    ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-400"
+                    : "bg-white/[0.05] border-white/[0.08] text-gray-300"
+                }`}
+              >
                 <Wallet className="w-5 h-5" />
+                <span className="text-sm">{connected ? (shortAddr || "Connected") : "Connect Wallet"}</span>
               </button>
             </div>
+
           </div>
         </div>
       )}
+
+      {/* Wallet Modal */}
+      {walletModalOpen && <WalletModal onClose={() => setWalletModalOpen(false)} />}
     </nav>
   );
 }

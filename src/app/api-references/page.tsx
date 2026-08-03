@@ -1,171 +1,289 @@
-import React from "react";
+"use client";
 
-const ApiReference = () => {
-  return (
-    <div className="max-w-5xl mx-auto px-4 py-12 mt-[70px]">
-      <h1 className="text-4xl font-bold mb-8 text-center">PoPP API Reference</h1>
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Copy, Check, Globe, Lock } from "lucide-react";
+import Link from "next/link";
 
-      {/* Introduction */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold mb-3">Introduction</h2>
-        <p>
-          Welcome to the PoPP API! This API allows you to interact with the
-          Proof-of-Problem Protocol for verifying, validating, and escalating
-          real-world problems.
-        </p>
-      </section>
+const CHAIN_API = "https://chain.thharko.com";
+const BACKEND_API = "https://popp.thharko.com";
 
-      {/* Authentication */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold mb-3">Authentication</h2>
-        <p>All API requests must include an API key in the header:</p>
-        <pre className="bg-gray-900 text-green-400 p-4 rounded my-4 overflow-x-auto">
-          <code>Authorization: Bearer &lt;your_api_key&gt;</code>
-        </pre>
-      </section>
-
-      {/* Endpoints */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold mb-5">Endpoints</h2>
-
-        {/* Problems */}
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-2">Problems</h3>
-
-          <div className="mb-4">
-            <h4 className="font-semibold">GET /api/problems</h4>
-            <p>Retrieve a list of all problems.</p>
-            <p className="italic mb-1">Optional query parameter:</p>
-            <ul className="list-disc list-inside mb-2">
-              <li><code>status</code>: Filter by problem status (open, closed, etc.)</li>
-            </ul>
-            <pre className="bg-gray-800 text-green-300 p-3 rounded overflow-x-auto">
-              <code>
-{`[
-  {
-    "id": "123",
-    "title": "Problem title",
-    "status": "open",
-    "created_at": "2025-08-01T12:00:00Z"
-  }
-]`}
-              </code>
-            </pre>
-          </div>
-
-          <div className="mb-4">
-            <h4 className="font-semibold">POST /api/problems</h4>
-            <p>Create a new problem.</p>
-            <p className="italic mb-1">Body parameters:</p>
-            <pre className="bg-gray-800 text-green-300 p-3 rounded overflow-x-auto mb-2">
-              <code>
-{`{
-  "title": "Problem title",
-  "description": "Detailed problem description"
-}`}
-              </code>
-            </pre>
-            <p className="italic mb-1">Response:</p>
-            <pre className="bg-gray-800 text-green-300 p-3 rounded overflow-x-auto">
-              <code>
-{`{
-  "id": "124",
-  "title": "Problem title",
-  "status": "open"
-}`}
-              </code>
-            </pre>
-          </div>
-        </div>
-
-        {/* Users */}
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-2">Users</h3>
-          <div>
-            <h4 className="font-semibold">GET /api/users/{`{userId}`}</h4>
-            <p>Get details of a specific user.</p>
-            <pre className="bg-gray-800 text-green-300 p-3 rounded overflow-x-auto">
-              <code>
-{`{
-  "id": "user123",
-  "username": "popplover",
-  "joined_at": "2025-01-01T10:00:00Z"
-}`}
-              </code>
-            </pre>
-          </div>
-        </div>
-
-        {/* Votes */}
-        <div>
-          <h3 className="text-xl font-semibold mb-2">Votes</h3>
-          <div>
-            <h4 className="font-semibold">POST /api/problems/{`{problemId}`}/votes</h4>
-            <p>Cast a vote on a problem.</p>
-            <p className="italic mb-1">Body:</p>
-            <pre className="bg-gray-800 text-green-300 p-3 rounded overflow-x-auto mb-2">
-              <code>
-{`{
-  "vote": "up"  // or "down"
-}`}
-              </code>
-            </pre>
-            <p className="italic mb-1">Response:</p>
-            <pre className="bg-gray-800 text-green-300 p-3 rounded overflow-x-auto">
-              <code>
-{`{
-  "problemId": "123",
-  "votes": {
-    "up": 10,
-    "down": 2
-  }
-}`}
-              </code>
-            </pre>
-          </div>
-        </div>
-      </section>
-
-      {/* Error Codes */}
-      <section className="mb-10">
-        <h2 className="text-2xl font-semibold mb-3">Error Codes</h2>
-        <table className="w-full text-left border-collapse border border-gray-300">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 px-3 py-2">Code</th>
-              <th className="border border-gray-300 px-3 py-2">Message</th>
-              <th className="border border-gray-300 px-3 py-2">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              { code: 400, msg: "Bad Request", desc: "Invalid request parameters" },
-              { code: 401, msg: "Unauthorized", desc: "Missing or invalid API key" },
-              { code: 404, msg: "Not Found", desc: "Resource not found" },
-              { code: 500, msg: "Internal Server Error", desc: "Server encountered an error" },
-            ].map(({ code, msg, desc }) => (
-              <tr key={code} className="odd:bg-gray-50">
-                <td className="border border-gray-300 px-3 py-2 font-mono">{code}</td>
-                <td className="border border-gray-300 px-3 py-2">{msg}</td>
-                <td className="border border-gray-300 px-3 py-2">{desc}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
-
-      {/* Examples */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-3">Examples</h2>
-        <p>Get all open problems:</p>
-        <pre className="bg-gray-900 text-green-400 p-4 rounded overflow-x-auto">
-          <code>
-            {`curl -H "Authorization: Bearer <your_api_key>" https://api.popp.io/api/problems?status=open`}
-          </code>
-        </pre>
-      </section>
-    </div>
-  );
+type Endpoint = {
+  method: "GET" | "POST";
+  path: string;
+  desc: string;
+  response?: string;
 };
 
-export default ApiReference;
+const chainEndpoints: Endpoint[] = [
+  {
+    method: "GET",
+    path: "/popp/ticket",
+    desc: "List all submitted problem tickets",
+    response: `{ "tickets": [...], "pagination": { ... } }`,
+  },
+  {
+    method: "GET",
+    path: "/popp/ticket/{id}",
+    desc: "Get a specific ticket by ID",
+    response: `{ "ticket": { "id": "...", "status": "...", ... } }`,
+  },
+  {
+    method: "GET",
+    path: "/popp/proofs",
+    desc: "List all submitted proofs",
+    response: `{ "proofs": [...], "pagination": { ... } }`,
+  },
+  {
+    method: "GET",
+    path: "/cosmos/staking/v1beta1/validators",
+    desc: "List all active validators",
+    response: `{ "validators": [...], "pagination": { ... } }`,
+  },
+  {
+    method: "GET",
+    path: "/cosmos/gov/v1beta1/proposals",
+    desc: "List governance proposals",
+    response: `{ "proposals": [...], "pagination": { ... } }`,
+  },
+  {
+    method: "GET",
+    path: "/cosmos/staking/v1beta1/pool",
+    desc: "Get staking pool info (bonded tokens)",
+    response: `{ "pool": { "bonded_tokens": "100000000", ... } }`,
+  },
+  {
+    method: "GET",
+    path: "/cosmos/base/tendermint/v1beta1/node_info",
+    desc: "Get chain node information",
+    response: `{ "default_node_info": { ... }, "application_version": { ... } }`,
+  },
+  {
+    method: "GET",
+    path: "/cosmos/bank/v1beta1/supply",
+    desc: "Get total token supply",
+    response: `{ "supply": [{ "denom": "stake", "amount": "..." }] }`,
+  },
+];
+
+const backendEndpoints: Endpoint[] = [
+  {
+    method: "POST",
+    path: "/api/submissions",
+    desc: "Submit a new problem report to the off-chain backend",
+    response: `{ "id": "...", "status": "pending", ... }`,
+  },
+  {
+    method: "GET",
+    path: "/api/submissions",
+    desc: "List all submissions with pagination",
+    response: `{ "submissions": [...], "total": ... }`,
+  },
+  {
+    method: "GET",
+    path: "/api/submissions/{id}",
+    desc: "Get a specific submission by ID",
+    response: `{ "id": "...", "title": "...", "status": "...", ... }`,
+  },
+  {
+    method: "POST",
+    path: "/api/validations",
+    desc: "Submit a validation for a problem",
+    response: `{ "id": "...", "ticket_id": "...", "verdict": "..." }`,
+  },
+  {
+    method: "POST",
+    path: "/api/proofs",
+    desc: "Submit proof evidence for a ticket",
+    response: `{ "id": "...", "ticket_id": "...", "evidence_hash": "..." }`,
+  },
+];
+
+const methodColor = (method: string) =>
+  method === "GET" ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" : "text-blue-400 bg-blue-500/10 border-blue-500/20";
+
+export default function ApiReferencesPage() {
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const copyText = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(text);
+    setTimeout(() => setCopied(null), 2000);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#030712] text-white">
+      <div className="pt-16 max-w-5xl mx-auto px-6 py-12">
+        {/* Hero */}
+        <div className="mb-10">
+          <h1 className="text-4xl font-bold mb-3">
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+              PoPP API Reference
+            </span>
+          </h1>
+          <p className="text-gray-400 max-w-2xl">
+            Interact with the Proof-of-Problem Protocol through the Cosmos SDK chain
+            and the PoPP off-chain backend.
+          </p>
+        </div>
+
+        {/* Base URLs */}
+        <div className="grid sm:grid-cols-2 gap-4 mb-10">
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-3">
+            <Globe className="w-5 h-5 text-cyan-400 shrink-0" />
+            <div>
+              <div className="text-xs text-gray-500 mb-0.5">Chain API (Cosmos SDK)</div>
+              <div className="text-sm font-mono text-cyan-400">{CHAIN_API}</div>
+            </div>
+          </div>
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-3">
+            <Lock className="w-5 h-5 text-blue-400 shrink-0" />
+            <div>
+              <div className="text-xs text-gray-500 mb-0.5">Backend API (Off-chain)</div>
+              <div className="text-sm font-mono text-blue-400">{BACKEND_API}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Chain Endpoints */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-2">Chain Endpoints</h2>
+          <p className="text-sm text-gray-400 mb-6">
+            Public REST endpoints on the PoPP Cosmos SDK chain. No authentication required for read-only queries.
+          </p>
+
+          <div className="space-y-3">
+            {chainEndpoints.map((ep) => (
+              <motion.div
+                key={ep.path}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3 }}
+                className="bg-white/5 border border-white/10 rounded-xl p-4"
+              >
+                <div className="flex items-start gap-3">
+                  <span className={`px-2 py-0.5 rounded border text-xs font-mono font-bold shrink-0 ${methodColor(ep.method)}`}>
+                    {ep.method}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <code className="text-sm font-mono text-white break-all">{ep.path}</code>
+                      <button
+                        onClick={() => copyText(`${CHAIN_API}${ep.path}`)}
+                        className="shrink-0 text-gray-500 hover:text-cyan-400 transition-colors"
+                      >
+                        {copied === `${CHAIN_API}${ep.path}` ? (
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    </div>
+                    <p className="text-sm text-gray-400">{ep.desc}</p>
+                    {ep.response && (
+                      <pre className="mt-2 text-xs text-gray-500 bg-black/30 rounded p-2 overflow-x-auto">
+                        <code>{ep.response}</code>
+                      </pre>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Backend Endpoints */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-2">Backend Endpoints</h2>
+          <p className="text-sm text-gray-400 mb-6">
+            Off-chain API for submissions, validations, and proofs. These endpoints handle the bridge between user submissions and on-chain tickets.
+          </p>
+
+          <div className="space-y-3">
+            {backendEndpoints.map((ep) => (
+              <motion.div
+                key={ep.path}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3 }}
+                className="bg-white/5 border border-white/10 rounded-xl p-4"
+              >
+                <div className="flex items-start gap-3">
+                  <span className={`px-2 py-0.5 rounded border text-xs font-mono font-bold shrink-0 ${methodColor(ep.method)}`}>
+                    {ep.method}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <code className="text-sm font-mono text-white break-all">{ep.path}</code>
+                      <button
+                        onClick={() => copyText(`${BACKEND_API}${ep.path}`)}
+                        className="shrink-0 text-gray-500 hover:text-cyan-400 transition-colors"
+                      >
+                        {copied === `${BACKEND_API}${ep.path}` ? (
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        ) : (
+                          <Copy className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    </div>
+                    <p className="text-sm text-gray-400">{ep.desc}</p>
+                    {ep.response && (
+                      <pre className="mt-2 text-xs text-gray-500 bg-black/30 rounded p-2 overflow-x-auto">
+                        <code>{ep.response}</code>
+                      </pre>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Example */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-4">Example</h2>
+          <p className="text-sm text-gray-400 mb-3">Fetch all tickets from the chain:</p>
+          <div className="bg-black/40 border border-white/10 rounded-xl p-4 flex items-start gap-3">
+            <pre className="text-sm text-emerald-400 overflow-x-auto flex-1">
+              <code>curl {CHAIN_API}/popp/ticket</code>
+            </pre>
+            <button
+              onClick={() => copyText(`curl ${CHAIN_API}/popp/ticket`)}
+              className="text-gray-500 hover:text-cyan-400 transition-colors shrink-0"
+            >
+              {copied === `curl ${CHAIN_API}/popp/ticket` ? (
+                <Check className="w-4 h-4 text-emerald-400" />
+              ) : (
+                <Copy className="w-4 h-4" />
+              )}
+            </button>
+          </div>
+        </section>
+
+        {/* Links */}
+        <div className="flex flex-wrap gap-4">
+          <Link
+            href="/sdk"
+            className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 text-sm font-semibold hover:shadow-lg hover:shadow-cyan-500/20 transition"
+          >
+            SDK Documentation
+          </Link>
+          <Link
+            href="/cli"
+            className="px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-sm font-semibold hover:bg-white/10 transition"
+          >
+            CLI Reference
+          </Link>
+          <Link
+            href="/docs"
+            className="px-5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-sm font-semibold hover:bg-white/10 transition"
+          >
+            Developer Docs
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

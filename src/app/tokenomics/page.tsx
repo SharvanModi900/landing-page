@@ -75,6 +75,39 @@ export default function TokenomicsPage() {
             Each submitted problem generates PRS credits for validators and contributors. Escalation tokens allow priority processing and media amplification. The PoPP token ensures governance participation and sustainable ecosystem growth.
           </p>
         </div>
+
+        {/* Incentive Structures */}
+        <div className="bg-white/[0.03] border-y border-white/[0.06] py-10 px-6">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-2xl font-bold mb-6 text-center">Incentive Structures</h2>
+            <div className="grid sm:grid-cols-3 gap-6 mb-8">
+              {[
+                { icon: "💰", title: "Direct Rewards", desc: "Token incentives for validators and contributors upon successful validation." },
+                { icon: "🛡️", title: "Reputation & Governance", desc: "Reputation points build influence in PoPP DAO governance and voting." },
+                { icon: "🏆", title: "Social Incentives", desc: "Recognition badges, leaderboard positions, and community prestige." },
+              ].map((item, i) => (
+                <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-5">
+                  <div className="text-3xl mb-3">{item.icon}</div>
+                  <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
+                  <p className="text-gray-400 text-sm">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+            <h3 className="text-lg font-bold mb-4 text-center">Reward Distribution</h3>
+            <div className="max-w-md mx-auto space-y-3">
+              {[
+                { label: "Validators", percent: 50 },
+                { label: "Contributors", percent: 30 },
+                { label: "Ecosystem Fund", percent: 20 },
+              ].map((r, i) => (
+                <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-4 flex justify-between items-center">
+                  <span className="font-semibold text-sm">{r.label}</span>
+                  <span className="font-bold text-cyan-400">{r.percent}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

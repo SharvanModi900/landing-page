@@ -212,22 +212,25 @@ export default function Home() {
 
           <div className="flex flex-wrap justify-center gap-4 mb-8">
             <Link
-              href="/submit"
+              href="/report"
               className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-semibold text-white hover:shadow-lg hover:shadow-cyan-500/25 transition-all"
             >
               Submit Problem
             </Link>
+            <a
+              href="/app/popp.apk"
+              className="inline-flex items-center gap-2.5 px-8 py-4 bg-white/5 border border-white/15 hover:bg-white/10 rounded-lg font-semibold text-gray-300 transition-colors"
+            >
+              <svg viewBox="0 0 24 24" className="w-5 h-5 text-green-400" fill="currentColor">
+                <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.01 5.732 7.708-8.034zm3.196-1.832l2.386 1.361a1 1 0 010 1.728l-2.386 1.361-2.533-2.533 2.533-2.917zM5.791 3.252l10.01 5.732-2.302 2.302-7.708-8.034z" />
+              </svg>
+              Download Android App
+            </a>
             <Link
               href="/whitepapers"
               className="px-8 py-4 bg-white/5 border border-white/15 hover:bg-white/10 rounded-lg font-semibold text-gray-300 transition-colors"
             >
               Read Whitepaper
-            </Link>
-            <Link
-              href="/community"
-              className="px-8 py-4 bg-white/5 border border-white/15 hover:bg-white/10 rounded-lg font-semibold text-gray-300 transition-colors"
-            >
-              Join Community
             </Link>
           </div>
 

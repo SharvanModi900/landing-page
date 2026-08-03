@@ -46,7 +46,7 @@ export default function UsingPoppPage() {
           </div>
         </div>
         <Link
-          href="/submit"
+          href="/report"
           className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 px-5 py-2.5 rounded-lg font-medium hover:opacity-90 transition"
         >
           Submit a Problem <ArrowRightIcon className="w-4 h-4" />

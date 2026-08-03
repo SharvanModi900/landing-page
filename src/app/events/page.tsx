@@ -3,27 +3,31 @@ import { motion } from "framer-motion";
 
 const events = [
   {
-    title: "Space Innovation Summit",
+    title: "PoPP Validator Onboarding Workshop",
     date: "2025-08-20",
     location: "Virtual Event",
-    image: "/images/space-summit.jpg",
-    description: "A gathering of the brightest minds in space technology.",
+    description: "Learn how to become a PoPP validator — staking, evidence review, and reputation scoring.",
     type: "upcoming",
   },
   {
     title: "PoPP Developer Meetup",
     date: "2025-09-05",
-    location: "Dubai, UAE",
-    image: "/images/dev-meet.jpg",
-    description: "Hands-on coding, networking, and building PoPP tools.",
+    location: "Bengaluru, India",
+    description: "Hands-on coding, networking, and building PoPP tools with the core team.",
     type: "upcoming",
   },
   {
-    title: "Hackathon 2025",
+    title: "Civic Tech & PoPP: Governance Deep-Dive",
+    date: "2025-09-18",
+    location: "Virtual Event",
+    description: "How NGOs and civic organizations can integrate PoPP for transparent problem reporting.",
+    type: "upcoming",
+  },
+  {
+    title: "PoPP Hackathon 2025",
     date: "2025-07-15",
-    location: "Bangalore, India",
-    image: "/images/hackathon.jpg",
-    description: "48-hour innovation challenge to solve real-world problems.",
+    location: "Bengaluru, India",
+    description: "48-hour challenge to build tools and integrations on the PoPP protocol.",
     type: "past",
   },
 ];
@@ -85,14 +89,13 @@ export default function EventsPage() {
                   transition={{ duration: 0.4 }}
                   className="rounded-xl bg-white/5 border border-white/10 overflow-hidden"
                 >
-                  <img
-                    src={event.image}
-                    alt={event.title}
-                    className="w-full h-40 object-cover"
-                  />
                   <div className="p-4">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center mb-3">
+                      <span className="text-white font-bold text-sm">{event.title[0]}</span>
+                    </div>
                     <h3 className="text-base font-bold">{event.title}</h3>
-                    <p className="text-sm text-gray-500">{event.date}</p>
+                    <p className="text-sm text-gray-500">{event.date} — {event.location}</p>
+                    <p className="text-sm text-gray-400 mt-1">{event.description}</p>
                   </div>
                 </motion.div>
               ))}

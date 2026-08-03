@@ -6,25 +6,22 @@ import Link from "next/link";
 export default function DatasetsPage() {
   const datasets = [
     {
-      title: "Global Problem Reports Dataset",
-      desc: "Comprehensive dataset of all problems reported through PoPP protocol.",
-      size: "2.4 GB",
-      records: "125,000+",
+      title: "Problem Ticket Registry",
+      desc: "All problem tickets submitted through PoPP — including status, category, evidence hashes, and validator consensus.",
+      status: "Coming Soon",
       format: "JSON, CSV",
     },
     {
-      title: "Validator Performance Metrics",
-      desc: "Historical data on validator accuracy, response times, and rewards.",
-      size: "890 MB",
-      records: "50,000+",
+      title: "Validator Performance Reports",
+      desc: "Historical data on validator accuracy, response times, stake changes, and reputation scores.",
+      status: "Coming Soon",
       format: "CSV, Parquet",
     },
     {
-      title: "Problem Resolution Outcomes",
-      desc: "Track resolution rates and impact metrics across different categories.",
-      size: "1.2 GB",
-      records: "75,000+",
-      format: "JSON, CSV",
+      title: "Governance & Proposal Data",
+      desc: "On-chain governance proposals, voting records, and outcome data from the PoPP DAO.",
+      status: "Coming Soon",
+      format: "JSON",
     },
   ];
 
@@ -48,14 +45,10 @@ export default function DatasetsPage() {
             <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-5">
               <h3 className="font-semibold text-lg mb-2">{ds.title}</h3>
               <p className="text-gray-400 text-sm mb-4">{ds.desc}</p>
-              <div className="grid grid-cols-3 gap-4 mb-4 text-sm">
+              <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
                 <div>
-                  <div className="text-gray-400 text-xs">Size</div>
-                  <div className="font-semibold">{ds.size}</div>
-                </div>
-                <div>
-                  <div className="text-gray-400 text-xs">Records</div>
-                  <div className="font-semibold">{ds.records}</div>
+                  <div className="text-gray-400 text-xs">Status</div>
+                  <div className="font-semibold text-amber-400">{ds.status}</div>
                 </div>
                 <div>
                   <div className="text-gray-400 text-xs">Format</div>

@@ -27,7 +27,7 @@ type Resource = {
   link?: string;
 };
 
-const ALL_CATEGORIES = ["All", "Space Tech", "Blockchain", "AI & Robotics", "Dev Tools", "Research"];
+const ALL_CATEGORIES = ["All", "Protocol Basics", "Validators", "Governance", "Dev Tools", "Research"];
 const FORMATS = ["All", "Article", "Video", "Tutorial", "PDF"];
 
 const sampleResources: Resource[] = [
@@ -35,7 +35,7 @@ const sampleResources: Resource[] = [
     id: "r1",
     title: "Understanding PoPP Protocol",
     desc: "Deep dive into the Proof-of-Problem Protocol framework with diagrams and examples.",
-    category: "Blockchain",
+    category: "Protocol Basics",
     difficulty: "Intermediate",
     format: "Article",
     tags: ["protocol", "governance"],
@@ -48,14 +48,14 @@ const sampleResources: Resource[] = [
   {
     id: "r2",
     title: "PoPP Masterclass — Part 1",
-    desc: "Video course: architecture, smart contracts and real-world integrations.",
+    desc: "Video course: architecture, Cosmos SDK chain setup, and real-world integrations.",
     category: "Dev Tools",
     difficulty: "Advanced",
     format: "Video",
     tags: ["course", "video"],
     progress: 10,
     featured: true,
-    author: "Instructor Team",
+    author: "Core Team",
     rating: 4.8,
     link: "#",
   },
@@ -63,27 +63,27 @@ const sampleResources: Resource[] = [
     id: "r3",
     title: "Beginner Guide to Decentralized Governance",
     desc: "A step-by-step beginner path to learn governance for PoPP.",
-    category: "Research",
+    category: "Governance",
     difficulty: "Beginner",
     format: "Tutorial",
     tags: ["guide", "beginner"],
     progress: 0,
-    author: "Community Contributor",
+    author: "Community",
     rating: 4.2,
     link: "#",
   },
   {
     id: "r4",
-    title: "Security Best Practices (PDF)",
-    desc: "Checklist and best practices to secure your dApp.",
-    category: "Dev Tools",
+    title: "Validator Security Best Practices (PDF)",
+    desc: "Checklist and best practices to secure your validator node.",
+    category: "Validators",
     difficulty: "Intermediate",
     format: "PDF",
-    tags: ["security"],
+    tags: ["security", "validator"],
     progress: 0,
     author: "Security Team",
     rating: 4.7,
-    link: "/downloads/security-checklist.pdf",
+    link: "#",
   },
 ];
 
@@ -456,9 +456,9 @@ export default function LearningResourcesPage() {
             <ol className="space-y-2 text-sm">
               <li className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-orange-400 flex items-center justify-center font-bold text-xs">A</div>
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-400 to-orange-400 flex items-center justify-center font-bold text-xs">V1</div>
                   <div>
-                    <div className="font-semibold text-xs">Anaya</div>
+                    <div className="font-semibold text-xs">Validator #1</div>
                     <div className="text-xs text-gray-400">420 pts</div>
                   </div>
                 </div>
@@ -466,9 +466,9 @@ export default function LearningResourcesPage() {
               </li>
               <li className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-violet-500 flex items-center justify-center font-bold text-xs">M</div>
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-400 to-violet-500 flex items-center justify-center font-bold text-xs">V2</div>
                   <div>
-                    <div className="font-semibold text-xs">Marco</div>
+                    <div className="font-semibold text-xs">Validator #2</div>
                     <div className="text-xs text-gray-400">380 pts</div>
                   </div>
                 </div>
@@ -476,9 +476,9 @@ export default function LearningResourcesPage() {
               </li>
               <li className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-blue-400 flex items-center justify-center font-bold text-xs">S</div>
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-blue-400 flex items-center justify-center font-bold text-xs">V3</div>
                   <div>
-                    <div className="font-semibold text-xs">Sana</div>
+                    <div className="font-semibold text-xs">Validator #3</div>
                     <div className="text-xs text-gray-400">310 pts</div>
                   </div>
                 </div>

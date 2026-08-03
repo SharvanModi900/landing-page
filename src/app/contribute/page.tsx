@@ -52,7 +52,7 @@ export default function ContributePage() {
                 Get Started
               </Link>
               <Link
-                href="https://github.com/your-org/your-repo"
+                href="#"
                 target="_blank"
                 rel="noreferrer"
                 className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/[0.07] transition"
@@ -119,7 +119,7 @@ export default function ContributePage() {
                     </div>
                     <div>
                       <div className="text-sm font-semibold text-white">{s}</div>
-                      {idx === 0 && <div className="text-xs text-gray-500 mt-0.5">git clone git@github.com:your-org/your-repo.git</div>}
+                      {idx === 0 && <div className="text-xs text-gray-500 mt-0.5">git clone the PoPP repository</div>}
                     </div>
                   </li>
                 ))}
@@ -127,7 +127,7 @@ export default function ContributePage() {
 
               <div className="mt-6 flex gap-3">
                 <Link
-                  href="https://github.com/your-org/your-repo/issues?q=is%3Aopen+is%3Aissue"
+                  href="#"
                   className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 hover:bg-white/[0.07] transition"
                   target="_blank"
                   rel="noreferrer"
@@ -149,13 +149,13 @@ export default function ContributePage() {
                 Chat with contributors, find mentors, and coordinate efforts.
               </p>
               <div className="flex flex-col gap-3">
-                <Link className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 hover:bg-white/[0.07] transition" href="https://discord.gg/your-invite" target="_blank" rel="noreferrer">
+                <Link className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 hover:bg-white/[0.07] transition" href="#" target="_blank" rel="noreferrer">
                   Join Discord
                 </Link>
                 <Link className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 hover:bg-white/[0.07] transition" href="https://matrix.org" target="_blank" rel="noreferrer">
                   Join Matrix
                 </Link>
-                <Link className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 hover:bg-white/[0.07] transition" href="https://forum.yoursite.com" target="_blank" rel="noreferrer">
+                <Link className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 hover:bg-white/[0.07] transition" href="#" target="_blank" rel="noreferrer">
                   Visit Forum
                 </Link>
               </div>
@@ -205,7 +205,7 @@ export default function ContributePage() {
             <h3 className="text-2xl font-bold text-white mb-3">Ready to contribute?</h3>
             <p className="text-gray-400 mb-6">Pick an area above and start by opening an issue or joining the discussion.</p>
             <div className="flex gap-3 justify-center">
-              <Link href="https://github.com/your-org/your-repo" className="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 font-semibold hover:shadow-lg hover:shadow-cyan-500/20 transition">
+              <Link href="#" className="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 font-semibold hover:shadow-lg hover:shadow-cyan-500/20 transition">
                 Go to GitHub
               </Link>
               <Link href="/support" className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/[0.07] transition">
