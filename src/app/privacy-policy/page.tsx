@@ -17,6 +17,13 @@ import {
   Users,
   AlertTriangle,
   BookOpen,
+  Smartphone,
+  MapPin,
+  Camera,
+  Bell,
+  Image,
+  Key,
+  Wifi,
 } from "lucide-react";
 
 // ─── Data ───────────────────────────────────────────────────────────────────
@@ -128,6 +135,38 @@ Anonymized and aggregated data may be retained indefinitely for research and net
 • Block explorers (public blockchain data)
 
 We encourage you to review the privacy policies of any third-party services you interact with through PoPP.`,
+  },
+  {
+    id: "mobile-app-data",
+    title: "Mobile App Data Collection (Google Play)",
+    icon: <Smartphone size={14} />,
+    content: `The PoPP mobile application collects the following types of data to provide its civic reporting and validation services. This disclosure is provided in compliance with Google Play Store Data Safety requirements.`,
+    subsections: [
+      { label: "Location (Approximate & Precise)", detail: "GPS coordinates are collected to geo-tag problem submissions, enable map exploration, and power ride-mode road health monitoring. Location is collected only when you submit a problem or use ride-mode — not in the background." },
+      { label: "Photos & Videos (Camera + Gallery)", detail: "Camera and photo library access is used to capture or select photos and videos as evidence when reporting civic problems (potholes, damage, etc.). Media is uploaded to our servers as problem evidence." },
+      { label: "Device & App Activity", detail: "Device type, OS version, IP address, app crash logs, and interaction patterns are collected for analytics, security, and performance optimization." },
+      { label: "Push Notifications", detail: "A unique device push token (via Firebase/Expo) is stored on our server to deliver real-time alerts about problem status updates, governance proposals, and validator activities." },
+      { label: "User Profile & Identity", detail: "Display name and profile avatar (optional) are collected during sign-up. Wallet address is stored for authentication. All credentials are stored in encrypted on-device storage (SecureStore/Keychain)." },
+      { label: "In-App Wallet & Keys", detail: "A 24-word mnemonic recovery phrase is generated and stored in encrypted on-device storage. Private keys are derived in-memory only — never transmitted or stored on our servers." },
+      { label: "Submissions & Evidence", detail: "Problem descriptions, GPS coordinates, photos, videos, and evidence hashes are uploaded to our servers for validation, verification, and public record." },
+      { label: "App Permissions Requested", detail: "Location (foreground), Camera, Photo Library, Notifications. All permissions are optional and can be revoked at any time via device settings." },
+    ],
+  },
+  {
+    id: "play-store-safety",
+    title: "Google Play Data Safety Summary",
+    icon: <Shield size={14} />,
+    content: null,
+    subsections: [
+      { label: "Data Collected", detail: "Location, Photos/Videos, Device info, App activity, Push token, User profile, Wallet address" },
+      { label: "Data NOT Collected", detail: "Contacts, SMS, call logs, microphone, browsing history, personal messages, fitness data, financial info" },
+      { label: "Data Shared with Third Parties", detail: "None. We do not sell or share personal data. Push notifications are delivered via Expo's service." },
+      { label: "Data Encryption", detail: "All data is encrypted in transit (TLS 1.3) and sensitive data encrypted at rest (AES-256)" },
+      { label: "Data Deletable?", detail: "Yes — users can request account deletion and data removal via privacy@popp.org or in-app settings" },
+      { label: "Security Practices", detail: "Regular security audits, code reviews, encrypted credential storage, self-custodial wallet keys" },
+      { label: "Data Purpose", detail: "Civic problem reporting, evidence collection, map visualization, governance participation, validator reputation" },
+      { label: "On-Chain Data", detail: "Wallet addresses and transaction data are publicly visible on the blockchain ledger (immutable by design)" },
+    ],
   },
   {
     id: "children",
