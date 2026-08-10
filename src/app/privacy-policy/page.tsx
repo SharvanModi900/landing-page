@@ -90,7 +90,7 @@ const SECTIONS = [
     id: "contact",
     title: "Contact",
     icon: <Shield size={16} />,
-    text: `For privacy questions or data deletion requests: privacy@popp.org`,
+    text: `For privacy questions or data deletion requests: sharvanmodi900@gmail.com`,
   },
 ];
 
