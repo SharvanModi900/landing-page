@@ -119,7 +119,7 @@
 import CoreProtocolWhitepaper from "./CoreProtocolWhitepaper";
 
 type Props = {
-  params: { category: string }; // ✅ params is plain object, not Promise
+  params: Promise<{ category: string }>;
 };
 
 export async function generateStaticParams() {
@@ -131,6 +131,6 @@ export async function generateStaticParams() {
 }
 
 export default async function WhitepaperPage({ params }: Props) {
-  const { category } = params; // ✅ no await needed
+  const { category } = await params;
   return <CoreProtocolWhitepaper category={category} />;
 }
