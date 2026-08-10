@@ -286,6 +286,56 @@ function DetailContent() {
             </motion.div>
           )}
 
+          {/* Location Map */}
+          {(backend?.latitude || ticket?.location) && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.13 }}
+              className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                <MapPin size={14} className="text-cyan-400" /> Location
+              </h2>
+              <div className="rounded-lg overflow-hidden border border-white/10 bg-black/20 h-48">
+                {(() => {
+                  const lat = backend?.latitude;
+                  const lng = backend?.longitude;
+                  if (lat && lng) {
+                    return (
+                      <iframe
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        loading="lazy"
+                        src={`https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.01},${lat - 0.01},${lng + 0.01},${lat + 0.01}&layer=mapnik&marker=${lat},${lng}`}
+                      />
+                    );
+                  }
+                  // Fallback for chain tickets with location string
+                  const loc = ticket?.location?.split(',');
+                  if (loc && loc.length === 2) {
+                    const cLat = parseFloat(loc[0]);
+                    const cLng = parseFloat(loc[1]);
+                    if (!isNaN(cLat) && !isNaN(cLng)) {
+                      return (
+                        <iframe
+                          width="100%"
+                          height="100%"
+                          style={{ border: 0 }}
+                          loading="lazy"
+                          src={`https://www.openstreetmap.org/export/embed.html?bbox=${cLng - 0.01},${cLat - 0.01},${cLng + 0.01},${cLat + 0.01}&layer=mapnik&marker=${cLat},${cLng}`}
+                        />
+                      );
+                    }
+                  }
+                  return <div className="flex items-center justify-center h-full text-gray-500 text-sm">Map unavailable</div>;
+                })()}
+              </div>
+              <div className="mt-2 text-xs text-gray-400">
+                {backend?.latitude && backend?.longitude
+                  ? `${backend.latitude.toFixed(6)}, ${backend.longitude.toFixed(6)}`
+                  : ticket?.location || "Unknown"}
+              </div>
+            </motion.div>
+          )}
+
           {/* AI Analysis */}
           {backend?.ai_summary && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
@@ -367,6 +417,19 @@ function DetailContent() {
               </div>
             </motion.div>
           )}
+
+          {/* Raw Data */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+            className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+            <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+              <FileText size={14} className="text-gray-400" /> Raw Data
+            </h2>
+            <div className="bg-black/30 rounded-lg p-3 overflow-x-auto">
+              <pre className="text-[10px] text-gray-400 font-mono whitespace-pre-wrap break-all">
+                {JSON.stringify({ ticket, backend }, null, 2)}
+              </pre>
+            </div>
+          </motion.div>
         </div>
 
         {/* Sidebar */}
