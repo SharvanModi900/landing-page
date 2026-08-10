@@ -13,14 +13,15 @@ export async function generateStaticParams() {
 export default async function WhitepaperPage({
   params,
 }: {
-  params: { category: string; paperId: string };
+  params: Promise<{ category: string; paperId: string }>;
 }) {
-  const categoryData = whitepapers[params.category];
+  const { category, paperId } = await params;
+  const categoryData = whitepapers[category];
   if (!categoryData) {
     return <div className="p-10 text-center text-gray-400">Category not found.</div>;
   }
 
-  const wp = categoryData.papers.find((p: any) => p.id === params.paperId);
+  const wp = categoryData.papers.find((p: any) => p.id === paperId);
   if (!wp) {
     return <div className="p-10 text-center text-gray-400">Whitepaper not found.</div>;
   }

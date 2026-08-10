@@ -9,6 +9,17 @@ async function hashFile(file: File): Promise<string> {
   return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
+async function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+const BACKEND_URL = "http://35.154.1.21:4000";
+
 export default function SubmissionForm({
   onSuccess,
 }: {
@@ -20,6 +31,7 @@ export default function SubmissionForm({
     longitude: "",
   });
   const [file, setFile] = useState<File | null>(null);
+  const [filePreview, setFilePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [locationStatus, setLocationStatus] = useState<
@@ -61,7 +73,15 @@ export default function SubmissionForm({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+      const f = e.target.files[0];
+      setFile(f);
+      // Generate preview for image files
+      if (f.type.startsWith("image/")) {
+        const url = URL.createObjectURL(f);
+        setFilePreview(url);
+      } else {
+        setFilePreview(null);
+      }
     }
   };
 
@@ -72,11 +92,29 @@ export default function SubmissionForm({
 
     try {
       let media_hash = "";
+      let media_url = "";
       if (file) {
         media_hash = await hashFile(file);
+        // Upload image to S3 via backend upload endpoint
+        try {
+          const base64 = await fileToBase64(file);
+          const uploadRes = await fetch(`${BACKEND_URL}/api/upload/image`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ image: base64, category: "evidence" }),
+          });
+          if (uploadRes.ok) {
+            const uploadData = await uploadRes.json();
+            media_url = uploadData.url || "";
+          } else {
+            console.warn("Image upload failed, submitting without image URL");
+          }
+        } catch (uploadErr) {
+          console.warn("Image upload error:", uploadErr);
+        }
       }
 
-      const res = await fetch("http://35.154.1.21:4000/api/submissions", {
+      const res = await fetch(`${BACKEND_URL}/api/submissions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -84,6 +122,7 @@ export default function SubmissionForm({
           latitude: parseFloat(form.latitude),
           longitude: parseFloat(form.longitude),
           media_hash,
+          media_url,
         }),
       });
 
@@ -92,6 +131,7 @@ export default function SubmissionForm({
       onSuccess(data);
       setForm({ description: "", latitude: "", longitude: "" });
       setFile(null);
+      setFilePreview(null);
     } catch (err: any) {
       setError(err.message || "Unknown error");
     } finally {
@@ -192,12 +232,18 @@ export default function SubmissionForm({
             className="hidden"
           />
           {file ? (
-            <div className="text-center">
-              <FileText className="w-6 h-6 text-cyan-400 mx-auto mb-1" />
-              <span className="text-sm text-white">{file.name}</span>
-              <span className="text-xs text-gray-500 block">
-                {(file.size / 1024).toFixed(1)} KB
-              </span>
+            <div className="flex items-center gap-3">
+              {filePreview ? (
+                <img src={filePreview} alt="Preview" className="w-16 h-16 object-cover rounded-lg border border-white/10" />
+              ) : (
+                <FileText className="w-8 h-8 text-cyan-400 flex-shrink-0" />
+              )}
+              <div>
+                <span className="text-sm text-white block">{file.name}</span>
+                <span className="text-xs text-gray-500">
+                  {(file.size / 1024).toFixed(1)} KB
+                </span>
+              </div>
             </div>
           ) : (
             <div className="text-center">
