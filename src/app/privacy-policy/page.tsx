@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Shield, MapPin, Camera, Smartphone, Key, Bell, User, Image, Lock } from "lucide-react";
+import { Shield, MapPin, Camera, Smartphone, Bell, User, Image, Lock } from "lucide-react";
 
 const SECTIONS = [
   {
@@ -25,14 +25,14 @@ const SECTIONS = [
         detail: "Camera and photo library access is used to capture evidence when reporting civic problems. Media is uploaded to our servers as proof.",
       },
       {
-        label: "Wallet Address",
-        icon: <Key size={14} />,
-        detail: "A wallet address is generated or imported when you sign in. Used as your identity on the platform. Private keys stay on your device — never sent to our servers.",
+        label: "User Account",
+        icon: <User size={14} />,
+        detail: "An account is created when you sign in. Used as your identity on the platform.",
       },
       {
         label: "Display Name",
         icon: <User size={14} />,
-        detail: "Optional. You can set a display name during wallet creation or in your profile. Used to show who submitted a problem (unless anonymous).",
+        detail: "Optional. You can set a display name during sign-up or in your profile. Used to show who submitted a problem (unless anonymous).",
       },
       {
         label: "Profile Photo",
@@ -42,7 +42,7 @@ const SECTIONS = [
       {
         label: "Push Notification Token",
         icon: <Bell size={14} />,
-        detail: "A device-specific token is sent to our server so we can notify you about problem updates, governance proposals, and validator activities.",
+        detail: "A device-specific token is sent to our server so we can notify you about problem updates and community activities.",
       },
       {
         label: "Device Info",
@@ -55,18 +55,15 @@ const SECTIONS = [
     id: "not-collected",
     title: "Data We Do NOT Collect",
     icon: <Lock size={16} />,
-    text: "We do NOT collect: contacts, SMS, call logs, microphone audio, browsing history, personal messages, fitness data, or financial information. We do not sell or share any personal data with third parties.",
+    text: "We do NOT collect: contacts, SMS, call logs, microphone audio, browsing history, personal messages, fitness data, or financial/payment information. We do not sell or share any personal data with third parties.",
   },
   {
     id: "storage",
     title: "How Data Is Stored",
     icon: <Lock size={16} />,
     items: [
-      { label: "Wallet Mnemonic", detail: "Stored in your device's encrypted SecureStore. Never transmitted to our servers." },
-      { label: "Private Keys", detail: "Derived in-memory only for signing transactions. Never stored or transmitted." },
-      { label: "Auth Token", detail: "JWT token stored in your device's local storage. Sent with each API request." },
+      { label: "Auth Token", detail: "Authentication token stored in your device's local storage. Sent with each API request." },
       { label: "Submissions", detail: "Problem reports (text, photos, location) are sent to and stored on our servers." },
-      { label: "Blockchain Data", detail: "Submission hashes anchored on the PoPP chain are public and immutable." },
     ],
   },
   {
@@ -84,7 +81,7 @@ const SECTIONS = [
     id: "deletion",
     title: "Data Deletion",
     icon: <Shield size={16} />,
-    text: `You can delete your account and request data removal by contacting us at sharvanmodi900@gmail.com. On-chain data (submission hashes) cannot be deleted as they are part of the immutable blockchain ledger. All off-chain data (profile, submissions, photos) will be removed within 30 days of your request.`,
+    text: `You can delete your account and request data removal by visiting our account deletion page or contacting us at sharvanmodi900@gmail.com. All off-chain data (profile, submissions, photos) will be removed within 30 days of your request.`,
   },
   {
     id: "contact",
