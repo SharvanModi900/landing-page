@@ -76,9 +76,10 @@ export default function SubmitPage() {
 
               {/* Right Column: Form */}
               <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-8">
-                <h2 className="text-xl font-bold text-white mb-6">
-                  Problem Details
+                <h2 className="text-xl font-bold text-white mb-2">
+                  Submit a Problem
                 </h2>
+                <p className="text-sm text-gray-400 mb-6">Report a real-world issue for verification</p>
                 <SubmissionForm
                   onSuccess={(data: any) => {
                     setSubmitted(true);

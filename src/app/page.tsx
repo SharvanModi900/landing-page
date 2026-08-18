@@ -17,7 +17,7 @@ const caseStudies = [
     evidence: "Video evidence + IoT sensor data",
     outcome: "Emergency response + district reforms",
     icon: "🚰",
-    color: "#22d3ee",
+    color: "#06b6d4",
   },
   {
     title: "Infrastructure Hazard",
@@ -26,7 +26,7 @@ const caseStudies = [
     evidence: "Photo + GPS + traffic camera data",
     outcome: "Civic repair funded + reputation gains",
     icon: "🛣️",
-    color: "#10b981",
+    color: "#3b82f6",
   },
   {
     title: "Corruption Report",
@@ -35,7 +35,7 @@ const caseStudies = [
     evidence: "Audio recording + document scan",
     outcome: "Legal alert + audit flag + media escalation",
     icon: "🕵️‍♂️",
-    color: "#a855f7",
+    color: "#10b981",
   },
 ];
 
@@ -66,7 +66,7 @@ const governanceSteps = [
 /* ================================================================== */
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#0a0e1a] text-white">
       {/* 1. Hero */}
       <div className="pt-16">
         <HeroSection />
@@ -79,13 +79,13 @@ export default function Home() {
       <ValidatorSection />
 
       {/* 4. Case Studies */}
-      <section className="py-24 px-6">
+      <section className="py-24 px-6 bg-[#0a0f1a]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
               Real-World <span className="text-cyan-400">Impact</span>
             </h2>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
               See how PoPP transforms problems into provable facts across different domains.
             </p>
           </div>
@@ -98,25 +98,25 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.15 }}
-                className="bg-white/5 border border-white/10 rounded-xl p-6"
+                className="bg-white/[0.03] border border-white/[0.07] rounded-xl p-6 hover:border-white/[0.13] transition-colors"
               >
                 <div className="text-3xl mb-4">{cs.icon}</div>
                 <h4 className="text-lg font-bold text-white mb-3">{cs.title}</h4>
                 <div className="space-y-2 text-sm">
-                  <div className="text-gray-400">
+                  <div className="text-gray-300">
                     <span className="text-gray-500">Location:</span>{" "}
-                    <span className="text-gray-300 ml-1">{cs.location}</span>
+                    <span className="text-gray-200 ml-1">{cs.location}</span>
                   </div>
-                  <div className="text-gray-400">
+                  <div className="text-gray-300">
                     <span className="text-gray-500">Issue:</span>{" "}
-                    <span className="text-gray-300 ml-1">{cs.issue}</span>
+                    <span className="text-gray-200 ml-1">{cs.issue}</span>
                   </div>
-                  <div className="text-gray-400">
+                  <div className="text-gray-300">
                     <span className="text-gray-500">Evidence:</span>{" "}
-                    <span className="text-gray-300 ml-1">{cs.evidence}</span>
+                    <span className="text-gray-200 ml-1">{cs.evidence}</span>
                   </div>
                   <div
-                    className="pt-2 mt-2 border-t border-white/5 font-medium"
+                    className="pt-2 mt-2 border-t border-white/[0.06] font-medium"
                     style={{ color: cs.color }}
                   >
                     {cs.outcome}
@@ -129,7 +129,7 @@ export default function Home() {
           <div className="text-center mt-10">
             <Link
               href="/case-studies"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 border border-white/15 hover:bg-white/10 rounded-lg text-sm font-semibold text-gray-300 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/[0.06] border border-white/[0.12] hover:bg-white/[0.10] rounded-lg text-sm font-semibold text-gray-200 transition-colors"
             >
               See All Case Studies
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -144,13 +144,13 @@ export default function Home() {
       <WhoNeedsPoPP />
 
       {/* 6. Trust & Governance (merged) */}
-      <section className="py-24 px-6">
+      <section className="py-24 px-6 bg-[#0d1220]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
-              Trust & <span className="text-green-400">Governance</span>
+              Trust & <span className="text-cyan-400">Governance</span>
             </h2>
-            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
               Security is engineered into every layer. Governance evolves with the community.
             </p>
           </div>
@@ -163,7 +163,7 @@ export default function Home() {
                 {securityItems.map((item) => (
                   <div
                     key={item.title}
-                    className="bg-white/5 border border-white/10 rounded-xl p-4"
+                    className="bg-white/[0.03] border border-white/[0.07] rounded-xl p-4 hover:border-white/[0.13] transition-colors"
                   >
                     <div className="text-2xl mb-2">{item.icon}</div>
                     <h4 className="text-sm font-semibold text-white mb-1">{item.title}</h4>
@@ -180,9 +180,9 @@ export default function Home() {
                 {governanceSteps.map((step, idx) => (
                   <div
                     key={step.stage}
-                    className="flex items-start gap-4 bg-white/5 border border-white/10 rounded-xl p-4"
+                    className="flex items-start gap-4 bg-white/[0.03] border border-white/[0.07] rounded-xl p-4 hover:border-white/[0.13] transition-colors"
                   >
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-green-500 to-cyan-500 text-white font-bold text-sm flex-shrink-0">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-sm flex-shrink-0">
                       {idx + 1}
                     </div>
                     <div>
@@ -198,37 +198,39 @@ export default function Home() {
       </section>
 
       {/* 7. Final CTA */}
-      <section className="py-24 px-6">
+      <section className="py-24 px-6 bg-[#0a0f1a]">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
             Join the Protocol That{" "}
-            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-amber-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Proves Truth
             </span>
           </h2>
-          <p className="text-lg text-gray-400 mb-10 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-300 mb-10 max-w-2xl mx-auto">
             Transform complaints into cryptographically proven facts. Earn rewards. Shape governance.
           </p>
 
           <div className="flex flex-wrap justify-center gap-4 mb-8">
             <Link
               href="/report"
-              className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-semibold text-white hover:shadow-lg hover:shadow-cyan-500/25 transition-all"
+              className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-semibold text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all"
             >
               Submit Problem
             </Link>
             <a
-              href="/app/popp.apk"
-              className="inline-flex items-center gap-2.5 px-8 py-4 bg-white/5 border border-white/15 hover:bg-white/10 rounded-lg font-semibold text-gray-300 transition-colors"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSc1uzrlQPc3q_DignaVOK2yzKKaLgtGMQNvCx5iZmgmcx-VAeA/viewform"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 px-8 py-4 bg-white/[0.06] border border-white/[0.12] hover:bg-white/[0.10] rounded-lg font-semibold text-gray-200 transition-colors"
             >
-              <svg viewBox="0 0 24 24" className="w-5 h-5 text-green-400" fill="currentColor">
-                <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.01 5.732 7.708-8.034zm3.196-1.832l2.386 1.361a1 1 0 010 1.728l-2.386 1.361-2.533-2.533 2.533-2.917zM5.791 3.252l10.01 5.732-2.302 2.302-7.708-8.034z" />
+              <svg className="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
               </svg>
-              Download Android App
+              Join Early Access
             </a>
             <Link
               href="/whitepapers"
-              className="px-8 py-4 bg-white/5 border border-white/15 hover:bg-white/10 rounded-lg font-semibold text-gray-300 transition-colors"
+              className="px-8 py-4 bg-white/[0.06] border border-white/[0.12] hover:bg-white/[0.10] rounded-lg font-semibold text-gray-200 transition-colors"
             >
               Read Whitepaper
             </Link>

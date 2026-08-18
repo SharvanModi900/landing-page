@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useMemo, useRef } from "react";
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -56,18 +56,38 @@ function FitBounds({ markers }: { markers: ProblemMarker[] }) {
   return null;
 }
 
+/** Captures the map instance for parent-level cleanup */
+function MapInstanceCapture({ onCreated }: { onCreated: (map: L.Map) => void }) {
+  const map = useMap();
+  useEffect(() => {
+    onCreated(map);
+  }, [map, onCreated]);
+  return null;
+}
+
 interface ProblemMapProps {
   markers: ProblemMarker[];
   onMarkerClick?: (id: string) => void;
+  visible?: boolean;
 }
 
-export default function ProblemMap({ markers, onMarkerClick }: ProblemMapProps) {
+export default function ProblemMap({ markers, onMarkerClick, visible = true }: ProblemMapProps) {
   const [showHeatmap, setShowHeatmap] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [showSettings, setShowSettings] = useState(false);
   const [showLegend, setShowLegend] = useState(false);
-  const [mapKey, setMapKey] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<L.Map | null>(null);
+
+  // When map becomes visible, tell Leaflet to recalculate dimensions
+  useEffect(() => {
+    if (visible && mapRef.current) {
+      // Delay slightly to ensure the container has fully transitioned to visible
+      const timer = setTimeout(() => {
+        mapRef.current?.invalidateSize();
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [visible]);
 
   const validMarkers = markers.filter(
     (m) => m.latitude && m.longitude && Math.abs(m.latitude) > 0.001 && Math.abs(m.longitude) > 0.001
@@ -102,23 +122,9 @@ export default function ProblemMap({ markers, onMarkerClick }: ProblemMapProps) 
     return Object.keys(categoryCounts).filter((cat) => categoryCounts[cat] > 0);
   }, [categoryCounts]);
 
-  // Cleanup map on unmount to prevent "already initialized" error
-  useEffect(() => {
-    return () => {
-      // Force cleanup by incrementing key if component remounts
-      if (containerRef.current) {
-        const mapContainer = containerRef.current.querySelector('.leaflet-container');
-        if (mapContainer && (mapContainer as any)._leaflet_id) {
-          delete (mapContainer as any)._leaflet_id;
-        }
-      }
-    };
-  }, []);
-
   return (
-    <div ref={containerRef} className="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 bg-[#0a0f1a]">
+    <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 bg-[#0a0f1a]">
       <MapContainer
-        key={mapKey}
         center={[20.5937, 78.9629]}
         zoom={5}
         style={{ height: "100%", width: "100%", background: "#0a0f1a" }}
@@ -126,52 +132,55 @@ export default function ProblemMap({ markers, onMarkerClick }: ProblemMapProps) 
         scrollWheelZoom={true}
         attributionControl={false}
       >
+        <MapInstanceCapture onCreated={(map) => { mapRef.current = map; }} />
         <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
         <FitBounds markers={filteredMarkers} />
-        {filteredMarkers.map((marker) => (
-          <CircleMarker
-            key={marker.id}
-            center={[marker.latitude, marker.longitude]}
-            radius={showHeatmap ? 18 : 12}
-            pathOptions={{
-              color: "#ffffff",
-              weight: showHeatmap ? 1 : 2.5,
-              fillColor: marker.color,
-              fillOpacity: showHeatmap ? 0.4 : 0.85,
-            }}
-            eventHandlers={{
-              click: () => onMarkerClick?.(marker.id),
-            }}
-          >
-            <Popup className="popp-popup">
-              <div className="p-1 min-w-[220px]">
-                <div className="flex items-center gap-2 mb-2">
-                  <span
-                    className="px-2.5 py-1 text-[10px] font-bold rounded-full uppercase tracking-wider"
-                    style={{
-                      backgroundColor: marker.color + "25",
-                      color: marker.color,
-                      border: `1.5px solid ${marker.color}50`,
-                    }}
-                  >
-                    {marker.status}
-                  </span>
-                  <span className="text-[9px] text-gray-400 uppercase font-medium bg-gray-100 px-1.5 py-0.5 rounded">
-                    {marker.source}
-                  </span>
+        {filteredMarkers.map((marker) => {
+          const pinIcon = L.divIcon({
+            className: 'popp-pin-wrapper',
+            html: `<div class="popp-pin-marker"><div class="popp-pin-body" style="background:${marker.color};"></div><div class="popp-pin-icon">!</div></div>`,
+            iconSize: [30, 42],
+            iconAnchor: [15, 42],
+          });
+          return (
+            <Marker
+              key={marker.id}
+              position={[marker.latitude, marker.longitude]}
+              icon={pinIcon}
+              eventHandlers={{
+                click: () => onMarkerClick?.(marker.id),
+              }}
+            >
+              <Popup className="popp-popup">
+                <div className="p-1 min-w-[220px]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span
+                      className="px-2.5 py-1 text-[10px] font-bold rounded-full uppercase tracking-wider"
+                      style={{
+                        backgroundColor: marker.color + "25",
+                        color: marker.color,
+                        border: `1.5px solid ${marker.color}50`,
+                      }}
+                    >
+                      {marker.status}
+                    </span>
+                    <span className="text-[9px] text-gray-400 uppercase font-medium bg-gray-100 px-1.5 py-0.5 rounded">
+                      {marker.source}
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-sm mb-1 text-gray-900 leading-tight">{marker.title}</h3>
+                  <p className="text-xs text-gray-500 mb-2 line-clamp-2">{marker.description}</p>
+                  <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
+                    <span className="text-[10px] text-gray-400 capitalize flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full" style={{ backgroundColor: marker.color }}></span>
+                      {CATEGORY_ICONS[marker.category?.toLowerCase()] || "📋"} {marker.category}
+                    </span>
+                  </div>
                 </div>
-                <h3 className="font-bold text-sm mb-1 text-gray-900 leading-tight">{marker.title}</h3>
-                <p className="text-xs text-gray-500 mb-2 line-clamp-2">{marker.description}</p>
-                <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
-                  <span className="text-[10px] text-gray-400 capitalize flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: marker.color }}></span>
-                    {CATEGORY_ICONS[marker.category?.toLowerCase()] || "📋"} {marker.category}
-                  </span>
-                </div>
-              </div>
-            </Popup>
-          </CircleMarker>
-        ))}
+              </Popup>
+            </Marker>
+          );
+        })}
       </MapContainer>
 
       {/* Top Stats Badge */}
@@ -205,10 +214,7 @@ export default function ProblemMap({ markers, onMarkerClick }: ProblemMapProps) 
       {/* Zoom Controls */}
       <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-1">
         <button
-          onClick={() => {
-            const mapEl = document.querySelector(".leaflet-container") as any;
-            if (mapEl?._leaflet_map) mapEl._leaflet_map.zoomIn();
-          }}
+          onClick={() => mapRef.current?.zoomIn()}
           className="w-10 h-10 bg-black/70 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center text-white hover:bg-black/90 transition"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -217,10 +223,7 @@ export default function ProblemMap({ markers, onMarkerClick }: ProblemMapProps) 
           </svg>
         </button>
         <button
-          onClick={() => {
-            const mapEl = document.querySelector(".leaflet-container") as any;
-            if (mapEl?._leaflet_map) mapEl._leaflet_map.zoomOut();
-          }}
+          onClick={() => mapRef.current?.zoomOut()}
           className="w-10 h-10 bg-black/70 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center text-white hover:bg-black/90 transition"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -372,6 +375,43 @@ export default function ProblemMap({ markers, onMarkerClick }: ProblemMapProps) 
       )}
 
       <style jsx global>{`
+        .popp-pin-wrapper {
+          background: none !important;
+          border: none !important;
+        }
+        .popp-pin-marker {
+          position: relative;
+          width: 30px;
+          height: 42px;
+          filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4));
+          transition: transform 0.15s ease;
+        }
+        .popp-pin-marker:hover {
+          transform: scale(1.15);
+        }
+        .popp-pin-body {
+          width: 30px;
+          height: 30px;
+          border-radius: 50% 50% 50% 0;
+          transform: rotate(-45deg);
+          position: absolute;
+          top: 0;
+          left: 0;
+          border: 2.5px solid #fff;
+        }
+        .popp-pin-icon {
+          position: absolute;
+          top: 4px;
+          left: 0;
+          right: 0;
+          text-align: center;
+          font-size: 15px;
+          font-weight: 900;
+          color: #fff;
+          text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+          z-index: 2;
+          line-height: 1;
+        }
         .popp-popup .leaflet-popup-content-wrapper {
           border-radius: 12px;
           padding: 0;

@@ -8,7 +8,8 @@ import {
   ArrowUpDown, TrendingUp, Map, List,
 } from "lucide-react";
 import Link from "next/link";
-import ProblemMap from "@/components/ProblemMap";
+import dynamic from "next/dynamic";
+const ProblemMap = dynamic(() => import("@/components/ProblemMap"), { ssr: false });
 
 const CHAIN_API = "https://chain.thharko.com";
 const BACKEND_API = "https://popp.thharko.com";
@@ -514,53 +515,46 @@ export default function ExplorerPage() {
                 </div>
               </div>
 
-              {/* Map View */}
-              {viewMode === "map" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="h-[550px] mb-6"
-                >
-                  <ProblemMap
-                    markers={filtered.map((item) => {
-                      const lat = item.source === "backend" 
-                        ? parseFloat(item.location.split(",")[0]) 
-                        : null;
-                      const lng = item.source === "backend"
-                        ? parseFloat(item.location.split(",")[1])
-                        : null;
-                      const itemStatusStyle = getStatusStyle(item.status);
-                      const colorMap: Record<string, string> = {
-                        "text-blue-400": "#3b82f6",
-                        "text-yellow-400": "#f59e0b",
-                        "text-emerald-400": "#22c55e",
-                        "text-purple-400": "#a855f7",
-                        "text-orange-400": "#f97316",
-                        "text-cyan-400": "#06b6d4",
-                        "text-red-400": "#ef4444",
-                        "text-gray-400": "#6b7280",
-                      };
-                      return {
-                        id: `${item.source}-${item.id}`,
-                        latitude: lat || 0,
-                        longitude: lng || 0,
-                        title: item.title,
-                        description: item.description?.slice(0, 100) || "",
-                        category: item.category,
-                        status: item.status,
-                        color: colorMap[itemStatusStyle.color] || "#6b7280",
-                        source: item.source,
-                        media_url: item.media_url,
-                      };
-                    }).filter((m) => m.latitude && m.longitude && Math.abs(m.latitude) > 0.001 && Math.abs(m.longitude) > 0.001)}
-                  />
-                </motion.div>
-              )}
+              {/* Map View — always mounted, hidden via display:none, invalidateSize on show */}
+              <div className={viewMode === "map" ? "h-[550px] mb-6" : "hidden"}>
+                <ProblemMap
+                  visible={viewMode === "map"}
+                  markers={filtered.map((item) => {
+                    const lat = item.source === "backend" 
+                      ? parseFloat(item.location.split(",")[0]) 
+                      : null;
+                    const lng = item.source === "backend"
+                      ? parseFloat(item.location.split(",")[1])
+                      : null;
+                    const itemStatusStyle = getStatusStyle(item.status);
+                    const colorMap: Record<string, string> = {
+                      "text-blue-400": "#3b82f6",
+                      "text-yellow-400": "#f59e0b",
+                      "text-emerald-400": "#22c55e",
+                      "text-purple-400": "#a855f7",
+                      "text-orange-400": "#f97316",
+                      "text-cyan-400": "#06b6d4",
+                      "text-red-400": "#ef4444",
+                      "text-gray-400": "#6b7280",
+                    };
+                    return {
+                      id: `${item.source}-${item.id}`,
+                      latitude: lat || 0,
+                      longitude: lng || 0,
+                      title: item.title,
+                      description: item.description?.slice(0, 100) || "",
+                      category: item.category,
+                      status: item.status,
+                      color: colorMap[itemStatusStyle.color] || "#6b7280",
+                      source: item.source,
+                      media_url: item.media_url,
+                    };
+                  }).filter((m) => m.latitude && m.longitude && Math.abs(m.latitude) > 0.001 && Math.abs(m.longitude) > 0.001)}
+                />
+              </div>
 
-              {/* List View */}
-              {viewMode === "list" && (
-              <div className="space-y-3">
+              {/* List View — always mounted, just hidden */}
+              <div className={viewMode === "list" ? "block space-y-3" : "hidden"}>
                 {paginatedItems.map((item, i) => {
                   const statusStyle = getStatusStyle(item.status);
                   const detailHref = `/explorer/detail?id=${encodeURIComponent(item.id)}`;
@@ -677,7 +671,6 @@ export default function ExplorerPage() {
                   </div>
                 )}
               </div>
-              )}
             </>
           )}
         </section>

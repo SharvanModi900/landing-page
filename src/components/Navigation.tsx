@@ -180,10 +180,36 @@ export default function Navigation() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-[#030712]/95 backdrop-blur-xl shadow-[0_1px_0_rgba(255,255,255,0.04)]"
+          ? "bg-[#0a0e1a]/95 backdrop-blur-xl shadow-[0_1px_0_rgba(255,255,255,0.04)]"
           : "bg-transparent"
       }`}
     >
+      {/* Early Access Banner Strip */}
+      <div className="bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-cyan-500/10 border-b border-white/[0.06]">
+        <div className="w-full max-w-7xl mx-auto px-5 py-1.5 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-cyan-500/20 border border-cyan-500/30 rounded-full text-[10px] font-semibold text-cyan-400 flex-shrink-0">
+              <span className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
+              BETA
+            </span>
+            <p className="text-xs text-gray-400 truncate hidden sm:block">
+              Android app in <span className="text-gray-200 font-medium">testing</span> — join early access
+            </p>
+          </div>
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSc1uzrlQPc3q_DngaVOK2yzKKaLgtGMQNvCx5iZmgmcx-VAeA/viewform"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-md text-[11px] font-semibold text-white hover:shadow-md hover:shadow-cyan-500/20 transition-all"
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Join Waitlist
+          </a>
+        </div>
+      </div>
+
       <div className="w-full max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
         {/* ---- Logo ---- */}
         <Link href="/" className="flex items-center group">
