@@ -1,6 +1,101 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { MapPin, FileText, Upload, Navigation, Loader2, Camera, Video, Image as ImageIcon, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
+
+// Dynamic Leaflet import to avoid SSR issues
+let L: typeof import("leaflet") | null = null;
+let MapContainer: any = null;
+let TileLayer: any = null;
+let Marker: any = null;
+let useMap: any = null;
+
+function MapClickHandler({ onClick }: { onClick: (lat: number, lng: number) => void }) {
+  const map = useMap();
+  useEffect(() => {
+    const handler = (e: any) => onClick(e.latlng.lat, e.latlng.lng);
+    map.on("click", handler);
+    return () => map.off("click", handler);
+  }, [map, onClick]);
+  return null;
+}
+
+function LocationMapPicker({
+  lat,
+  lng,
+  onPick,
+}: {
+  lat: number;
+  lng: number;
+  onPick: (lat: number, lng: number) => void;
+}) {
+  const [ready, setReady] = useState(false);
+  const [mapLib, setMapLib] = useState<{
+    MapContainer: any;
+    TileLayer: any;
+    Marker: any;
+    useMap: any;
+    L: typeof import("leaflet");
+  } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    (async () => {
+      const leaflet = await import("leaflet");
+      const rl = await import("react-leaflet");
+      // Fix default icon paths
+      delete (leaflet.default.Icon.Default.prototype as any)._getIconUrl;
+      leaflet.default.Icon.Default.mergeOptions({
+        iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+        iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+        shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+      });
+      setMapLib({
+        MapContainer: rl.MapContainer,
+        TileLayer: rl.TileLayer,
+        Marker: rl.Marker,
+        useMap: rl.useMap,
+        L: leaflet.default,
+      });
+      setReady(true);
+    })();
+  }, []);
+
+  const handleMapClick = useCallback(
+    (clickedLat: number, clickedLng: number) => {
+      onPick(clickedLat, clickedLng);
+    },
+    [onPick]
+  );
+
+  if (!ready || !mapLib) {
+    return (
+      <div className="h-48 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+        <Loader2 className="w-5 h-5 text-cyan-400 animate-spin" />
+        <span className="text-sm text-gray-400 ml-2">Loading map...</span>
+      </div>
+    );
+  }
+
+  const { MapContainer: MC, TileLayer: TL, Marker: Mk, useMap: UM, L: leafletLib } = mapLib;
+  const icon = leafletLib.icon({
+    iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+    iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+    shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+  });
+
+  return (
+    <div className="rounded-xl overflow-hidden border border-white/10" style={{ height: 250 }}>
+      <MC center={[lat, lng]} zoom={13} style={{ height: "100%", width: "100%" }}>
+        <TL url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap" />
+        <Mk position={[lat, lng]} icon={icon} />
+        <MapClickHandler onClick={handleMapClick} />
+      </MC>
+    </div>
+  );
+}
 
 async function hashFile(file: File): Promise<string> {
   const buffer = await file.arrayBuffer();
@@ -54,31 +149,68 @@ export default function SubmissionForm({
   }, []);
 
   const detectLocation = () => {
-    if ("geolocation" in navigator) {
-      setLocationStatus("detecting");
-      navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-          const lat = pos.coords.latitude;
-          const lng = pos.coords.longitude;
-          // Reverse geocode to get address
-          let address = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-          try {
-            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-            if (res.ok) {
-              const data = await res.json();
-              address = data.display_name || address;
-            }
-          } catch {}
-          setLocation({ lat, lng, address });
-          setLocationStatus("success");
-        },
-        () => {
-          setLocationStatus("denied");
-        }
-      );
-    } else {
+    if (!("geolocation" in navigator)) {
       setLocationStatus("denied");
+      return;
     }
+
+    setLocationStatus("detecting");
+
+    // Try high accuracy (GPS) first
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        // Reverse geocode to get address
+        let address = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+          if (res.ok) {
+            const data = await res.json();
+            address = data.display_name || address;
+          }
+        } catch {}
+        setLocation({ lat, lng, address });
+        setLocationStatus("success");
+      },
+      () => {
+        // High accuracy failed — fallback to low accuracy (IP/WiFi)
+        navigator.geolocation.getCurrentPosition(
+          async (pos) => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            let address = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+            try {
+              const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+              if (res.ok) {
+                const data = await res.json();
+                address = data.display_name || address;
+              }
+            } catch {}
+            setLocation({ lat, lng, address });
+            setLocationStatus("success");
+          },
+          () => {
+            setLocationStatus("denied");
+          },
+          { enableHighAccuracy: false, timeout: 15000, maximumAge: 0 }
+        );
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  };
+
+  const handleMapPick = async (lat: number, lng: number) => {
+    let address = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+      if (res.ok) {
+        const data = await res.json();
+        address = data.display_name || address;
+      }
+    } catch {}
+    setLocation({ lat, lng, address });
+    setLocationStatus("success");
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -325,6 +457,23 @@ export default function SubmissionForm({
               <div className="flex items-center gap-2 mt-2 text-xs text-amber-400">
                 <AlertCircle className="w-3 h-3" />
                 Location access denied — enable in browser settings
+              </div>
+            )}
+            {/* Map picker for manual location selection */}
+            {location ? (
+              <div className="mt-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-gray-500">Click map to adjust location</span>
+                  <span className="text-xs text-gray-600">{location.lat.toFixed(4)}, {location.lng.toFixed(4)}</span>
+                </div>
+                <LocationMapPicker lat={location.lat} lng={location.lng} onPick={handleMapPick} />
+              </div>
+            ) : (
+              <div className="mt-3">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-amber-400">Auto-detect failed — click map to pick your location</span>
+                </div>
+                <LocationMapPicker lat={20.5937} lng={78.9629} onPick={handleMapPick} />
               </div>
             )}
           </div>
