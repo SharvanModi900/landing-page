@@ -27,8 +27,10 @@ http.createServer((req, res) => {
   let urlPath = decodeURIComponent(req.url.split('?')[0]);
   if (urlPath === '/') urlPath = '/index.html';
 
-  // Handle Next.js RSC requests (client-side navigation/prefetch)
-  const isRSC = req.headers['rsc'] === '1' || req.headers['next-router-prefetch'];
+  // Handle Next.js RSC requests (client-side navigation only)
+  // Only 'rsc: 1' header indicates a true RSC flight data request
+  // 'next-router-prefetch' is for prefetching and still needs HTML, not .txt
+  const isRSC = req.headers['rsc'] === '1';
 
   let filePath = path.join(OUT_DIR, urlPath);
 
