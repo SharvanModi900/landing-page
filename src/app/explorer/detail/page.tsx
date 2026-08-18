@@ -119,31 +119,48 @@ function DetailContent() {
             setError("Submission not found");
           }
         } else {
-          const res = await fetch(`${CHAIN_API}/popp/ticket/tickets`);
-          if (res.ok) {
-            const data = await res.json();
-            const found = data.tickets?.find((t: TicketDetail) => t.id === ticketId);
-            if (found) {
-              setTicket(found);
-              // Try to find matching backend submission (may fail due to CORS)
-              try {
-                const backendRes = await fetch(`${BACKEND_API}/api/submissions`);
-                if (backendRes.ok) {
-                  const subs = await backendRes.json();
-                  const match = Array.isArray(subs) ? subs.find((s: BackendDetail) =>
-                    s.media_hash === found.evidence_hash
-                  ) : null;
-                  if (match) setBackend(match);
+          // First try chain
+          let foundOnChain = false;
+          try {
+            const res = await fetch(`${CHAIN_API}/popp/ticket/tickets`);
+            if (res.ok) {
+              const data = await res.json();
+              const found = data.tickets?.find((t: TicketDetail) => t.id === ticketId);
+              if (found) {
+                setTicket(found);
+                foundOnChain = true;
+                // Try to find matching backend submission
+                try {
+                  const backendRes = await fetch(`${BACKEND_API}/api/submissions`);
+                  if (backendRes.ok) {
+                    const subs = await backendRes.json();
+                    const match = Array.isArray(subs) ? subs.find((s: BackendDetail) =>
+                      s.media_hash === found.evidence_hash
+                    ) : null;
+                    if (match) setBackend(match);
+                  }
+                } catch {
+                  console.warn("Backend API not accessible, showing chain data only");
                 }
-              } catch {
-                // CORS or network error - continue with chain data only
-                console.warn("Backend API not accessible, showing chain data only");
               }
-            } else {
-              setError("Ticket not found on chain");
             }
-          } else {
-            setError("Failed to fetch from chain");
+          } catch {
+            console.warn("Chain API not accessible");
+          }
+
+          // Fallback: try backend directly (handles UUID IDs from explorer)
+          if (!foundOnChain) {
+            try {
+              const res = await fetch(`${BACKEND_API}/api/submissions/${ticketId}`);
+              if (res.ok) {
+                const data = await res.json();
+                setBackend(data);
+              } else {
+                setError("Ticket not found on chain or in backend");
+              }
+            } catch {
+              setError("Ticket not found on chain and backend is unavailable");
+            }
           }
         }
       } catch (err) {
