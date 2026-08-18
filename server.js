@@ -32,6 +32,15 @@ http.createServer((req, res) => {
   // 'next-router-prefetch' is for prefetching and still needs HTML, not .txt
   const isRSC = req.headers['rsc'] === '1';
 
+  // Block direct access to .txt RSC flight data files
+  // Redirect to the corresponding HTML page instead
+  if (urlPath.endsWith('.txt') && !isRSC) {
+    const htmlPath = urlPath.replace(/\.txt$/, '');
+    res.writeHead(302, { 'Location': htmlPath });
+    res.end();
+    return;
+  }
+
   let filePath = path.join(OUT_DIR, urlPath);
 
   // If no extension, handle route resolution
