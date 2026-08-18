@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title: "Proof of Problem Protocol (PoPP)",
     description: "The protocol for verifiable, decentralized problem-solving and truth validation.",
     type: "website",
-    url: "https://proofofproblem.org",
+    url: "https://pops.thharko.com",
   },
   twitter: {
     card: "summary_large_image",
