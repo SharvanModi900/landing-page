@@ -5,9 +5,10 @@ import {
   Search, Filter, Calendar, MapPin, Shield, CheckCircle, Clock,
   AlertTriangle, Globe, Activity, ChevronDown, X, ExternalLink,
   Layers, ArrowRight, Hash, Zap, Eye, ChevronRight, ChevronLeft,
-  ArrowUpDown, TrendingUp,
+  ArrowUpDown, TrendingUp, Map, List,
 } from "lucide-react";
 import Link from "next/link";
+import ProblemMap from "@/components/ProblemMap";
 
 const CHAIN_API = "https://chain.thharko.com";
 const BACKEND_API = "https://popp.thharko.com";
@@ -109,6 +110,7 @@ export default function ExplorerPage() {
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "severity" | "consensus">("newest");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(20);
+  const [viewMode, setViewMode] = useState<"list" | "map">("list");
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -439,6 +441,22 @@ export default function ExplorerPage() {
 
         {/* Results */}
         <section className="max-w-6xl mx-auto px-6 pb-8">
+          {/* Stats Badge - Mobile App Style */}
+          {!loading && filtered.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-4"
+            >
+              <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2">
+                <Activity size={14} className="text-cyan-400" />
+                <span className="text-sm font-semibold text-gray-200">
+                  {chainCount} chain · {backendCount} submissions · {filtered.length} problems
+                </span>
+              </div>
+            </motion.div>
+          )}
+
           {loading ? (
             <div className="flex items-center justify-center py-16">
               <div className="flex flex-col items-center gap-3">
@@ -456,14 +474,92 @@ export default function ExplorerPage() {
             </div>
           ) : (
             <>
-              {/* Results count */}
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs text-gray-400">
-                  Showing {paginatedItems.length} of {filtered.length} results
-                  {totalPages > 1 && ` (Page ${currentPage} of ${totalPages})`}
-                </span>
+              {/* Results Header with View Toggle */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-gray-300 font-medium">
+                    {filtered.length} {filtered.length === 1 ? "Problem" : "Problems"}
+                  </span>
+                  {totalPages > 1 && (
+                    <span className="text-xs text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center bg-white/5 border border-white/10 rounded-lg p-0.5">
+                    <button
+                      onClick={() => setViewMode("list")}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                        viewMode === "list"
+                          ? "bg-gradient-to-r from-cyan-500/20 to-blue-600/20 text-cyan-400 border border-cyan-500/30"
+                          : "text-gray-400 hover:text-gray-200"
+                      }`}
+                    >
+                      <List size={13} />
+                      <span>List</span>
+                    </button>
+                    <button
+                      onClick={() => setViewMode("map")}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                        viewMode === "map"
+                          ? "bg-gradient-to-r from-cyan-500/20 to-blue-600/20 text-cyan-400 border border-cyan-500/30"
+                          : "text-gray-400 hover:text-gray-200"
+                      }`}
+                    >
+                      <Map size={13} />
+                      <span>Map</span>
+                    </button>
+                  </div>
+                </div>
               </div>
 
+              {/* Map View */}
+              {viewMode === "map" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="h-[550px] mb-6"
+                >
+                  <ProblemMap
+                    markers={filtered.map((item) => {
+                      const lat = item.source === "backend" 
+                        ? parseFloat(item.location.split(",")[0]) 
+                        : null;
+                      const lng = item.source === "backend"
+                        ? parseFloat(item.location.split(",")[1])
+                        : null;
+                      const itemStatusStyle = getStatusStyle(item.status);
+                      const colorMap: Record<string, string> = {
+                        "text-blue-400": "#3b82f6",
+                        "text-yellow-400": "#f59e0b",
+                        "text-emerald-400": "#22c55e",
+                        "text-purple-400": "#a855f7",
+                        "text-orange-400": "#f97316",
+                        "text-cyan-400": "#06b6d4",
+                        "text-red-400": "#ef4444",
+                        "text-gray-400": "#6b7280",
+                      };
+                      return {
+                        id: `${item.source}-${item.id}`,
+                        latitude: lat || 0,
+                        longitude: lng || 0,
+                        title: item.title,
+                        description: item.description?.slice(0, 100) || "",
+                        category: item.category,
+                        status: item.status,
+                        color: colorMap[itemStatusStyle.color] || "#6b7280",
+                        source: item.source,
+                        media_url: item.media_url,
+                      };
+                    }).filter((m) => m.latitude && m.longitude && Math.abs(m.latitude) > 0.001 && Math.abs(m.longitude) > 0.001)}
+                  />
+                </motion.div>
+              )}
+
+              {/* List View */}
+              {viewMode === "list" && (
               <div className="space-y-3">
                 {paginatedItems.map((item, i) => {
                   const statusStyle = getStatusStyle(item.status);
@@ -547,39 +643,40 @@ export default function ExplorerPage() {
                     </motion.div>
                   );
                 })}
-              </div>
 
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 mt-6">
-                  <button
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}
-                    className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition"
-                  >
-                    <ChevronLeft size={16} />
-                  </button>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-6">
                     <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`w-8 h-8 rounded-lg text-xs font-semibold transition ${
-                        currentPage === page
-                          ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white"
-                          : "bg-white/5 border border-white/10 text-gray-400 hover:text-white"
-                      }`}
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition"
                     >
-                      {page}
+                      <ChevronLeft size={16} />
                     </button>
-                  ))}
-                  <button
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
-                    className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition"
-                  >
-                    <ChevronRight size={16} />
-                  </button>
-                </div>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-8 h-8 rounded-lg text-xs font-semibold transition ${
+                          currentPage === page
+                            ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white"
+                            : "bg-white/5 border border-white/10 text-gray-400 hover:text-white"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition"
+                    >
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
+                )}
+              </div>
               )}
             </>
           )}
