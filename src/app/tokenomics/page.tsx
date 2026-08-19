@@ -21,11 +21,11 @@ export default function TokenomicsPage() {
   ];
 
   return (
-    <div className="bg-[#030712] text-white min-h-screen">
+    <div className="bg-[#030712] text-white min-h-screen overflow-x-hidden">
       <div className="pt-16">
         {/* Hero Section */}
-        <div className="max-w-5xl mx-auto px-6 py-12">
-          <h1 className="text-4xl md:text-5xl font-extrabold">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               PoPP Tokenomics
             </span>
@@ -36,7 +36,7 @@ export default function TokenomicsPage() {
         </div>
 
         {/* Token Flow SVG */}
-        <div className="max-w-5xl mx-auto px-6 py-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
           <svg viewBox="0 0 600 120" className="w-full h-32">
             <defs>
               <linearGradient id="flowGrad" x1="0" y1="0" x2="1" y2="0">
@@ -54,7 +54,7 @@ export default function TokenomicsPage() {
         </div>
 
         {/* Token Cards */}
-        <div className="max-w-5xl mx-auto px-6 py-8 grid sm:grid-cols-3 gap-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
           {tokenomics.map((t, idx) => (
             <div key={idx} className="p-5 rounded-xl bg-white/5 border border-white/10">
               <h3 className="text-lg font-bold mb-2 text-cyan-400">{t.token}</h3>
@@ -69,7 +69,7 @@ export default function TokenomicsPage() {
         </div>
 
         {/* How Tokens Move */}
-        <div className="max-w-5xl mx-auto px-6 py-10 border-t border-white/10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 border-t border-white/10">
           <h2 className="text-2xl font-bold mb-4">How Tokens Move in PoPP</h2>
           <p className="text-gray-400">
             Each submitted problem generates PRS credits for validators and contributors. Escalation tokens allow priority processing and media amplification. The PoPP token ensures governance participation and sustainable ecosystem growth.
@@ -77,10 +77,10 @@ export default function TokenomicsPage() {
         </div>
 
         {/* Incentive Structures */}
-        <div className="bg-white/[0.03] border-y border-white/[0.06] py-10 px-6">
+        <div className="bg-white/[0.03] border-y border-white/[0.06] py-10 px-4 sm:px-6">
           <div className="max-w-5xl mx-auto">
             <h2 className="text-2xl font-bold mb-6 text-center">Incentive Structures</h2>
-            <div className="grid sm:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
               {[
                 { icon: "💰", title: "Direct Rewards", desc: "Token incentives for validators and contributors upon successful validation." },
                 { icon: "🛡️", title: "Reputation & Governance", desc: "Reputation points build influence in PoPP DAO governance and voting." },

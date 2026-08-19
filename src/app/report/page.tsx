@@ -26,7 +26,7 @@ export default function SubmitPage() {
   }, [submitted, currentStage, STAGES.length, advanceStage]);
 
   return (
-    <main className="min-h-screen bg-[#06080f] text-white overflow-hidden">
+    <main className="min-h-screen bg-[#030712] text-white overflow-hidden overflow-x-hidden">
       {/* Ambient background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-cyan-500/[0.03] rounded-full blur-[120px]" />
@@ -37,7 +37,7 @@ export default function SubmitPage() {
       <div className="relative pt-20 pb-16 min-h-screen flex flex-col">
         {!submitted ? (
           /* ═══════ PRE-SUBMISSION: Split Panel ═══════ */
-          <div className="flex-1 w-full max-w-7xl mx-auto px-6 flex gap-8 items-start">
+          <div className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 flex gap-8 items-start">
             {/* ── Left: Pipeline Timeline ── */}
             <div className="hidden lg:flex flex-col w-80 sticky top-28">
               <div className="mb-8">
@@ -135,7 +135,7 @@ export default function SubmitPage() {
           </div>
         ) : (
           /* ═══════ POST-SUBMISSION ═══════ */
-          <div className="flex-1 w-full max-w-4xl mx-auto px-6">
+          <div className="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6">
             <div className="flex flex-col lg:flex-row gap-8 items-start">
               {/* ── Left: Success + Pipeline ── */}
               <div className="flex-1">

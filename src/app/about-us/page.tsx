@@ -6,21 +6,12 @@ import { motion } from "framer-motion";
 /* ------------------------------------------------------------------ */
 /*  Data                                                              */
 /* ------------------------------------------------------------------ */
-const timelineMilestones = [
-  { year: "2024", title: "Whitepaper Released" },
-  { year: "2025 Q1", title: "Testnet Launched" },
-  { year: "2025 Q3", title: "Validator Program" },
-  { year: "2026", title: "Mainnet Pilot" },
-  { year: "Future", title: "Global Adoption" },
-];
 
 const coreValues = [
   { title: "Transparency", desc: "Open and auditable records for every problem and proof" },
   { title: "Decentralization", desc: "No single point of control — community-governed" },
   { title: "Collaboration", desc: "Communities solve problems together with verifiable data" },
   { title: "Security", desc: "Cryptographic data integrity by design" },
-  { title: "Impact", desc: "Focus on real outcomes and accountability" },
-  { title: "Innovation", desc: "Continuous improvement through open protocol design" },
 ];
 
 const teamMembers = [
@@ -28,27 +19,20 @@ const teamMembers = [
   
 ];
 
-const missionPoints = [
-  "Decentralized verification",
-  "Transparent records",
-  "Community governance",
-  "Incentivized validators",
-];
 
-const visionPillars = ["Accessibility", "Scalability", "Integrity"];
 
 /* ================================================================== */
 /*  PAGE                                                              */
 /* ================================================================== */
 export default function AboutUsPage() {
   return (
-    <div className="min-h-screen bg-[#0a0e1a] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* ---- HERO ---- */}
-        <section className="py-20 px-6 bg-gradient-to-b from-[#0a0e1a] via-[#0d1526] to-[#0a0f1a]">
+        <section className="py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-b from-[#030712] via-[#050a15] to-[#030712]">
           <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-12">
             <div className="flex-1">
-              <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
                 Empowering Problem Solvers{" "}
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                   Worldwide
@@ -117,88 +101,30 @@ export default function AboutUsPage() {
           </div>
         </section>
 
-        {/* ---- MISSION & VISION ---- */}
-        <section className="py-16 px-6 bg-[#0d1220]">
-          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Mission */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4 }}
-              className="bg-white/[0.03] border border-white/[0.07] rounded-xl p-6 hover:border-white/[0.13] transition-colors"
-            >
-              <h3 className="text-xl font-bold text-cyan-400">Our Mission</h3>
-              <p className="mt-4 text-gray-300 leading-relaxed">
-                To empower communities, organizations, and innovators with a transparent and decentralized way to
-                verify problems — ensuring that attention and resources are directed where they truly matter.
-              </p>
-              <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-gray-200">
-                {missionPoints.map((point) => (
-                  <li key={point} className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 mt-2 rounded-full bg-cyan-400 shrink-0" />
-                    {point}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
-            {/* Vision */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              className="bg-white/[0.03] border border-white/[0.07] rounded-xl p-6 hover:border-white/[0.13] transition-colors"
-            >
-              <h3 className="text-xl font-bold text-blue-400">Our Vision</h3>
-              <p className="mt-4 text-gray-300 leading-relaxed">
-                A world where decision-makers, communities and organizations rely on verified facts before deploying
-                solutions — reducing waste, improving outcomes and building trust.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                {visionPillars.map((pillar) => (
-                  <div
-                    key={pillar}
-                    className="px-4 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-sm text-gray-200"
-                  >
-                    {pillar}
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+        {/* ---- MISSION, VISION & STORY LINKS ---- */}
+        <section className="py-16 px-6 bg-white/[0.03]">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[
+              { title: "Our Mission", desc: "A world where problems cannot be silenced — cryptographically verified and transparently validated.", link: "/mission", label: "Read Mission" },
+              { title: "Our Vision", desc: "Shaping a transparent & decentralized future through collective intelligence.", link: "/vision", label: "Explore Vision" },
+              { title: "Our Story", desc: "From a broken internet line to a global protocol — the origin of PoPP.", link: "/our-story", label: "Read Story" },
+            ].map((item) => (
+              <Link key={item.title} href={item.link}
+                className="bg-white/[0.03] border border-white/[0.07] rounded-xl p-6 hover:border-white/[0.13] transition-colors group">
+                <h3 className="text-lg font-bold text-cyan-400">{item.title}</h3>
+                <p className="mt-3 text-gray-400 text-sm leading-relaxed">{item.desc}</p>
+                <span className="mt-4 inline-flex items-center gap-1 text-sm text-cyan-400 font-medium group-hover:gap-2 transition-all">
+                  {item.label} →
+                </span>
+              </Link>
+            ))}
           </div>
         </section>
 
-        {/* ---- TIMELINE ---- */}
-        <section className="py-16 px-6 bg-[#0a0f1a]">
-          <div className="max-w-6xl mx-auto">
-            <h3 className="text-2xl font-bold text-white mb-8">The PoPP Journey</h3>
-            <div className="relative overflow-x-auto pb-4">
-              <div className="flex gap-4 min-w-[900px]">
-                {timelineMilestones.map((m, i) => (
-                  <motion.div
-                    key={m.year}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: i * 0.1 }}
-                    className="min-w-[200px] p-5 bg-white/[0.03] border border-white/[0.07] rounded-xl hover:border-white/[0.13] transition-colors"
-                  >
-                    <div className="text-sm font-semibold text-cyan-400">{m.year}</div>
-                    <div className="text-white font-bold mt-2">{m.title}</div>
-                    <div className="mt-3 w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center text-white text-sm font-bold">
-                      {i + 1}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
+
 
         {/* ---- CORE VALUES ---- */}
-        <section className="py-16 px-6 bg-[#0d1220]">
+        <section className="py-16 px-6 bg-white/[0.03]">
           <div className="max-w-6xl mx-auto">
             <h3 className="text-2xl font-bold text-white mb-8">Core Values</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -227,7 +153,7 @@ export default function AboutUsPage() {
         </section>
 
         {/* ---- TEAM ---- */}
-        <section className="py-16 px-6 bg-[#0a0f1a]">
+        <section className="py-16 px-6 bg-white/[0.02]">
           <div className="max-w-6xl mx-auto">
             <h3 className="text-2xl font-bold text-white mb-8">Meet the Team</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
@@ -256,7 +182,7 @@ export default function AboutUsPage() {
         </section>
 
         {/* ---- CTA ---- */}
-        <section className="py-16 px-6 bg-[#0d1220]">
+        <section className="py-16 px-6 bg-white/[0.03]">
           <div className="max-w-4xl mx-auto">
             <div className="bg-white/[0.03] border border-white/[0.07] rounded-xl p-8 flex flex-col lg:flex-row items-center justify-between gap-6">
               <div>

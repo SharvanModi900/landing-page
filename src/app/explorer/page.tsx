@@ -255,17 +255,17 @@ export default function ExplorerPage() {
   })).filter((c) => c.count > 0);
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero */}
-        <section className="relative py-8 px-6 text-center overflow-hidden">
+        <section className="relative py-8 px-4 sm:px-6 text-center overflow-hidden">
           <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-cyan-600/8 blur-3xl" />
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10">
             <div className="inline-flex items-center gap-2 mb-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 ring-1 ring-cyan-500/30">
                 <Globe className="h-5 w-5 text-cyan-400" />
               </div>
-              <h1 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent">
                 Problem Explorer
               </h1>
             </div>
@@ -276,7 +276,7 @@ export default function ExplorerPage() {
         </section>
 
         {/* Stats */}
-        <section className="max-w-6xl mx-auto px-6 mb-6">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 mb-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { label: "On-Chain Tickets", value: chainCount, icon: <Layers className="h-4 w-4 text-cyan-400" />, gradient: "from-cyan-500/10 to-blue-600/10", border: "border-cyan-500/20" },
@@ -322,7 +322,7 @@ export default function ExplorerPage() {
         </section>
 
         {/* Search & Filters */}
-        <section className="max-w-6xl mx-auto px-6 mb-4">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 mb-4">
           <div className="bg-white/[0.03] border border-white/10 rounded-xl p-4">
             <div className="flex flex-col lg:flex-row gap-3">
               {/* Search */}
@@ -441,7 +441,7 @@ export default function ExplorerPage() {
         </section>
 
         {/* Results */}
-        <section className="max-w-6xl mx-auto px-6 pb-8">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-8">
           {/* Stats Badge - Mobile App Style */}
           {!loading && filtered.length > 0 && (
             <motion.div
@@ -516,7 +516,7 @@ export default function ExplorerPage() {
               </div>
 
               {/* Map View — always mounted, hidden via display:none, invalidateSize on show */}
-              <div className={viewMode === "map" ? "h-[550px] mb-6" : "hidden"}>
+              <div className={viewMode === "map" ? "h-[350px] sm:h-[550px] mb-6" : "hidden"}>
                 <ProblemMap
                   visible={viewMode === "map"}
                   markers={filtered.map((item) => {
@@ -676,7 +676,7 @@ export default function ExplorerPage() {
         </section>
 
         {/* CTA */}
-        <section className="max-w-5xl mx-auto px-6 pb-12">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-12">
           <div className="bg-gradient-to-br from-cyan-500/5 to-blue-600/5 border border-white/10 rounded-xl p-6 text-center">
             <h2 className="text-xl font-bold mb-2">Have a Problem to Report?</h2>
             <p className="text-gray-400 text-sm mb-4 max-w-md mx-auto">

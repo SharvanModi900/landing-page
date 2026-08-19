@@ -67,7 +67,7 @@ const governanceSteps = [
 /* ================================================================== */
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#0a0e1a] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       {/* 1. Hero */}
       <div className="pt-16">
         <HeroSection />
@@ -83,10 +83,10 @@ export default function Home() {
       <ValidatorSection />
 
       {/* 4. Case Studies */}
-      <section className="py-24 px-6 bg-[#0a0f1a]">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-white/[0.02]">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
               Real-World <span className="text-cyan-400">Impact</span>
             </h2>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
@@ -94,7 +94,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid-cols-1 md:grid-cols-3 gap-6">
             {caseStudies.map((cs, idx) => (
               <motion.div
                 key={idx}
@@ -148,10 +148,10 @@ export default function Home() {
       <WhoNeedsPoPP />
 
       {/* 6. Trust & Governance (merged) */}
-      <section className="py-24 px-6 bg-[#0d1220]">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-white/[0.03]">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
               Trust & <span className="text-cyan-400">Governance</span>
             </h2>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
@@ -163,7 +163,7 @@ export default function Home() {
             {/* Security grid */}
             <div>
               <h3 className="text-xl font-bold text-white mb-6">Security Guarantees</h3>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {securityItems.map((item) => (
                   <div
                     key={item.title}
@@ -202,9 +202,9 @@ export default function Home() {
       </section>
 
       {/* 7. Final CTA */}
-      <section className="py-24 px-6 bg-[#0a0f1a]">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 bg-white/[0.02]">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
             Join the Protocol That{" "}
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Proves Truth
@@ -214,10 +214,10 @@ export default function Home() {
             Transform complaints into cryptographically proven facts. Earn rewards. Shape governance.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 mb-8">
             <Link
               href="/report"
-              className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-semibold text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all"
+              className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-semibold text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all text-center"
             >
               Submit Problem
             </Link>

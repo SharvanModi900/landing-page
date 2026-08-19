@@ -53,10 +53,10 @@ const roadmap: Step[] = [
 
 export default function RoadmapPage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* HERO */}
-        <section className="px-6 lg:px-20 py-16 lg:py-24">
+        <section className="px-4 sm:px-6 lg:px-20 py-16 lg:py-24">
           <div className="mx-auto max-w-7xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -68,7 +68,7 @@ export default function RoadmapPage() {
                 PoPP Roadmap
               </div>
 
-              <h1 className="mt-4 text-4xl leading-[1.1] font-extrabold md:text-5xl text-white">
+              <h1 className="mt-4 text-2xl sm:text-4xl leading-[1.1] font-extrabold md:text-5xl text-white">
                 Our Journey to a{" "}
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                   Verified Future
@@ -99,13 +99,13 @@ export default function RoadmapPage() {
         </section>
 
         {/* TIMELINE */}
-        <section id="timeline" className="px-6 lg:px-20 pb-20">
+        <section id="timeline" className="px-4 sm:px-6 lg:px-20 pb-20">
           <motion.h2
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-12 max-w-7xl text-center text-3xl font-bold"
+            className="mx-auto mb-12 max-w-7xl text-center text-2xl sm:text-3xl font-bold"
           >
             Milestones & Phases
           </motion.h2>
@@ -155,17 +155,17 @@ export default function RoadmapPage() {
         </section>
 
         {/* CTA */}
-        <section className="px-6 lg:px-20 pb-16">
+        <section className="px-4 sm:px-6 lg:px-20 pb-16">
           <div className="mx-auto max-w-6xl">
             <div className="bg-white/5 border border-white/10 rounded-xl p-8 md:p-12">
-              <div className="grid items-center gap-8 md:grid-cols-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-8">
                 <div className="md:col-span-2">
                   <h3 className="text-2xl md:text-3xl font-bold">Be part of the journey.</h3>
                   <p className="mt-2 text-gray-400">
                     Contribute to the protocol, validate problems, or integrate PoPP into your ecosystem.
                   </p>
                 </div>
-                <div className="flex gap-3 md:justify-end">
+                <div className="flex flex-col sm:flex-row gap-3 md:justify-end">
                   <Link
                     href="/contribute"
                     className="rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-3 font-semibold hover:shadow-lg hover:shadow-cyan-500/20 transition"

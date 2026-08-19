@@ -43,17 +43,17 @@ const flowSteps = [
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero */}
-        <section className="py-20 px-6 text-center">
+        <section className="py-16 sm:py-20 px-4 sm:px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4">
+            <h1 className="text-2xl sm:text-4xl md:text-6xl font-extrabold text-white mb-4">
               How{" "}
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 PoPP Works
@@ -67,7 +67,7 @@ export default function HowItWorksPage() {
         </section>
 
         {/* Protocol Flow */}
-        <section className="py-12 px-6">
+        <section className="py-12 px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold text-center mb-10">The Problem Flow</h2>
             <div className="relative pl-8">
@@ -97,10 +97,10 @@ export default function HowItWorksPage() {
         </section>
 
         {/* 5 Layers */}
-        <section className="py-16 px-6">
+        <section className="py-12 sm:py-16 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-2xl font-bold text-center mb-10">The 5 Protocol Layers</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {layers.map((layer, i) => (
                 <motion.div
                   key={layer.title}
@@ -122,7 +122,7 @@ export default function HowItWorksPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-16 px-6 text-center">
+        <section className="py-12 sm:py-16 px-4 sm:px-6 text-center">
           <div className="max-w-4xl mx-auto">
             <div className="bg-white/5 border border-white/10 rounded-xl p-8 md:p-12">
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">

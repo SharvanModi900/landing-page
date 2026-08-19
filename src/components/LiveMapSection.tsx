@@ -143,7 +143,7 @@ export default function LiveMapSection() {
   }, [markers]);
 
   return (
-    <section className="py-24 px-6 bg-[#0a0e1a] relative overflow-hidden">
+    <section className="py-16 sm:py-24 px-4 sm:px-6 bg-[#0a0e1a] relative overflow-hidden">
       {/* Ambient glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-cyan-500/[0.02] rounded-full blur-[120px] pointer-events-none" />
 
@@ -160,10 +160,10 @@ export default function LiveMapSection() {
             <Globe className="w-3.5 h-3.5" />
             Live Protocol Activity
           </div>
-          <h2 className="text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
+          <h2 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">
             Problems Being <span className="text-cyan-400">Proven</span> in Real-Time
           </h2>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto">
             Every pin represents a real-world problem submitted, validated, and proven through the PoPP protocol.
           </p>
         </motion.div>
@@ -203,8 +203,7 @@ export default function LiveMapSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative rounded-2xl overflow-hidden border border-white/[0.06]"
-          style={{ height: "480px" }}
+          className="relative rounded-2xl overflow-hidden border border-white/[0.06] h-[300px] sm:h-[400px] lg:h-[480px]"
         >
           {loading ? (
             <div className="w-full h-full flex items-center justify-center bg-[#0a0f1a]">

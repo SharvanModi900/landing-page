@@ -27,16 +27,16 @@ export default function SecurityPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero */}
-        <section className="py-20 px-6">
+        <section className="py-16 sm:py-20 px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
               <div className="inline-block px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-sm text-gray-400 mb-6">
                 Security Framework
               </div>
-              <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
+              <h1 className="text-2xl sm:text-4xl md:text-6xl font-extrabold text-white mb-4 sm:mb-6 tracking-tight">
                 Uncompromising <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">Security</span>
               </h1>
               <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
@@ -47,7 +47,7 @@ export default function SecurityPage() {
         </section>
 
         {/* Security Overview */}
-        <section className="py-12 px-6">
+        <section className="py-12 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }}
               className="bg-white/5 border border-white/10 rounded-xl p-8 md:p-12"

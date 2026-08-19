@@ -49,10 +49,10 @@ const waysToEngage = [
 
 export default function CommunityPage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero */}
-        <section className="max-w-5xl mx-auto px-6 py-16 text-center">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -62,7 +62,7 @@ export default function CommunityPage() {
               <Users className="w-4 h-4 text-cyan-400" />
               Community
             </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
+            <h1 className="text-2xl sm:text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
               Built by the Community,{" "}
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 For the Community
@@ -77,9 +77,9 @@ export default function CommunityPage() {
         </section>
 
         {/* Channels */}
-        <section className="max-w-5xl mx-auto px-6 py-8">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
           <h2 className="text-2xl font-bold mb-6 text-center">Connect</h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {channels.map((ch, i) => (
               <motion.div
                 key={ch.title}
@@ -104,9 +104,9 @@ export default function CommunityPage() {
         </section>
 
         {/* Ways to Engage */}
-        <section className="max-w-5xl mx-auto px-6 py-12">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <h2 className="text-2xl font-bold mb-6 text-center">Ways to Engage</h2>
-          <div className="grid sm:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {waysToEngage.map((item, i) => (
               <motion.div
                 key={item.title}
@@ -124,7 +124,7 @@ export default function CommunityPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-16 px-6 text-center">
+        <section className="py-16 px-4 sm:px-6 text-center">
           <div className="max-w-4xl mx-auto">
             <div className="bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl p-8 md:p-12">
               <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">

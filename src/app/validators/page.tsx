@@ -6,12 +6,12 @@ import Link from "next/link";
 
 export default function ValidatorsPage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero Section */}
-        <section className="relative py-12 px-6 text-center">
+        <section className="relative py-12 px-4 sm:px-6 text-center">
           <motion.h1
-            className="text-5xl md:text-6xl font-extrabold"
+            className="text-2xl sm:text-4xl md:text-6xl font-extrabold"
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -43,7 +43,7 @@ export default function ValidatorsPage() {
         </section>
 
         {/* Why Become a Validator */}
-        <section className="py-10 px-6 max-w-6xl mx-auto">
+        <section className="py-10 px-4 sm:px-6 max-w-6xl mx-auto">
           <motion.h2
             className="text-3xl font-bold mb-6 text-center"
             initial={{ opacity: 0 }}
@@ -51,7 +51,7 @@ export default function ValidatorsPage() {
           >
             Why Validators Matter
           </motion.h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
                 icon: <Award className="h-8 w-8 text-cyan-400" />,
@@ -85,7 +85,7 @@ export default function ValidatorsPage() {
         </section>
 
         {/* Steps to Become a Validator */}
-        <section className="py-10 px-6 bg-white/[0.03] border-y border-white/[0.06]">
+        <section className="py-10 px-4 sm:px-6 bg-white/[0.03] border-y border-white/[0.06]">
           <motion.h2
             className="text-3xl font-bold mb-6 text-center"
             initial={{ opacity: 0 }}
@@ -93,7 +93,7 @@ export default function ValidatorsPage() {
           >
             Path to Certification
           </motion.h2>
-          <div className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {[
               "Pass the Validator Exam",
               "Verify Real Problems",
@@ -117,7 +117,7 @@ export default function ValidatorsPage() {
         </section>
 
         {/* Call to Action */}
-        <section className="py-10 px-6 text-center">
+        <section className="py-10 px-4 sm:px-6 text-center">
           <motion.h2
             className="text-4xl font-bold mb-4"
             initial={{ opacity: 0 }}

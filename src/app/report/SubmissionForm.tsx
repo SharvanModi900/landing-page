@@ -394,14 +394,14 @@ export default function SubmissionForm({ onSuccess }: { onSuccess: (data: any) =
                   <Camera className="w-5 h-5 text-cyan-400" />
                 </div>
                 <span className="text-xs text-gray-500 font-medium">Photo</span>
-                <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+                <input type="file" accept="image/*" capture="environment" onChange={handleFileChange} className="hidden" />
               </label>
               <label className="flex flex-col items-center gap-3 p-5 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] transition-all cursor-pointer group">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-500/10 group-hover:scale-110 transition-transform">
                   <Video className="w-5 h-5 text-amber-400" />
                 </div>
                 <span className="text-xs text-gray-500 font-medium">Video</span>
-                <input type="file" accept="video/*" onChange={handleFileChange} className="hidden" />
+                <input type="file" accept="video/*" capture="environment" onChange={handleFileChange} className="hidden" />
               </label>
               <label className="flex flex-col items-center gap-3 p-5 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] transition-all cursor-pointer group">
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-purple-500/10 group-hover:scale-110 transition-transform">

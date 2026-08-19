@@ -207,12 +207,12 @@ function DetailContent() {
     <>
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="flex items-start gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row items-start gap-4 mb-6">
           <div className="flex-shrink-0 w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center text-2xl ring-1 ring-white/10">
             {getCategoryIcon(category)}
           </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-2">
+          <div className="flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
               <span className={`px-2 py-1 text-xs font-bold rounded-lg border ${statusStyle.bg} ${statusStyle.color}`}>
                 <span className={`inline-block w-2 h-2 rounded-full ${statusStyle.dot} mr-1.5`} />
                 {statusStyle.label}
@@ -223,7 +223,7 @@ function DetailContent() {
                 </span>
               )}
             </div>
-            <h1 className="text-2xl font-bold mb-1">{backend?.title || description}</h1>
+            <h1 className="text-xl sm:text-2xl font-bold mb-1 break-words">{backend?.title || description}</h1>
             <div className="flex flex-wrap items-center gap-3 text-sm text-gray-400">
               <span className="flex items-center gap-1"><MapPin size={14} /> {location}</span>
               {ticket?.region && <span className="flex items-center gap-1"><Globe size={14} /> {ticket.region}</span>}
@@ -403,14 +403,14 @@ function DetailContent() {
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-400">Ticket ID</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-cyan-400 break-all max-w-[200px]">{ticket.id}</span>
+                    <span className="text-xs font-mono text-cyan-400 break-all max-w-[150px] sm:max-w-[200px]">{ticket.id}</span>
                     <CopyButton text={ticket.id} />
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-400">Submitter</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-gray-300 break-all max-w-[200px]">{ticket.submitter}</span>
+                    <span className="text-xs font-mono text-gray-300 break-all max-w-[150px] sm:max-w-[200px]">{ticket.submitter}</span>
                     <CopyButton text={ticket.submitter} />
                   </div>
                 </div>
@@ -528,8 +528,8 @@ function DetailContent() {
 
 export default function TicketDetailPage() {
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
-      <div className="pt-16 max-w-4xl mx-auto px-6 py-8">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+      <div className="pt-16 max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Back button */}
         <Link href="/explorer" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition mb-6">
           <ArrowLeft size={14} /> Back to Explorer

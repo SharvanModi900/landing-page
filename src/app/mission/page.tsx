@@ -38,10 +38,10 @@ const commitments = [
 
 export default function MissionPage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero */}
-        <section className="py-20 px-6 text-center">
+        <section className="py-16 sm:py-20 px-4 sm:px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -51,7 +51,7 @@ export default function MissionPage() {
             <div className="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full bg-white/5 border border-white/10 text-sm text-gray-400">
               Our Mission
             </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
+            <h1 className="text-2xl sm:text-4xl md:text-6xl font-extrabold tracking-tight mb-4 sm:mb-6">
               A World Where Problems{" "}
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 Cannot Be Silenced

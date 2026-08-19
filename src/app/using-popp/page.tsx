@@ -5,10 +5,10 @@ import { UserGroupIcon, ChartBarIcon, GlobeAltIcon, ArrowRightIcon } from '@hero
 
 export default function UsingPoppPage() {
   return (
-    <main className="min-h-screen bg-[#030712] text-white pt-16">
+    <main className="min-h-screen bg-[#030712] text-white pt-16 overflow-x-hidden">
       {/* Hero Section */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-10">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
+      <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
+        <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4">
           Using <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">PoPP</span>
         </h1>
         <p className="text-gray-400 text-lg max-w-2xl">
@@ -17,7 +17,7 @@ export default function UsingPoppPage() {
       </section>
 
       {/* For Users Section */}
-      <section id="users" className="mx-auto w-full max-w-7xl px-6 py-10">
+      <section id="users" className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
         <div className="flex items-center gap-3 mb-6">
           <UserGroupIcon className="w-8 h-8 text-cyan-400" />
           <h2 className="text-3xl font-bold">For Users</h2>
@@ -59,7 +59,7 @@ export default function UsingPoppPage() {
       </div>
 
       {/* For Validators Section */}
-      <section id="validators" className="mx-auto w-full max-w-7xl px-6 py-10">
+      <section id="validators" className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
         <div className="flex items-center gap-3 mb-6">
           <ChartBarIcon className="w-8 h-8 text-cyan-400" />
           <h2 className="text-3xl font-bold">For Validators</h2>
@@ -101,7 +101,7 @@ export default function UsingPoppPage() {
       </div>
 
       {/* For Partners Section */}
-      <section id="partners" className="mx-auto w-full max-w-7xl px-6 py-10">
+      <section id="partners" className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
         <div className="flex items-center gap-3 mb-6">
           <GlobeAltIcon className="w-8 h-8 text-cyan-400" />
           <h2 className="text-3xl font-bold">For Partners</h2>
@@ -138,7 +138,7 @@ export default function UsingPoppPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-10 mt-10">
+      <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10 mt-10">
         <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-8 text-center">
           <h2 className="text-2xl font-bold mb-3">Ready to Get Started?</h2>
           <p className="text-gray-400 mb-5 max-w-2xl mx-auto">

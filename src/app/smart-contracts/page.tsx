@@ -8,12 +8,12 @@ export default function SmartContractsPage() {
   const [showCode, setShowCode] = useState(false);
 
   return (
-    <div className="bg-[#0a0e23] text-gray-200 min-h-screen">
+    <div className="bg-[#030712] text-white min-h-screen overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-24 px-6 bg-gradient-to-br from-blue-900/40 to-purple-900/30">
+      <section className="relative overflow-hidden py-16 sm:py-24 px-4 sm:px-6 bg-gradient-to-br from-blue-900/40 to-purple-900/30">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h1 className="text-5xl font-extrabold text-white leading-tight mb-6">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight mb-6">
               Smart Contracts <br />
               <span className="text-blue-400">The Trust Layer of PoPP</span>
             </h1>
@@ -22,7 +22,7 @@ export default function SmartContractsPage() {
               Problem Protocol. These contracts ensure fairness, security, and
               accountability at every step.
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/audit-reports"
                 className="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 transition shadow-lg font-semibold"
@@ -39,7 +39,7 @@ export default function SmartContractsPage() {
           </div>
           <div className="relative">
             <div className="absolute -top-12 -right-12 w-72 h-72 bg-purple-500/20 blur-3xl rounded-full animate-pulse"></div>
-            <div className="relative bg-[#101830] p-8 rounded-2xl shadow-xl border border-blue-500/20">
+            <div className="relative bg-white/[0.03] p-8 rounded-2xl shadow-xl border border-blue-500/20">
               <h3 className="text-lg font-bold text-blue-400 mb-4">
                 Contract Flow
               </h3>
@@ -56,8 +56,8 @@ export default function SmartContractsPage() {
       </section>
 
       {/* Overview */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-bold text-white mb-6">🔍 Overview</h2>
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">🔍 Overview</h2>
         <p className="text-gray-300 leading-relaxed text-lg">
           Smart contracts in PoPP act as the backbone of trust. They automate
           processes like problem submission, validation, and rewards
@@ -68,12 +68,12 @@ export default function SmartContractsPage() {
       </section>
 
       {/* Core Contracts */}
-      <section className="bg-[#11172e] py-20 px-6">
+      <section className="bg-white/[0.02] py-16 sm:py-20 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-white mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8 sm:mb-12">
             🧩 Core Contracts
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
                 title: "Problem Registry",
@@ -102,7 +102,7 @@ export default function SmartContractsPage() {
             ].map((c) => (
               <div
                 key={c.title}
-                className="p-6 rounded-2xl bg-[#1a213d] border border-blue-400/20 hover:border-blue-400/50 transition"
+                className="p-6 rounded-2xl bg-white/[0.03] border border-blue-400/20 hover:border-blue-400/50 transition"
               >
                 <h3 className="text-xl font-semibold text-blue-400 mb-2">
                   {c.title}
@@ -116,11 +116,11 @@ export default function SmartContractsPage() {
 
       {/* Example Code */}
       {showCode && (
-        <section className="max-w-5xl mx-auto px-6 py-20">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
           <h2 className="text-2xl font-bold text-white mb-6">
             Solidity Example
           </h2>
-          <pre className="bg-[#0d1224] p-6 rounded-xl text-sm text-green-400 overflow-x-auto">
+          <pre className="bg-white/[0.02] p-6 rounded-xl text-sm text-green-400 overflow-x-auto">
 {`pragma solidity ^0.8.0;
 
 contract ProblemRegistry {
@@ -141,10 +141,10 @@ contract ProblemRegistry {
       )}
 
       {/* Security & Audits */}
-      <section className="bg-[#0e1328] py-20 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
+      <section className="bg-white/[0.02] py-16 sm:py-20 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
           <div>
-            <h2 className="text-3xl font-bold text-white mb-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">
               🔒 Security & Audits
             </h2>
             <p className="text-gray-300 leading-relaxed">
@@ -159,7 +159,7 @@ contract ProblemRegistry {
               and bug bounty incentives to encourage responsible reporting.
             </p>
           </div>
-          <div className="bg-[#1a213d] p-6 rounded-2xl border border-purple-400/20">
+          <div className="bg-white/[0.03] p-6 rounded-2xl border border-purple-400/20">
             <h3 className="text-lg font-bold text-purple-400 mb-3">
               Current Status
             </h3>
@@ -173,18 +173,18 @@ contract ProblemRegistry {
       </section>
 
       {/* Roadmap */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-bold text-white mb-6">🚀 Roadmap</h2>
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">🚀 Roadmap</h2>
         <div className="space-y-6">
-          <div className="p-6 rounded-xl bg-[#161d35] border-l-4 border-blue-500">
+          <div className="p-6 rounded-xl bg-white/[0.03] border-l-4 border-blue-500">
             <h4 className="text-lg font-semibold text-blue-400">Phase 1</h4>
             <p>Ethereum smart contracts deployed for problem registry.</p>
           </div>
-          <div className="p-6 rounded-xl bg-[#161d35] border-l-4 border-purple-500">
+          <div className="p-6 rounded-xl bg-white/[0.03] border-l-4 border-purple-500">
             <h4 className="text-lg font-semibold text-purple-400">Phase 2</h4>
             <p>Cosmos SDK + CosmWasm integration for interoperability.</p>
           </div>
-          <div className="p-6 rounded-xl bg-[#161d35] border-l-4 border-green-500">
+          <div className="p-6 rounded-xl bg-white/[0.03] border-l-4 border-green-500">
             <h4 className="text-lg font-semibold text-green-400">Phase 3</h4>
             <p>zk-SNARK privacy-preserving problem validation contracts.</p>
           </div>

@@ -85,14 +85,14 @@ function CircleTile({ children, color, expanded }: { children: React.ReactNode; 
 const RoadmapOrbitSection: React.FC = () => {
   const [expanded, setExpanded] = useState<number | null>(null);
   return (
-    <section className="w-full flex flex-col items-center pt-32 pb-20 bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 relative overflow-x-hidden min-h-[900px]">
-      <h2 className="text-4xl md:text-5xl font-bold text-center mb-4 text-white drop-shadow-lg z-30">
+    <section className="w-full flex flex-col items-center pt-20 sm:pt-32 pb-16 sm:pb-20 bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 relative overflow-x-hidden min-h-[600px] sm:min-h-[900px]">
+      <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-center mb-4 text-white drop-shadow-lg z-30">
         Roadmap
       </h2>
-      <p className="text-lg md:text-xl text-center text-gray-300 mb-12 max-w-2xl z-30">
+      <p className="text-base sm:text-lg md:text-xl text-center text-gray-300 mb-8 sm:mb-12 max-w-2xl z-30">
         From prototype to planetary scale—building the future of truth validation.
       </p>
-      <div className="relative w-full max-w-5xl h-[700px] mx-auto">
+      <div className="relative w-full max-w-5xl h-[500px] sm:h-[700px] mx-auto">
         {/* Mosaic Tiles */}
         {milestones.map((m, i) => {
           const pos = tilePositions[i];

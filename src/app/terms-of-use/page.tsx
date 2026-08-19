@@ -60,12 +60,12 @@ export default function TermsOfUsePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero Section */}
         <div className="border-b border-white/10 py-12">
-          <div className="max-w-6xl mx-auto px-6">
-            <h1 className="text-5xl font-extrabold">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold">
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 Terms of Use
               </span>
@@ -79,9 +79,9 @@ export default function TermsOfUsePage() {
         </div>
 
         {/* Table of Contents */}
-        <div className="max-w-5xl mx-auto px-6 py-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
           <h2 className="text-2xl font-bold text-white mb-4">Table of Contents</h2>
-          <ul className="grid sm:grid-cols-2 gap-3 text-gray-400">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-gray-400">
             {sections.map((s) => (
               <li key={s.id}>
                 <a
@@ -96,7 +96,7 @@ export default function TermsOfUsePage() {
         </div>
 
         {/* Sections */}
-        <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-8">
           {sections.map((s) => (
             <div key={s.id} id={s.id} className="scroll-mt-24">
               <h3 className="text-2xl font-semibold text-cyan-400 mb-3">

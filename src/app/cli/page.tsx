@@ -144,10 +144,10 @@ export default function CLIPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* ─── Hero ─────────────────────────────────────────────────────── */}
-        <section className="relative py-8 px-6 text-center overflow-hidden border-b border-white/10">
+        <section className="relative py-8 px-4 sm:px-6 text-center overflow-hidden border-b border-white/10">
           <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-cyan-600/10 blur-3xl" />
 
           <motion.div initial={{ opacity: 0, y: -15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="relative z-10">
@@ -155,7 +155,7 @@ export default function CLIPage() {
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 ring-1 ring-cyan-500/30">
                 <Terminal className="h-5 w-5 text-cyan-400" />
               </div>
-              <h1 className="text-3xl md:text-4xl font-extrabold">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold">
                 PoPP{" "}
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">CLI</span>
               </h1>
@@ -175,7 +175,7 @@ export default function CLIPage() {
         </section>
 
         {/* ─── Interactive Playground ─────────────────────────────────────── */}
-        <section className="max-w-4xl mx-auto px-6 py-8">
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
           <h2 className="text-xl font-bold mb-4 flex items-center gap-2"><Terminal size={18} className="text-cyan-400" /> CLI Playground</h2>
           <p className="text-sm text-gray-400 mb-4">
             Try commands in the interactive terminal below. Type <code className="text-cyan-400">help</code> to see available commands.
@@ -226,7 +226,7 @@ export default function CLIPage() {
 
         {/* ─── Installation ─────────────────────────────────────────────── */}
         <section id="install" className="bg-white/[0.03] border-y border-white/[0.06] py-8">
-          <div className="max-w-4xl mx-auto px-6">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
             <h2 className="text-xl font-bold mb-2 flex items-center gap-2"><Download size={18} className="text-cyan-400" /> Installation</h2>
             <p className="text-sm text-gray-400 mb-4">
               Install the PoPP CLI on your system with a single command.
@@ -250,7 +250,7 @@ export default function CLIPage() {
         </section>
 
         {/* ─── Quick Start ──────────────────────────────────────────────── */}
-        <section className="max-w-4xl mx-auto px-6 py-8">
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
           <h2 className="text-xl font-bold mb-4">Quick Start</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {QUICK_START.map((item) => (
@@ -269,7 +269,7 @@ export default function CLIPage() {
         </section>
 
         {/* ─── Command Reference ────────────────────────────────────────── */}
-        <section className="max-w-4xl mx-auto px-6 py-8">
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
           <h2 className="text-xl font-bold mb-4 flex items-center gap-2"><BookOpen size={18} className="text-cyan-400" /> Command Reference</h2>
           <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
             <div className="grid grid-cols-12 gap-3 px-4 py-2.5 bg-white/[0.03] border-b border-white/10 text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -288,7 +288,7 @@ export default function CLIPage() {
         </section>
 
         {/* ─── CTA ──────────────────────────────────────────────────────── */}
-        <section className="max-w-4xl mx-auto px-6 py-8">
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-xl p-6 text-center">
             <h2 className="text-xl font-bold mb-2">Ready to Use the CLI?</h2>

@@ -127,10 +127,10 @@ export default function ValidatorPanelPage() {
   // ─── Render ─────────────────────────────────────────────────────────────
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* ─── Hero ─────────────────────────────────────────────────────── */}
-        <section className="relative py-6 px-6 text-center overflow-hidden">
+        <section className="relative py-6 px-4 sm:px-6 text-center overflow-hidden">
           <div className="absolute -top-40 left-0 w-[400px] h-[400px] rounded-full bg-cyan-600/10 blur-3xl" />
 
           <motion.div initial={{ opacity: 0, y: -15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="relative z-10">
@@ -149,8 +149,8 @@ export default function ValidatorPanelPage() {
         </section>
 
         {/* ─── Stats ────────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 mb-4">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-white/10 rounded-lg p-2.5">
               <div className="flex items-center gap-1.5 mb-1"><Users className="h-3.5 w-3.5 text-cyan-400" /><span className="text-[11px] text-gray-400">Active</span></div>
               <div className="text-lg font-bold">{loading ? "—" : activeValidators}</div>
@@ -175,8 +175,8 @@ export default function ValidatorPanelPage() {
         </section>
 
         {/* ─── Tabs ─────────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 mb-4">
-          <div className="flex gap-1.5">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
+          <div className="flex flex-wrap gap-1.5">
             {(["overview", "leaderboard", "activity"] as const).map((tab) => (
               <button key={tab} onClick={() => setActiveTab(tab)}
                 className={`px-3 py-1.5 rounded-md text-xs font-semibold transition capitalize ${
@@ -190,7 +190,7 @@ export default function ValidatorPanelPage() {
 
         {/* ─── Overview Tab ─────────────────────────────────────────────── */}
         {activeTab === "overview" && (
-          <section className="max-w-7xl mx-auto px-6 pb-6">
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Level Distribution */}
               <div className="bg-white/5 border border-white/10 rounded-lg p-4">
@@ -301,8 +301,8 @@ export default function ValidatorPanelPage() {
                 </Link>
               </div>
             ) : (
-              <div className="bg-white/5 border border-white/10 rounded-lg overflow-hidden">
-                <div className="grid grid-cols-2 md:grid-cols-7 gap-3 px-3 py-2 bg-white/[0.03] border-b border-white/10 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+              <div className="bg-white/5 border border-white/10 rounded-lg overflow-x-auto">
+                <div className="grid grid-cols-2 md:grid-cols-7 gap-3 px-3 py-2 bg-white/[0.03] border-b border-white/10 text-[10px] font-semibold text-gray-400 uppercase tracking-wider min-w-[600px]">
                   <div>#</div>
                   <div>Address</div>
                   <div>Level</div>
@@ -315,7 +315,7 @@ export default function ValidatorPanelPage() {
                   const lvl = VALIDATOR_LEVELS[v.level] || VALIDATOR_LEVELS[0];
                   return (
                     <motion.div key={v.address} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }}
-                      className="grid grid-cols-2 md:grid-cols-7 gap-3 px-3 py-2 border-b border-white/10 hover:bg-white/[0.03] transition">
+                      className="grid grid-cols-2 md:grid-cols-7 gap-3 px-3 py-2 border-b border-white/10 hover:bg-white/[0.03] transition min-w-[600px]">
                       <div className="text-[11px] font-bold text-gray-500">#{i + 1}</div>
                       <div className="font-mono text-[11px] text-cyan-400 truncate" title={v.address}>{truncateAddr(v.address)}</div>
                       <div>
@@ -370,7 +370,7 @@ export default function ValidatorPanelPage() {
         )}
 
         {/* ─── CTA ──────────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 pb-6">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-lg p-5 text-center">
             <h2 className="text-lg font-bold mb-1">Become a Validator</h2>

@@ -234,7 +234,7 @@ export default function ProblemMap({ markers, onMarkerClick, visible = true }: P
 
       {/* Settings Panel */}
       {showSettings && (
-        <div className="absolute top-16 right-4 z-[1000] w-72 bg-black/90 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
+        <div className="absolute top-16 right-4 z-[1000] w-[calc(100%-2rem)] sm:w-72 bg-black/90 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
           {/* Header */}
           <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
             <h3 className="text-sm font-bold text-white">Map Settings</h3>

@@ -38,10 +38,10 @@ export default function DeleteAccountPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero */}
-        <section className="relative py-6 px-6 text-center overflow-hidden border-b border-white/10">
+        <section className="relative py-6 px-4 sm:px-6 text-center overflow-hidden border-b border-white/10">
           <div className="absolute -top-40 left-0 w-[400px] h-[400px] rounded-full bg-red-600/10 blur-3xl" />
           <div className="relative z-10">
             <div className="flex items-center justify-center gap-2 mb-2">
@@ -61,7 +61,7 @@ export default function DeleteAccountPage() {
         </section>
 
         {/* Content */}
-        <section className="max-w-3xl mx-auto px-6 py-8 space-y-6">
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-6">
           {/* Important Notice */}
           <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-5">
             <div className="flex items-start gap-3">

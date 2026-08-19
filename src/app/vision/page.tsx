@@ -6,10 +6,10 @@ import Link from "next/link";
 
 export default function VisionPage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* HERO */}
-        <section className="px-6 lg:px-20 py-20 lg:py-28">
+        <section className="px-4 sm:px-6 lg:px-20 py-16 sm:py-20 lg:py-28">
           <div className="mx-auto max-w-7xl flex flex-col lg:flex-row items-center gap-12">
             {/* Left */}
             <motion.div
@@ -23,7 +23,7 @@ export default function VisionPage() {
                 PoPP Vision
               </div>
 
-              <h1 className="text-4xl lg:text-6xl font-extrabold leading-tight tracking-tight text-white">
+              <h1 className="text-2xl sm:text-4xl lg:text-6xl font-extrabold leading-tight tracking-tight text-white">
                 Shaping a Transparent &{" "}
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                   Decentralized Future
@@ -36,7 +36,7 @@ export default function VisionPage() {
                 intelligence, blockchain integrity, and global trust.
               </p>
 
-              <div className="mt-8 flex gap-4">
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Link
                   href="#approach"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-semibold transition hover:shadow-lg hover:shadow-cyan-500/20"
@@ -80,13 +80,13 @@ export default function VisionPage() {
         </section>
 
         {/* Vision Manifesto */}
-        <section className="text-center px-6 lg:px-20 py-16">
+        <section className="text-center px-4 sm:px-6 lg:px-20 py-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl font-bold mb-8"
+            className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8"
           >
             A World Built on{" "}
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
@@ -105,18 +105,18 @@ export default function VisionPage() {
         </section>
 
         {/* APPROACH */}
-        <section id="approach" className="px-6 lg:px-20 py-16">
+        <section id="approach" className="px-4 sm:px-6 lg:px-20 py-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center text-3xl font-bold mb-12"
+            className="text-center text-2xl sm:text-3xl font-bold mb-8 sm:mb-12"
           >
             Our Approach
           </motion.h2>
 
-          <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {[
               {
                 icon: <Shield className="w-6 h-6 text-cyan-400" />,
@@ -153,7 +153,7 @@ export default function VisionPage() {
         </section>
 
         {/* CLOSING CTA */}
-        <section className="px-6 lg:px-20 py-16 text-center">
+        <section className="px-4 sm:px-6 lg:px-20 py-16 text-center">
           <div className="max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -161,7 +161,7 @@ export default function VisionPage() {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight mb-6">
                 Join the{" "}
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                   Movement
@@ -171,7 +171,7 @@ export default function VisionPage() {
                 Be a part of the Proof-of-Problem Protocol (PoPP) revolution.
                 Together we can shape a transparent, decentralized, and intelligent future.
               </p>
-              <div className="flex justify-center gap-4">
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
                 <Link
                   href="/whitepapers"
                   className="px-8 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 font-semibold hover:shadow-lg hover:shadow-cyan-500/20 transition-all"

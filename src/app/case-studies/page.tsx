@@ -216,16 +216,16 @@ export default function CaseStudiesPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* ─── Hero ─────────────────────────────────────────────────────── */}
-        <section className="mx-auto w-full max-w-7xl px-6 py-10">
+        <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h1 className="text-3xl md:text-4xl font-extrabold leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight">
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 Real Problems. Verified Solutions.
               </span>
@@ -256,7 +256,7 @@ export default function CaseStudiesPage() {
         </section>
 
         {/* ─── Filter bar ───────────────────────────────────────────────── */}
-        <section className="mx-auto w-full max-w-7xl px-6 pb-4">
+        <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 pb-4">
           <div className="flex flex-wrap items-center gap-2">
             <Filter size={16} className="text-gray-500" />
             {DOMAINS.map((d) => (
@@ -276,7 +276,7 @@ export default function CaseStudiesPage() {
         </section>
 
         {/* ─── Case Study Cards ─────────────────────────────────────────── */}
-        <section className="mx-auto w-full max-w-7xl px-6 pb-10">
+        <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 pb-10">
           <div className="space-y-4">
             {filtered.map((cs, i) => {
               const expanded = expandedId === cs.id;

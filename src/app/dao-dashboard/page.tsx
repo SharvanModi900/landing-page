@@ -153,10 +153,10 @@ export default function DAODashboardPage() {
   // ─── Render ─────────────────────────────────────────────────────────────
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* ─── Hero ─────────────────────────────────────────────────────── */}
-        <section className="relative py-6 px-6 text-center overflow-hidden">
+        <section className="relative py-6 px-4 sm:px-6 text-center overflow-hidden">
           <div className="absolute -top-40 right-0 w-[400px] h-[400px] rounded-full bg-blue-600/10 blur-3xl" />
 
           <motion.div initial={{ opacity: 0, y: -15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="relative z-10">
@@ -175,8 +175,8 @@ export default function DAODashboardPage() {
         </section>
 
         {/* ─── Stats ────────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 mb-4">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-blue-500/20 to-purple-600/20 border border-white/10 rounded-lg p-2.5">
               <div className="flex items-center gap-1.5 mb-1"><Vote className="h-3.5 w-3.5 text-blue-400" /><span className="text-[11px] text-gray-400">Proposals</span></div>
               <div className="text-lg font-bold">{loading ? "—" : proposals.length}</div>
@@ -201,7 +201,7 @@ export default function DAODashboardPage() {
         </section>
 
         {/* ─── Treasury & Staking ───────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 mb-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Staking Overview */}
             <div className="bg-white/5 border border-white/10 rounded-lg p-4">
@@ -259,10 +259,10 @@ export default function DAODashboardPage() {
         </section>
 
         {/* ─── Proposals ────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 pb-6">
-          <div className="flex items-center justify-between mb-3">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-3 gap-2">
             <h2 className="text-sm font-bold flex items-center gap-1.5"><FileText size={14} className="text-blue-400" /> Proposals</h2>
-            <div className="flex gap-1">
+            <div className="flex flex-wrap gap-1">
               {["all", "PROPOSAL_STATUS_DEPOSIT_PERIOD", "PROPOSAL_STATUS_VOTING_PERIOD", "PROPOSAL_STATUS_PASSED", "PROPOSAL_STATUS_REJECTED"].map((s) => (
                 <button key={s} onClick={() => setStatusFilter(s)}
                   className={`px-2 py-0.5 rounded-full text-[10px] font-semibold transition ${statusFilter === s ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white" : "bg-white/5 text-gray-400 hover:text-white border border-white/10"}`}>
@@ -367,7 +367,7 @@ export default function DAODashboardPage() {
         </section>
 
         {/* ─── CTA ──────────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 pb-6">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-lg p-5 text-center">
             <h2 className="text-lg font-bold mb-1">Shape the Future of PoPP</h2>
