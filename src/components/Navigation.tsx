@@ -19,7 +19,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Wallet, ChevronDown, X } from "lucide-react";
 import { useWallet } from "@/lib/wallet";
-import WalletModal from "./WalletModal";
+import WalletDropdown from "./WalletDropdown";
 
 /* ------------------------------------------------------------------ */
 /*  Mega-menu data — consolidated into 7 logical groups               */
@@ -65,19 +65,29 @@ export const megaMenuSections: MegaSection[] = [
       { title: "Problem Explorer", desc: "Browse submitted problems", href: "/explorer", icon: BookOpenIcon },
       { title: "Validator Panel", desc: "Live dashboard and analytics", href: "/validator-panel", icon: ChartBarIcon },
       { title: "DAO Dashboard", desc: "Governance and proposals", href: "/dao-dashboard", icon: GlobeAltIcon },
+      { title: "Proofer", desc: "Cryptographic proof generation", href: "/proofer", icon: ShieldCheckIcon },
+      { title: "Escalations", desc: "Resolve escalated submissions", href: "/escalations", icon: ArrowUpRightIcon },
+      { title: "Submit Problem", desc: "Report a real-world issue", href: "/report", icon: ArrowTrendingUpIcon },
+    ],
+  },
+  {
+    label: "Dashboard",
+    submenu: [
       { title: "Wallet", desc: "Manage tokens and staking", href: "/wallet", icon: StarIcon },
+      { title: "My Profile", desc: "Account settings & referrals", href: "/profile", icon: UsersIcon },
       { title: "Notifications", desc: "Alerts and updates", href: "/notifications", icon: NewspaperIcon },
       { title: "Leaderboard", desc: "Reputation rankings", href: "/leaderboard", icon: ArrowTrendingUpIcon },
       { title: "Resolutions", desc: "Rewards and resolution stats", href: "/resolutions", icon: ShieldCheckIcon },
-      { title: "Infrastructure", desc: "Network infrastructure monitor", href: "/infrastructure", icon: BuildingLibraryIcon },
-{ title: "Escalations", desc: "Resolve escalated submissions", href: "/escalations", icon: ArrowUpRightIcon },
-{ title: "Proofer", desc: "Cryptographic proof generation", href: "/proofer", icon: ShieldCheckIcon },
-{ title: "Identity (DID)", desc: "Decentralized identity management", href: "/did", icon: GlobeAltIcon },
-{ title: "Tokenomics", desc: "Live token dashboard & emissions", href: "/tokenomics", icon: ChartBarIcon },
-{ title: "Zones", desc: "Geographic zone management", href: "/zones", icon: GlobeAltIcon },
-{ title: "IoT Sensors", desc: "Sensor network management", href: "/sensors", icon: BuildingLibraryIcon },
-{ title: "My Profile", desc: "Account settings & referrals", href: "/profile", icon: UsersIcon },
-      { title: "Submit Problem", desc: "Report a real-world issue", href: "/report", icon: ArrowTrendingUpIcon },
+    ],
+  },
+  {
+    label: "Infrastructure",
+    submenu: [
+      { title: "Network Monitor", desc: "Infrastructure health & status", href: "/infrastructure", icon: BuildingLibraryIcon },
+      { title: "Identity (DID)", desc: "Decentralized identity management", href: "/did", icon: GlobeAltIcon },
+      { title: "Zones", desc: "Geographic zone management", href: "/zones", icon: GlobeAltIcon },
+      { title: "IoT Sensors", desc: "Sensor network management", href: "/sensors", icon: BuildingLibraryIcon },
+      { title: "Tokenomics", desc: "Live token dashboard & emissions", href: "/tokenomics", icon: ChartBarIcon },
     ],
   },
   {
@@ -139,6 +149,7 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
+  const walletBtnJustClosed = useRef(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -160,6 +171,13 @@ export default function Navigation() {
     const onScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  /* open wallet modal when any page calls connect() without a wallet */
+  useEffect(() => {
+    const handler = () => setWalletModalOpen(true);
+    window.addEventListener("popp-wallet-open-modal", handler);
+    return () => window.removeEventListener("popp-wallet-open-modal", handler);
   }, []);
 
   /* toggle mega menu on click */
@@ -200,22 +218,22 @@ export default function Navigation() {
       }`}
     >
       {/* Early Access Banner Strip */}
-      <div className="bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-cyan-500/10 border-b border-white/[0.06]">
-        <div className="w-full max-w-7xl mx-auto px-5 py-1.5 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-cyan-500/20 border border-cyan-500/30 rounded-full text-[10px] font-semibold text-cyan-400 flex-shrink-0">
-              <span className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
+      <div className="bg-gradient-to-r from-violet-600/90 via-indigo-600/90 to-cyan-600/90">
+        <div className="w-full max-w-7xl mx-auto px-5 py-2.5 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-white/20 border border-white/25 rounded-full text-[10px] font-bold text-white flex-shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               BETA
             </span>
-            <p className="text-xs text-gray-400 truncate hidden sm:block">
-              Android app in <span className="text-gray-200 font-medium">testing</span> — join early access
+            <p className="text-xs text-white/90 truncate hidden sm:block">
+              Android app in <span className="text-white font-semibold">early testing</span>  join the waitlist
             </p>
           </div>
           <a
             href="https://docs.google.com/forms/d/e/1FAIpQLSc1uzrlQPc3q_DngaVOK2yzKKaLgtGMQNvCx5iZmgmcx-VAeA/viewform"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-md text-[11px] font-semibold text-white hover:shadow-md hover:shadow-cyan-500/20 transition-all"
+            className="flex-shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white/20 hover:bg-white/30 border border-white/20 rounded-lg text-[11px] font-semibold text-white backdrop-blur-sm transition-all"
           >
             <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
@@ -259,28 +277,49 @@ export default function Navigation() {
 
           {/* Right-side actions */}
           <div className="flex items-center gap-3 ml-4">
-            <button
-              onClick={() => setWalletModalOpen(true)}
-              className={`inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all ${
-                connected
-                  ? "bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20"
-                  : "text-gray-400 hover:text-white hover:bg-white/[0.06]"
-              }`}
-            >
-              <Wallet className="w-[18px] h-[18px]" />
-              {connected && shortAddr && (
-                <span className="hidden lg:inline">{shortAddr}</span>
-              )}
-            </button>
-            <Link
-              href="/report"
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:scale-105 transition-all"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
-              Report Problem
-            </Link>
+            <div className="relative">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (walletModalOpen) {
+                    walletBtnJustClosed.current = true;
+                    setWalletModalOpen(false);
+                    requestAnimationFrame(() => { walletBtnJustClosed.current = false; });
+                  } else {
+                    setWalletModalOpen(true);
+                  }
+                }}
+                onMouseDown={(e) => { e.stopPropagation(); }}
+                className={`group relative inline-flex items-center gap-2 text-sm font-semibold transition-all duration-300 ${
+                  connected
+                    ? "py-2 pl-2 pr-3.5 rounded-full bg-white/[0.06] border border-white/[0.1] hover:border-white/[0.2] hover:bg-white/[0.08]"
+                    : "py-2.5 px-4 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-600/25 hover:shadow-violet-600/40 hover:scale-[1.02] active:scale-[0.98]"
+                }`}
+              >
+                {connected ? (
+                  <>
+                    {/* Address avatar */}
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 text-[10px] font-bold text-white">
+                      {address ? address.slice(2, 4).toUpperCase() : "?"}
+                    </span>
+                    {/* Green dot indicator */}
+                    <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
+                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 border border-[#0b1120]" />
+                    </span>
+                    <span className="hidden lg:inline text-white/90">{shortAddr}</span>
+                  </>
+                ) : (
+                  <>
+                    <Wallet className="w-4 h-4" />
+                    <span>Connect</span>
+                  </>
+                )}
+              </button>
+
+              {/* Wallet Dropdown */}
+              {walletModalOpen && <WalletDropdown onClose={() => setWalletModalOpen(false)} />}
+            </div>
           </div>
         </div>
 
@@ -299,20 +338,20 @@ export default function Navigation() {
       </div>
 
       {/* ============================================================ */}
-      {/*  Mega Menu (desktop) — animated slide-down                   */}
+      {/*  Mega Menu (desktop) — anchored below navbar                 */}
       {/* ============================================================ */}
       <div
         ref={megaMenuRef}
-        className={`hidden md:block fixed left-0 right-0 top-16 z-50 transition-all duration-300 ease-out ${
+        className={`hidden md:block absolute left-0 right-0 top-full z-40 transition-all duration-300 ease-out ${
           megaOpen
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-2 pointer-events-none"
         }`}
         style={{ visibility: megaOpen ? "visible" : "hidden" }}
       >
-        <div className="bg-[#0a0f1e]/95 backdrop-blur-xl shadow-2xl shadow-black/40 rounded-b-2xl border-t border-white/[0.04]">
+        <div className="bg-[#0a0f1e]/95 backdrop-blur-xl shadow-2xl shadow-black/40 rounded-b-2xl border border-white/[0.04] border-t-0">
           <div className="max-w-7xl mx-auto px-6 py-6 max-h-[75vh] overflow-y-auto">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-6">
+            <div className="grid grid-cols-3 lg:grid-cols-5 gap-x-6 gap-y-6">
               {megaMenuSections.map((section, sIdx) => (
                 <div
                   key={section.label}
@@ -391,27 +430,29 @@ export default function Navigation() {
             ))}
 
             {/* Bottom actions */}
-            <div className="pt-4 border-t border-white/[0.06] flex flex-col gap-3">
-              <Link
-                href="/report"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center justify-center gap-2 px-4 py-3.5 text-sm font-semibold rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-                </svg>
-                Report a Problem
-              </Link>
+            <div className="pt-4 border-t border-white/[0.06]">
               <button
                 onClick={() => { setIsMobileMenuOpen(false); setWalletModalOpen(true); }}
-                className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl border transition-colors ${
+                className={`w-full flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-xl text-sm font-semibold transition-all ${
                   connected
-                    ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-400"
-                    : "bg-white/[0.05] border-white/[0.08] text-gray-300"
+                    ? "bg-white/[0.06] border border-white/[0.1] text-white"
+                    : "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-600/25"
                 }`}
               >
-                <Wallet className="w-5 h-5" />
-                <span className="text-sm">{connected ? (shortAddr || "Connected") : "Connect Wallet"}</span>
+                {connected ? (
+                  <>
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 text-[10px] font-bold text-white">
+                      {address ? address.slice(2, 4).toUpperCase() : "?"}
+                    </span>
+                    <span>{shortAddr || "Connected"}</span>
+                    <span className="ml-auto flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                  </>
+                ) : (
+                  <>
+                    <Wallet className="w-5 h-5" />
+                    <span>Connect Wallet</span>
+                  </>
+                )}
               </button>
             </div>
 
@@ -419,8 +460,7 @@ export default function Navigation() {
         </div>
       )}
 
-      {/* Wallet Modal */}
-      {walletModalOpen && <WalletModal onClose={() => setWalletModalOpen(false)} />}
+      {/* Wallet dropdown is now inline in the nav bar */}
     </nav>
   );
 }

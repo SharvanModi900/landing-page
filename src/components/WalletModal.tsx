@@ -1,169 +1,594 @@
 "use client";
-import React from "react";
-import { X, Copy, ExternalLink, LogOut, Wallet, Loader2 } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  X, Copy, Check, Wallet, Loader2, ArrowLeft, Download, Upload,
+  Shield, Eye, Trash2, AlertTriangle, Send, ArrowDownLeft,
+  RefreshCw, Settings, ChevronRight, Clock, Coins,
+  ArrowRightLeft, Plus, Globe, LogOut, Key
+} from "lucide-react";
 import { useWallet } from "@/lib/wallet";
 
+type Screen = "main" | "backup" | "import" | "home" | "delete-confirm" | "settings" | "receive";
+
 export default function WalletModal({ onClose }: { onClose: () => void }) {
-  const { connected, address, name, balance, connect, disconnect, loading, error } =
-    useWallet();
+  const {
+    connected, address, name, balance, hasWallet,
+    createWallet, importWallet, connect, disconnect, disconnectAndDelete,
+    loading, error,
+  } = useWallet();
 
-  const shortAddr = address
-    ? `${address.slice(0, 10)}...${address.slice(-6)}`
-    : null;
+  const [screen, setScreen] = useState<Screen>(connected ? "home" : "main");
+  const [mnemonic, setMnemonic] = useState("");
+  const [importWords, setImportWords] = useState<string[]>(Array(24).fill(""));
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [backupConfirmed, setBackupConfirmed] = useState(false);
+  const [showMnemonic, setShowMnemonic] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [copiedField, setCopiedField] = useState("");
+  const [importError, setImportError] = useState("");
+  const [creating, setCreating] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const clipboardTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const copyAddress = () => {
-    if (address) navigator.clipboard.writeText(address);
+  // Clear mnemonic from state after 2 minutes on backup screen
+  useEffect(() => {
+    if (screen === "backup" && mnemonic) {
+      const timer = setTimeout(() => { setMnemonic(""); setShowMnemonic(false); }, 120_000);
+      return () => clearTimeout(timer);
+    }
+  }, [screen, mnemonic]);
+
+  useEffect(() => {
+    return () => { if (clipboardTimerRef.current) clearTimeout(clipboardTimerRef.current); };
+  }, []);
+
+  const shortAddr = address ? `${address.slice(0, 8)}...${address.slice(-6)}` : null;
+
+  const clearClipboard = (text: string, delayMs: number = 30_000) => {
+    if (clipboardTimerRef.current) clearTimeout(clipboardTimerRef.current);
+    clipboardTimerRef.current = setTimeout(() => {
+      navigator.clipboard.readText().then(clip => { if (clip === text) navigator.clipboard.writeText(""); }).catch(() => {});
+    }, delayMs);
   };
+
+  const copyToClipboard = (text: string, field: string) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setCopiedField(field);
+    setTimeout(() => { setCopied(false); setCopiedField(""); }, 2000);
+  };
+
+  // ─── Create Wallet ───
+  const handleCreate = async () => {
+    setCreating(true);
+    try { const w = await createWallet(); setMnemonic(w.mnemonic); setScreen("backup"); }
+    catch { /* handled in context */ }
+    finally { setCreating(false); }
+  };
+
+  // ─── Backup Confirm ───
+  const handleConfirmBackup = async () => {
+    await connect();
+    setMnemonic(""); setShowMnemonic(false);
+    setScreen("home");
+  };
+
+  // ─── Import Wallet ───
+  const handleImport = async () => {
+    setImportError("");
+    const words = importWords.filter(w => w.trim());
+    if (words.length !== 12 && words.length !== 24) {
+      setImportError(`Please enter all ${words.length < 15 ? 12 : 24} words`);
+      return;
+    }
+    try { await importWallet(words.join(" ")); await connect(); setImportWords(Array(24).fill("")); setScreen("home"); }
+    catch (err: any) { setImportError(err.message || "Failed to import"); }
+  };
+
+  const handleWordChange = (index: number, value: string) => {
+    setImportError("");
+    const clean = value.trim().toLowerCase().replace(/[^a-z]/g, "");
+    const next = [...importWords];
+    if (value.includes(" ")) {
+      const parts = value.split(/\s+/).filter(Boolean);
+      parts.forEach((w, i) => { if (index + i < 24) next[index + i] = w.toLowerCase().replace(/[^a-z]/g, ""); });
+      setImportWords(next);
+      inputRefs.current[Math.min(index + parts.length, 23)]?.focus();
+    } else {
+      next[index] = clean;
+      setImportWords(next);
+      if (value.endsWith(" ") && clean && index < 23) inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleWordKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === " " && importWords[index]) { e.preventDefault(); if (index < 23) inputRefs.current[index + 1]?.focus(); }
+    if (e.key === "Backspace" && !importWords[index] && index > 0) inputRefs.current[index - 1]?.focus();
+  };
+
+  const copyAddress = () => { if (address) copyToClipboard(address, "address"); };
+  const copyMnemonic = () => { if (mnemonic) { copyToClipboard(mnemonic, "mnemonic"); clearClipboard(mnemonic); } };
+
+  const handleDeleteWallet = async () => { await disconnectAndDelete(); onClose(); };
+
+  const filledWords = importWords.filter(w => w.trim()).length;
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
+      <div className="relative w-full max-w-[380px] bg-[#1a1b23] border border-white/[0.06] rounded-3xl shadow-[0_0_80px_rgba(0,0,0,0.5)] overflow-hidden max-h-[90vh] flex flex-col">
 
-      {/* Modal */}
-      <div className="relative w-full max-w-sm bg-[#0a0f1e] border border-white/10 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
-          <div className="flex items-center gap-2">
-            <Wallet className="w-5 h-5 text-cyan-400" />
-            <h2 className="text-lg font-bold text-white">Wallet</h2>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-1 text-gray-500 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Body */}
-        <div className="px-6 py-6">
-          {!connected ? (
-            /* ─── Not Connected ─── */
-            <div className="flex flex-col items-center text-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center">
-                <Wallet className="w-8 h-8 text-cyan-400" />
-              </div>
-              <div>
-                <h3 className="text-white font-semibold mb-1">
-                  Connect Your Wallet
-                </h3>
-                <p className="text-sm text-gray-400">
-                  Connect your Keplr wallet to submit problems, validate, and
-                  participate in governance.
+        {/* ═══════════════════════════════════════════════════════════
+            WELCOME SCREEN (Phantom-style)
+            ═══════════════════════════════════════════════════════════ */}
+        {screen === "main" && (
+          <div className="flex flex-col h-full">
+            {/* Gradient hero */}
+            <div className="relative px-8 pt-10 pb-8 text-center overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-b from-violet-600/20 via-purple-600/10 to-transparent" />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-gradient-to-br from-violet-500/20 to-cyan-500/10 rounded-full blur-3xl" />
+              <div className="relative z-10">
+                {/* Logo */}
+                <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-violet-500/20 rotate-3 hover:rotate-0 transition-transform duration-300">
+                  <Wallet className="w-10 h-10 text-white" />
+                </div>
+                <h1 className="text-2xl font-bold text-white mb-2">PoPP Wallet</h1>
+                <p className="text-sm text-gray-400 max-w-[260px] mx-auto leading-relaxed">
+                  Your gateway to the PoPP ecosystem. Create or import your wallet to get started.
                 </p>
               </div>
-
-              {error && (
-                <div className="w-full px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-sm text-red-400">
-                  {error}
-                </div>
-              )}
-
-              <button
-                onClick={connect}
-                disabled={loading}
-                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold text-white disabled:opacity-60 hover:shadow-lg hover:shadow-cyan-500/20 transition-all"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Connecting...
-                  </>
-                ) : (
-                  <>
-                    <img
-                      src="https://raw.githubusercontent.com/chainapsis/keplr-wallet/master/packages/extension/src/assets/icon-128.png"
-                      alt="Keplr"
-                      className="w-5 h-5 rounded"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = "none";
-                      }}
-                    />
-                    Connect Keplr
-                  </>
-                )}
-              </button>
-
-              <a
-                href="https://www.keplr.app/download"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-gray-500 hover:text-cyan-400 transition-colors inline-flex items-center gap-1"
-              >
-                Don&apos;t have Keplr?
-                <ExternalLink className="w-3 h-3" />
-              </a>
             </div>
-          ) : (
-            /* ─── Connected ─── */
-            <div className="flex flex-col gap-5">
-              {/* Profile */}
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white font-bold text-lg">
-                  {name?.[0]?.toUpperCase() || address?.[4]?.toUpperCase() || "?"}
+
+            {/* Actions */}
+            <div className="px-6 pb-8 space-y-3 flex-shrink-0">
+              {error && (
+                <div className="px-4 py-3 rounded-2xl bg-red-500/10 border border-red-500/20 text-sm text-red-400 text-center">{error}</div>
+              )}
+              <button
+                onClick={handleCreate}
+                disabled={creating}
+                className="w-full flex items-center justify-center gap-2.5 px-6 py-3.5 bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl font-semibold text-white disabled:opacity-60 hover:shadow-lg hover:shadow-violet-500/25 active:scale-[0.98] transition-all duration-200"
+              >
+                {creating ? <><Loader2 className="w-4 h-4 animate-spin" /> Creating...</> : <><Download className="w-4 h-4" /> Create New Wallet</>}
+              </button>
+              <button
+                onClick={() => { setImportWords(Array(24).fill("")); setImportError(""); setScreen("import"); }}
+                className="w-full flex items-center justify-center gap-2.5 px-6 py-3.5 bg-white/[0.06] border border-white/[0.08] rounded-2xl font-semibold text-gray-300 hover:bg-white/[0.1] active:scale-[0.98] transition-all duration-200"
+              >
+                <Upload className="w-4 h-4" /> Import Existing Wallet
+              </button>
+              <div className="flex items-center justify-center gap-1.5 pt-2 text-[10px] text-gray-600">
+                <Shield className="w-3 h-3" /> AES-256 encrypted · Non-custodial · Stored locally
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════════════════════
+            HOME SCREEN (Phantom-style wallet dashboard)
+            ═══════════════════════════════════════════════════════════ */}
+        {screen === "home" && (
+          <div className="flex flex-col h-full max-h-[90vh]">
+            {/* Gradient header */}
+            <div className="relative px-6 pt-5 pb-8 overflow-hidden flex-shrink-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-violet-600/30 via-purple-600/20 to-cyan-600/10" />
+              <div className="absolute top-0 right-0 w-40 h-40 bg-violet-500/10 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl" />
+
+              <div className="relative z-10">
+                {/* Top bar */}
+                <div className="flex items-center justify-between mb-6">
+                  <button
+                    onClick={copyAddress}
+                    className="flex items-center gap-2 px-3 py-1.5 bg-white/[0.08] hover:bg-white/[0.12] border border-white/[0.06] rounded-full transition-colors"
+                  >
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-br from-violet-400 to-cyan-400 flex items-center justify-center text-[8px] text-white font-bold">
+                      {name?.[0]?.toUpperCase() || address?.[4]?.toUpperCase() || "?"}
+                    </div>
+                    <span className="text-xs text-gray-300 font-medium">{name || shortAddr}</span>
+                    {copied && copiedField === "address"
+                      ? <Check className="w-3 h-3 text-emerald-400" />
+                      : <Copy className="w-3 h-3 text-gray-500" />
+                    }
+                  </button>
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => connect()} className="p-2 hover:bg-white/[0.08] rounded-xl transition-colors" title="Refresh">
+                      <RefreshCw className="w-4 h-4 text-gray-400" />
+                    </button>
+                    <button onClick={() => setScreen("settings")} className="p-2 hover:bg-white/[0.08] rounded-xl transition-colors">
+                      <Settings className="w-4 h-4 text-gray-400" />
+                    </button>
+                    <button onClick={onClose} className="p-2 hover:bg-white/[0.08] rounded-xl transition-colors">
+                      <X className="w-4 h-4 text-gray-500" />
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  {name && (
-                    <div className="text-white font-semibold">{name}</div>
-                  )}
-                  <div className="text-sm text-gray-400 font-mono">
-                    {shortAddr}
+
+                {/* Balance */}
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-white tracking-tight mb-1">
+                    {balance !== null ? `${balance}` : "—"}
+                  </div>
+                  <div className="text-sm text-gray-400 font-medium">Sat Mudra</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Action buttons */}
+            <div className="px-6 -mt-4 mb-6 flex-shrink-0">
+              <div className="grid grid-cols-4 gap-3">
+                {[
+                  { icon: <Send className="w-4 h-4" />, label: "Send", disabled: true },
+                  { icon: <ArrowDownLeft className="w-4 h-4" />, label: "Receive", action: () => setScreen("receive") },
+                  { icon: <ArrowRightLeft className="w-4 h-4" />, label: "Swap", disabled: true },
+                  { icon: <Plus className="w-4 h-4" />, label: "Buy", disabled: true },
+                ].map((btn, i) => (
+                  <button
+                    key={i}
+                    onClick={btn.action}
+                    disabled={btn.disabled}
+                    className="flex flex-col items-center gap-1.5 disabled:opacity-40"
+                  >
+                    <div className="w-11 h-11 rounded-2xl bg-white/[0.06] border border-white/[0.08] flex items-center justify-center text-gray-300 hover:bg-white/[0.1] active:scale-95 transition-all">
+                      {btn.icon}
+                    </div>
+                    <span className="text-[10px] text-gray-400 font-medium">{btn.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Scrollable content */}
+            <div className="flex-1 overflow-y-auto px-4 pb-4 min-h-0">
+              {/* Token list */}
+              <div className="mb-2">
+                <div className="flex items-center justify-between px-2 mb-2">
+                  <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Tokens</span>
+                  <span className="text-[10px] text-gray-600">PoPP Chain</span>
+                </div>
+                <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden">
+                  <div className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/[0.03] transition-colors cursor-pointer">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center flex-shrink-0">
+                      <Coins className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-semibold text-white">Sat Mudra</div>
+                      <div className="text-xs text-gray-500">satmudtra</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold text-white">{balance !== null ? balance : "—"}</div>
+                      <div className="text-xs text-gray-500">satmudtra</div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Balance */}
-              <div className="p-4 bg-white/[0.03] border border-white/10 rounded-xl">
-                <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">
-                  Balance
+              {/* Activity placeholder */}
+              <div className="mb-4">
+                <div className="flex items-center justify-between px-2 mb-2">
+                  <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Activity</span>
+                  <button className="text-[10px] text-violet-400 hover:text-violet-300 transition-colors">View all</button>
                 </div>
-                <div className="text-2xl font-bold text-white">
-                  {balance !== null ? `${balance} POPPT` : "—"}
+                <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden">
+                  <div className="flex items-center gap-3 px-4 py-6 justify-center">
+                    <Clock className="w-4 h-4 text-gray-600" />
+                    <span className="text-xs text-gray-500">No recent activity</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  onClick={copyAddress}
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-gray-300 hover:bg-white/10 transition-colors"
-                >
-                  <Copy className="w-4 h-4" />
-                  Copy
-                </button>
+              {/* Quick links */}
+              <div className="px-2 space-y-1">
                 <a
-                  href={`https://www.mintscan.io/cosmos/account/${address}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-gray-300 hover:bg-white/10 transition-colors"
+                  href={`/explorer`}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.04] transition-colors group"
                 >
-                  <ExternalLink className="w-4 h-4" />
-                  Explorer
+                  <Globe className="w-4 h-4 text-gray-500" />
+                  <span className="text-xs text-gray-400 flex-1">Problem Explorer</span>
+                  <ChevronRight className="w-3 h-3 text-gray-600 group-hover:text-gray-400 transition-colors" />
                 </a>
               </div>
+            </div>
+          </div>
+        )}
 
-              {/* Error */}
-              {error && (
-                <div className="px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-sm text-red-400">
-                  {error}
+        {/* ═══════════════════════════════════════════════════════════
+            RECEIVE SCREEN
+            ═══════════════════════════════════════════════════════════ */}
+        {screen === "receive" && (
+          <>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] flex-shrink-0">
+              <button onClick={() => setScreen("home")} className="p-1.5 text-gray-500 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors">
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <h2 className="text-base font-bold text-white">Receive</h2>
+              <div className="w-8" />
+            </div>
+            <div className="px-6 py-8 flex flex-col items-center gap-6">
+              {/* QR placeholder */}
+              <div className="w-48 h-48 bg-white rounded-2xl flex items-center justify-center p-4">
+                <div className="w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2ZmZiIvPjxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjMDAwIi8+PHJlY3QgeD0iNDAiIHk9IjEwIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9IiMwMDAiLz48cmVjdCB4PSI3MCIgeT0iMTAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0iIzAwMCIvPjxyZWN0IHg9IjEwIiB5PSI0MCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjMDAwIi8+PHJlY3QgeD0iNDAiIHk9IjQwIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9IiMwMDAiLz48cmVjdCB4PSI3MCIgeT0iNDAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0iIzAwMCIvPjxyZWN0IHg9IjEwIiB5PSI3MCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjMDAwIi8+PHJlY3QgeD0iNDAiIHk9IjcwIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIGZpbGw9IiMwMDAiLz48cmVjdCB4PSI3MCIgeT0iNzAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0iIzAwMCIvPjwvc3ZnPg==')] bg-center bg-contain rounded-xl" />
+              </div>
+              <div className="text-center">
+                <p className="text-sm text-gray-400 mb-3">Your wallet address</p>
+                <div className="px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-2xl">
+                  <p className="text-xs text-gray-300 font-mono break-all leading-relaxed">{address}</p>
+                </div>
+              </div>
+              <button
+                onClick={copyAddress}
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl font-semibold text-white hover:shadow-lg hover:shadow-violet-500/25 active:scale-[0.98] transition-all"
+              >
+                {copied && copiedField === "address" ? <><Check className="w-4 h-4" /> Copied!</> : <><Copy className="w-4 h-4" /> Copy Address</>}
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* ═══════════════════════════════════════════════════════════
+            SETTINGS SCREEN
+            ═══════════════════════════════════════════════════════════ */}
+        {screen === "settings" && (
+          <>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] flex-shrink-0">
+              <button onClick={() => setScreen("home")} className="p-1.5 text-gray-500 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors">
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <h2 className="text-base font-bold text-white">Settings</h2>
+              <div className="w-8" />
+            </div>
+            <div className="px-4 py-4 space-y-1 overflow-y-auto">
+              {/* Account section */}
+              <div className="px-2 mb-2">
+                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Account</span>
+              </div>
+              <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden mb-4">
+                <div className="flex items-center gap-3 px-4 py-3.5">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-violet-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                    {name?.[0]?.toUpperCase() || address?.[4]?.toUpperCase() || "?"}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold text-white">{name || "Wallet"}</div>
+                    <div className="text-xs text-gray-500 font-mono truncate">{shortAddr}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Security section */}
+              <div className="px-2 mb-2">
+                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Security</span>
+              </div>
+              <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden mb-4">
+                <button
+                  onClick={copyAddress}
+                  className="flex items-center gap-3 px-4 py-3.5 w-full hover:bg-white/[0.03] transition-colors"
+                >
+                  <Key className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm text-gray-300 flex-1 text-left">Copy Address</span>
+                  {copied && copiedField === "address"
+                    ? <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    : <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
+                  }
+                </button>
+                <div className="h-px bg-white/[0.04] mx-4" />
+                <div className="flex items-center gap-3 px-4 py-3">
+                  <Shield className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm text-gray-300 flex-1">Encryption</span>
+                  <span className="text-xs text-emerald-400 font-medium">AES-256-GCM</span>
+                </div>
+              </div>
+
+              {/* Danger zone */}
+              <div className="px-2 mb-2">
+                <span className="text-[10px] font-semibold text-red-400/60 uppercase tracking-wider">Danger Zone</span>
+              </div>
+              <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden">
+                <button
+                  onClick={() => { disconnect(); setScreen("main"); }}
+                  className="flex items-center gap-3 px-4 py-3.5 w-full hover:bg-white/[0.03] transition-colors"
+                >
+                  <LogOut className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm text-gray-300 flex-1 text-left">Disconnect Session</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
+                </button>
+                <div className="h-px bg-white/[0.04] mx-4" />
+                <button
+                  onClick={() => { setDeleteConfirmText(""); setScreen("delete-confirm"); }}
+                  className="flex items-center gap-3 px-4 py-3.5 w-full hover:bg-red-500/[0.04] transition-colors"
+                >
+                  <Trash2 className="w-4 h-4 text-red-400/60" />
+                  <span className="text-sm text-red-400 flex-1 text-left">Delete Wallet</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-red-400/40" />
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* ═══════════════════════════════════════════════════════════
+            BACKUP SCREEN
+            ═══════════════════════════════════════════════════════════ */}
+        {screen === "backup" && (
+          <>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] flex-shrink-0">
+              <div className="w-8" />
+              <h2 className="text-base font-bold text-white">Recovery Phrase</h2>
+              <button onClick={onClose} className="p-1.5 text-gray-500 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="px-5 py-5 space-y-4 overflow-y-auto">
+              <div className="flex items-start gap-2.5 p-3.5 bg-amber-500/[0.06] border border-amber-500/10 rounded-2xl">
+                <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-amber-300/80 leading-relaxed">
+                  Write down these 24 words in order and store them safely. This is the <strong className="text-amber-300">only way</strong> to recover your wallet. Never share your recovery phrase with anyone.
+                </p>
+              </div>
+
+              {mnemonic ? (
+                <>
+                  <div className="relative">
+                    <div className={`grid grid-cols-3 gap-1.5 ${!showMnemonic ? "blur-lg select-none" : ""}`}>
+                      {mnemonic.split(" ").map((word, i) => (
+                        <div key={i} className="flex items-center gap-1.5 px-2.5 py-2 bg-white/[0.04] border border-white/[0.06] rounded-xl">
+                          <span className="text-[9px] text-gray-600 w-4 text-right font-mono">{i + 1}</span>
+                          <span className="text-xs text-white/90 font-mono">{word}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {!showMnemonic && (
+                      <button
+                        onClick={() => setShowMnemonic(true)}
+                        className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-2xl backdrop-blur-[2px]"
+                      >
+                        <div className="flex items-center gap-2 px-5 py-2.5 bg-white/[0.08] border border-white/[0.12] rounded-xl text-sm text-white hover:bg-white/[0.12] transition-colors">
+                          <Eye className="w-4 h-4" /> Tap to reveal
+                        </div>
+                      </button>
+                    )}
+                  </div>
+
+                  <button onClick={copyMnemonic} className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-white/[0.04] border border-white/[0.06] rounded-xl text-xs text-gray-400 hover:bg-white/[0.06] transition">
+                    {copied && copiedField === "mnemonic" ? <><Check className="w-3 h-3 text-emerald-400" /> Copied!</> : <><Copy className="w-3 h-3" /> Copy to Clipboard</>}
+                  </button>
+                  <p className="text-[10px] text-gray-600 text-center">Clipboard auto-clears after 30 seconds</p>
+                </>
+              ) : (
+                <div className="text-center py-6 text-sm text-gray-500">
+                  Recovery phrase cleared from memory for security.
                 </div>
               )}
 
-              {/* Disconnect */}
+              <label className="flex items-start gap-2.5 cursor-pointer group">
+                <input type="checkbox" checked={backupConfirmed} onChange={(e) => setBackupConfirmed(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 rounded border-white/20 bg-white/5 text-violet-500 focus:ring-violet-500/50" />
+                <span className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors leading-relaxed">
+                  I have safely stored my recovery phrase. I understand that losing it means permanent loss of my wallet and funds.
+                </span>
+              </label>
+
               <button
-                onClick={disconnect}
-                className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl text-sm text-red-400 bg-red-500/5 border border-red-500/10 hover:bg-red-500/10 transition-colors"
+                onClick={handleConfirmBackup}
+                disabled={!backupConfirmed || !mnemonic}
+                className="w-full py-3 bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl font-semibold text-white disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-violet-500/25 active:scale-[0.98] transition-all"
               >
-                <LogOut className="w-4 h-4" />
-                Disconnect
+                Continue
               </button>
             </div>
-          )}
-        </div>
+          </>
+        )}
+
+        {/* ═══════════════════════════════════════════════════════════
+            IMPORT SCREEN
+            ═══════════════════════════════════════════════════════════ */}
+        {screen === "import" && (
+          <>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] flex-shrink-0">
+              <button onClick={() => setScreen("main")} className="p-1.5 text-gray-500 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors">
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <h2 className="text-base font-bold text-white">Import Wallet</h2>
+              <button onClick={onClose} className="p-1.5 text-gray-500 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="px-5 py-5 space-y-4 overflow-y-auto">
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Enter your 12 or 24-word recovery phrase to restore your wallet.
+              </p>
+
+              {/* Word counter bar */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className={`h-1 rounded-full transition-all duration-300 ${filledWords >= 24 ? "w-16 bg-emerald-500" : filledWords >= 12 ? "w-12 bg-violet-500" : "w-8 bg-violet-500/40"}`} />
+                  <span className="text-xs text-gray-500 font-medium">{filledWords} / 24</span>
+                </div>
+                <button
+                  onClick={() => { setImportWords(Array(24).fill("")); setImportError(""); inputRefs.current[0]?.focus(); }}
+                  className="text-xs text-gray-500 hover:text-gray-300 transition-colors px-2 py-1 rounded-lg hover:bg-white/[0.04]"
+                >Clear</button>
+              </div>
+
+              {/* 24 word input grid */}
+              <div className="grid grid-cols-3 gap-1.5">
+                {importWords.map((word, i) => (
+                  <div key={i} className={`flex items-center gap-1 px-2 py-1.5 rounded-xl border transition-all duration-150 ${word ? "bg-violet-500/[0.06] border-violet-500/20" : "bg-white/[0.03] border-white/[0.06]"} focus-within:border-violet-500/40 focus-within:ring-1 focus-within:ring-violet-500/20`}>
+                    <span className="text-[9px] text-gray-600 w-4 flex-shrink-0 text-right font-mono">{i + 1}</span>
+                    <input
+                      ref={el => { inputRefs.current[i] = el; }}
+                      type="text"
+                      value={word}
+                      onChange={e => handleWordChange(i, e.target.value)}
+                      onKeyDown={e => handleWordKeyDown(i, e)}
+                      placeholder="..."
+                      autoComplete="off"
+                      autoCorrect="off"
+                      spellCheck={false}
+                      tabIndex={0}
+                      className="w-full bg-transparent text-xs text-white font-mono outline-none placeholder:text-gray-700 min-w-0"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {importError && (
+                <div className="px-3 py-2.5 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-400">{importError}</div>
+              )}
+              {error && (
+                <div className="px-3 py-2.5 bg-red-500/10 border border-red-500/20 rounded-xl text-xs text-red-400">{error}</div>
+              )}
+
+              <button
+                onClick={handleImport}
+                disabled={loading || filledWords < 12}
+                className="w-full py-3 bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl font-semibold text-white disabled:opacity-30 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-violet-500/25 active:scale-[0.98] transition-all"
+              >
+                {loading ? <><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Importing...</> : "Import Wallet"}
+              </button>
+            </div>
+          </>
+        )}
+
+        {/* ═══════════════════════════════════════════════════════════
+            DELETE CONFIRM SCREEN
+            ═══════════════════════════════════════════════════════════ */}
+        {screen === "delete-confirm" && (
+          <>
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] flex-shrink-0">
+              <button onClick={() => setScreen("settings")} className="p-1.5 text-gray-500 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors">
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <h2 className="text-base font-bold text-red-400">Delete Wallet</h2>
+              <div className="w-8" />
+            </div>
+            <div className="px-5 py-5 space-y-4">
+              <div className="flex items-start gap-2.5 p-4 bg-red-500/[0.06] border border-red-500/10 rounded-2xl">
+                <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-red-300/80 leading-relaxed">
+                  This will <strong className="text-red-300">permanently delete</strong> your wallet and all local data. This action <strong className="text-red-300">cannot be undone</strong>. You can only recover with your 24-word recovery phrase.
+                </p>
+              </div>
+              <p className="text-sm text-gray-400">
+                Type <strong className="text-white font-semibold">DELETE</strong> to confirm:
+              </p>
+              <input
+                type="text"
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder="Type DELETE"
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-sm text-white placeholder:text-gray-600 focus:ring-1 focus:ring-red-500/40 focus:border-red-500/40 outline-none transition"
+                autoFocus
+              />
+              <button
+                onClick={handleDeleteWallet}
+                disabled={deleteConfirmText !== "DELETE"}
+                className="w-full py-3 bg-red-600 hover:bg-red-700 rounded-2xl font-semibold text-white disabled:opacity-20 disabled:cursor-not-allowed active:scale-[0.98] transition-all"
+              >
+                Permanently Delete Wallet
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

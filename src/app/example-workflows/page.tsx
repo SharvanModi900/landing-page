@@ -1,9 +1,29 @@
 'use client';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+
+const BACKEND_API = "https://popp.thharko.com";
 
 export default function ExampleWorkflowsPage() {
   const [activeTab, setActiveTab] = useState("Activists");
+  const [stats, setStats] = useState({ problems: 0, validators: 0, media: 0 });
+
+  useEffect(() => {
+    Promise.allSettled([
+      fetch(`${BACKEND_API}/api/submissions`).then((r) => r.ok ? r.json() : []),
+      fetch(`${BACKEND_API}/api/validators/status`).then((r) => r.ok ? r.json() : null),
+    ]).then(([subsResult, valResult]) => {
+      const submissions = subsResult.status === "fulfilled" ? (Array.isArray(subsResult.value) ? subsResult.value : []) : [];
+      const validators = valResult.status === "fulfilled" ? (valResult.value ? (Array.isArray(valResult.value) ? valResult.value : [valResult.value]) : []) : [];
+      setStats({
+        problems: submissions.length,
+        validators: Array.isArray(validators) ? validators.length : 0,
+        media: 0, // No media amplification endpoint yet
+      });
+    }).catch(() => {});
+  }, []);
+
+  const fmt = (n: number) => n > 0 ? n.toLocaleString() : "—";
 
   const workflows = [
     {
@@ -140,15 +160,15 @@ export default function ExampleWorkflowsPage() {
         {/* Impact Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid md:grid-cols-3 gap-8 text-center md:text-left">
           <div>
-            <h3 className="text-2xl sm:text-4xl font-bold text-cyan-400">12,400+</h3>
+            <h3 className="text-2xl sm:text-4xl font-bold text-cyan-400">{stats.problems > 0 ? `${fmt(stats.problems)}+` : "—"}</h3>
             <p className="text-gray-400">Problems Documented</p>
           </div>
           <div>
-            <h3 className="text-2xl sm:text-4xl font-bold text-emerald-400">4,200+</h3>
+            <h3 className="text-2xl sm:text-4xl font-bold text-emerald-400">{stats.validators > 0 ? `${fmt(stats.validators)}+` : "—"}</h3>
             <p className="text-gray-400">Validators Engaged</p>
           </div>
           <div>
-            <h3 className="text-2xl sm:text-4xl font-bold text-blue-400">1,800+</h3>
+            <h3 className="text-2xl sm:text-4xl font-bold text-blue-400">{stats.media > 0 ? `${fmt(stats.media)}+` : "—"}</h3>
             <p className="text-gray-400">Media Amplifications</p>
           </div>
         </div>
