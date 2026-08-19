@@ -1,5 +1,6 @@
 "use client";
 import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { poppWallet } from "./poppWallet";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -26,20 +27,29 @@ interface WalletState {
   balance: string | null;
   token: string | null;
   user: UserProfile | null;
+  hasWallet: boolean;
 }
 
 interface WalletContextType extends WalletState {
+  /** Create a new wallet (generates 24-word phrase) */
+  createWallet: () => Promise<{ address: string; mnemonic: string }>;
+  /** Import wallet from recovery phrase */
+  importWallet: (mnemonic: string) => Promise<string>;
+  /** Connect to backend after wallet is ready */
   connect: () => Promise<void>;
+  /** Disconnect and clear session */
   disconnect: () => void;
+  /** Disconnect AND delete wallet data permanently */
+  disconnectAndDelete: () => Promise<void>;
   loading: boolean;
   error: string | null;
-  /** Returns the Authorization header object, or empty object if not logged in */
   getAuthHeaders: () => Record<string, string>;
-  /** Refresh user profile from backend */
   refreshProfile: () => Promise<void>;
+  fetchBalance: () => Promise<void>;
 }
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://popp.thharko.com";
+const REST_ENDPOINT = "https://chain.thharko.com";
 
 /* ------------------------------------------------------------------ */
 /*  Context                                                            */
@@ -51,23 +61,20 @@ const WalletContext = createContext<WalletContextType>({
   balance: null,
   token: null,
   user: null,
+  hasWallet: false,
+  createWallet: async () => ({ address: "", mnemonic: "" }),
+  importWallet: async () => "",
   connect: async () => {},
   disconnect: () => {},
+  disconnectAndDelete: async () => {},
   loading: false,
   error: null,
   getAuthHeaders: () => ({}),
   refreshProfile: async () => {},
+  fetchBalance: async () => {},
 });
 
 export const useWallet = () => useContext(WalletContext);
-
-/* ------------------------------------------------------------------ */
-/*  Chain config                                                       */
-/* ------------------------------------------------------------------ */
-const CHAIN_ID = "popp-1";
-const CHAIN_NAME = "PoPP Protocol";
-const RPC_ENDPOINT = "https://rpc.thharko.com";
-const REST_ENDPOINT = "https://api.thharko.com";
 
 /* ------------------------------------------------------------------ */
 /*  Provider                                                           */
@@ -80,153 +87,174 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     balance: null,
     token: null,
     user: null,
+    hasWallet: false,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Restore session from localStorage
+  // Auto-restore session on mount
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("popp-wallet");
+    // Always derive address from encrypted storage (source of truth)
+    // instead of trusting the session cache which may be stale
+    const derivedAddress = poppWallet.getAddress();
+    const saved = localStorage.getItem("popp-wallet");
+
+    if (derivedAddress) {
+      // Merge any saved session data (name, token, user) with the derived address
+      let name: string | null = null, token: string | null = null, user: UserProfile | null = null, balance: string | null = null;
       if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.address) {
-          setState({
-            connected: true,
-            address: parsed.address,
-            name: parsed.name || null,
-            balance: null,
-            token: parsed.token || null,
-            user: parsed.user || null,
-          });
+        try {
+          const parsed = JSON.parse(saved);
+          name = parsed.name || null;
+          token = parsed.token || null;
+          user = parsed.user || null;
+          // Use backend's satmudra_balance from saved user profile
+          if (user?.satmudra_balance != null) {
+            balance = user.satmudra_balance.toFixed(2);
+          }
+        } catch {}
+      }
+      setState({
+        connected: true,
+        address: derivedAddress,
+        name,
+        balance,
+        token,
+        user,
+        hasWallet: true,
+      });
+      // Keep the session cache in sync with the derived address
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.address !== derivedAddress) {
+            localStorage.setItem("popp-wallet", JSON.stringify({ ...parsed, address: derivedAddress }));
+          }
+        } catch {}
+      }
+      if (token) {
+        fetchBalanceForAddress(derivedAddress);
+      } else {
+        authenticateWithBackend(derivedAddress);
+      }
+    } else if (saved) {
+      // No encrypted wallet but old session exists — clean up
+      localStorage.removeItem("popp-wallet");
+    }
+  }, []);
+
+  const fetchBalanceForAddress = async (address: string) => {
+    try {
+      const res = await fetch(`${REST_ENDPOINT}/cosmos/bank/v1beta1/balances/${address}`);
+      if (res.ok) {
+        const data = await res.json();
+        const found = data.balances?.find((b: any) => b.denom === "satmudtra");
+        if (found) {
+          const bal = (parseInt(found.amount) / 1e6).toFixed(2);
+          setState(prev => ({ ...prev, balance: bal }));
         }
       }
-    } catch {
-      // ignore
+    } catch { /* non-critical */ }
+  };
+
+  const authenticateWithBackend = async (address: string) => {
+    try {
+      const authRes = await fetch(`${BACKEND_URL}/api/auth/wallet`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ wallet_address: address, create_if_missing: true }),
+      });
+      if (authRes.ok) {
+        const authData = await authRes.json();
+        const token = authData.token as string;
+        const user = authData.user as UserProfile;
+        setState(prev => {
+          // Use backend's satmudra_balance as primary balance source
+          const bal = user?.satmudra_balance != null ? user.satmudra_balance.toFixed(2) : prev.balance;
+          const next = { ...prev, token, user, name: user?.display_name || prev.name, balance: bal };
+          localStorage.setItem("popp-wallet", JSON.stringify({ address: prev.address, name: next.name, token, user }));
+          return next;
+        });
+        // Also try chain REST API for real-time on-chain balance
+        fetchBalanceForAddress(address);
+      }
+    } catch (authErr) {
+      console.warn("Backend auth failed (wallet still connected):", authErr);
+    }
+  };
+
+  const createWallet = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const wallet = await poppWallet.createWallet();
+      setState(prev => ({ ...prev, address: wallet.address, connected: true, hasWallet: true }));
+      return wallet;
+    } catch (err: any) {
+      setError(err.message || "Failed to create wallet");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const importWallet = useCallback(async (mnemonic: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const wallet = await poppWallet.importWallet(mnemonic);
+      setState(prev => ({ ...prev, address: wallet.address, connected: true, hasWallet: true }));
+      return wallet.address;
+    } catch (err: any) {
+      setError(err.message || "Failed to import wallet");
+      throw err;
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const connect = useCallback(async () => {
+    if (!poppWallet.hasWallet()) {
+      window.dispatchEvent(new CustomEvent("popp-wallet-open-modal"));
+      return;
+    }
+    const address = poppWallet.getAddress();
+    if (!address) {
+      window.dispatchEvent(new CustomEvent("popp-wallet-open-modal"));
+      return;
+    }
     setLoading(true);
     setError(null);
-
     try {
-      // Check for Keplr
-      if (!window.keplr) {
-        throw new Error("Keplr wallet not found. Please install the Keplr browser extension.");
-      }
-
-      // Suggest chain (registers PoPP chain in Keplr if not already added)
-      if (typeof window.keplr.experimentalSuggestChain === "function") {
+      setState(prev => ({ ...prev, address, connected: true }));
+      // Sync session cache with the derived address immediately
+      const saved = localStorage.getItem("popp-wallet");
+      if (saved) {
         try {
-          await window.keplr.experimentalSuggestChain({
-            chainId: CHAIN_ID,
-            chainName: CHAIN_NAME,
-            rpc: RPC_ENDPOINT,
-            rest: REST_ENDPOINT,
-            bip44: { coinType: 118 },
-            bech32Config: {
-              bech32PrefixAccAddr: "popp",
-              bech32PrefixAccPub: "popppub",
-              bech32PrefixValAddr: "poppvaloper",
-              bech32PrefixValPub: "poppvaloperpub",
-              bech32PrefixConsAddr: "poppvalcons",
-              bech32PrefixConsPub: "poppvalconspub",
-            },
-            currencies: [
-              {
-                coinDenom: "POPPT",
-                coinMinimalDenom: "upoppt",
-                coinDecimals: 6,
-              },
-            ],
-            feeCurrencies: [
-              {
-                coinDenom: "POPPT",
-                coinMinimalDenom: "upoppt",
-                coinDecimals: 6,
-              },
-            ],
-            stakeCurrency: {
-              coinDenom: "POPPT",
-              coinMinimalDenom: "upoppt",
-              coinDecimals: 6,
-            },
-            gasPriceStep: { low: 0.01, average: 0.025, high: 0.04 },
-            features: ["stargate", "ibc-transfer"],
-          });
-        } catch (suggestErr) {
-          // Chain may already be registered — not fatal, continue
-          console.warn("Chain suggestion failed (may already exist):", suggestErr);
-        }
-      }
-
-      // Enable chain
-      await window.keplr.enable(CHAIN_ID);
-
-      // Get offline signer and address
-      const offlineSigner = window.keplr.getOfflineSigner(CHAIN_ID);
-      const accounts = await offlineSigner.getAccounts();
-
-      if (!accounts.length) {
-        throw new Error("No accounts found in Keplr wallet.");
-      }
-
-      const address = accounts[0].address;
-      const name = window.keplr.key?.name || null;
-
-      // Fetch balance
-      let balance: string | null = null;
-      try {
-        const res = await fetch(
-          `${REST_ENDPOINT}/cosmos/bank/v1beta1/balances/${address}`
-        );
-        if (res.ok) {
-          const data = await res.json();
-          const poppt = data.balances?.find(
-            (b: any) => b.denom === "upoppt" || b.denom === "POPPT"
-          );
-          if (poppt) {
-            balance = (parseInt(poppt.amount) / 1e6).toFixed(2);
+          const parsed = JSON.parse(saved);
+          if (parsed.address !== address) {
+            // Address changed (new import) — clear stale session data
+            localStorage.setItem("popp-wallet", JSON.stringify({ address }));
           }
-        }
-      } catch {
-        // balance fetch failed, not critical
+        } catch {}
       }
-
-      const newState: WalletState = { connected: true, address, name, balance, token: null, user: null };
-      setState(newState);
-      localStorage.setItem("popp-wallet", JSON.stringify({ address, name }));
-
-      // ── Authenticate with backend ──
-      try {
-        const authRes = await fetch(`${BACKEND_URL}/api/auth/wallet`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ wallet_address: address, display_name: name || undefined, create_if_missing: true }),
-        });
-        if (authRes.ok) {
-          const authData = await authRes.json();
-          const token = authData.token as string;
-          const user = authData.user as UserProfile;
-          setState(prev => ({ ...prev, token, user }));
-          localStorage.setItem("popp-wallet", JSON.stringify({ address, name, token, user }));
-        }
-      } catch (authErr) {
-        console.warn("Backend auth failed (wallet still connected):", authErr);
-      }
-    } catch (err: any) {
-      setError(err.message || "Failed to connect wallet");
-      setState({ connected: false, address: null, name: null, balance: null, token: null, user: null });
+      await authenticateWithBackend(address);
+      await fetchBalanceForAddress(address);
     } finally {
       setLoading(false);
     }
   }, []);
 
   const disconnect = useCallback(() => {
-    setState({ connected: false, address: null, name: null, balance: null, token: null, user: null });
+    setState({ connected: false, address: null, name: null, balance: null, token: null, user: null, hasWallet: poppWallet.hasWallet() });
     setError(null);
     localStorage.removeItem("popp-wallet");
+  }, []);
+
+  const disconnectAndDelete = useCallback(async () => {
+    await poppWallet.deleteWallet();
+    setState({ connected: false, address: null, name: null, balance: null, token: null, user: null, hasWallet: false });
+    setError(null);
   }, []);
 
   const getAuthHeaders = useCallback((): Record<string, string> => {
@@ -252,20 +280,15 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     } catch { /* non-critical */ }
   }, [state.token, state.address, state.name]);
 
+  const fetchBalance = useCallback(async () => {
+    if (state.address) await fetchBalanceForAddress(state.address);
+  }, [state.address]);
+
   return (
     <WalletContext.Provider
-      value={{ ...state, connect, disconnect, loading, error, getAuthHeaders, refreshProfile }}
+      value={{ ...state, createWallet, importWallet, connect, disconnect, disconnectAndDelete, loading, error, getAuthHeaders, refreshProfile, fetchBalance }}
     >
       {children}
     </WalletContext.Provider>
   );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Keplr window type                                                  */
-/* ------------------------------------------------------------------ */
-declare global {
-  interface Window {
-    keplr?: any;
-  }
 }

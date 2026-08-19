@@ -3,6 +3,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Wallet, Coins, ArrowUpRight, ArrowDownLeft, Lock, Flame, TrendingUp, Clock, Copy, Check, ArrowRightLeft } from "lucide-react";
 import { useWallet } from "@/lib/wallet";
+import WalletModal from "@/components/WalletModal";
+import { poppWallet } from "@/lib/poppWallet";
 
 const BACKEND_API = "https://popp.thharko.com";
 
@@ -41,6 +43,7 @@ export default function WalletPage() {
   const [burnAmount, setBurnAmount] = useState("");
   const [supplyInfo, setSupplyInfo] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "stake" | "transactions" | "earnings" | "burn" | "supply">("overview");
+  const [showWalletModal, setShowWalletModal] = useState(false);
 
   const fetchData = useCallback(async () => {
     if (!connected) return;
@@ -128,8 +131,8 @@ export default function WalletPage() {
           <div className="text-center py-16">
             <Wallet className="w-10 h-10 text-gray-700 mx-auto mb-3" />
             <h3 className="text-base font-bold mb-1">Connect Your Wallet</h3>
-            <p className="text-sm text-gray-400 mb-4">Connect to manage your Sat Mudra tokens.</p>
-            <button onClick={() => connect()} className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-600 rounded-lg text-sm font-semibold">Connect Wallet</button>
+            <p className="text-sm text-gray-400 mb-4">Create or import your PoPP wallet to manage Sat Mudra tokens.</p>
+            <button onClick={() => setShowWalletModal(true)} className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-600 rounded-lg text-sm font-semibold">Open Wallet</button>
           </div>
         ) : (
           <>
@@ -326,6 +329,7 @@ export default function WalletPage() {
           </>
         )}
       </div>
+      {showWalletModal && <WalletModal onClose={() => { setShowWalletModal(false); fetchData(); }} />}
     </main>
   );
 }

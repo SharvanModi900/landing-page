@@ -6,6 +6,7 @@ import PipelineSection from "@/components/PipelineSection";
 import ValidatorSection from "@/components/validators/validators";
 import WhoNeedsPoPP from "@/components/WhoNeedsPoPP/WhoNeedsPoPP";
 import LiveMapSection from "@/components/LiveMapSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
 
 /* ------------------------------------------------------------------ */
 /*  Case Studies data                                                 */
@@ -72,6 +73,9 @@ export default function Home() {
       <div className="">
         <HeroSection />
       </div>
+
+      {/* 1.5 Testimonials & Contributions */}
+      <TestimonialsSection />
 
       {/* 2. Pipeline */}
       <PipelineSection />
