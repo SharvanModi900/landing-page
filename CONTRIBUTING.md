@@ -51,8 +51,8 @@ By participating, you agree to keep interactions respectful and constructive. Ha
 ```bash
 # 1. Fork the repository on GitHub
 # 2. Clone your fork
-git clone https://github.com/<your-username>/popp-landing-page.git
-cd popp-landing-page
+git clone https://github.com/SharvanModi900/landing-page.git
+cd landing-page
 
 # 3. Install dependencies
 npm install
@@ -311,6 +311,11 @@ Open a discussion or issue with:
 - **Discord**: [Join our server](https://discord.gg/u6GqfJBsm) for real-time discussion
 - **X (Twitter)**: [@ShravanModi8](https://x.com/ShravanModi8) for announcements
 - **Issues**: Use GitHub Issues for bugs and feature requests
+
+## Related Repositories
+
+- **[Website](https://github.com/SharvanModi900/landing-page)** — This repository (landing page, web interfaces)
+- **[Protocol Research](https://github.com/SharvanModi900/proof-of-problem-protocol)** — Whitepaper, chapters, architecture blueprints, and protocol documentation
 
 ---
 

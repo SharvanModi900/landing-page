@@ -200,7 +200,7 @@ export default function Footer() {
             <a href="#" className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition" title="LinkedIn">
               <Linkedin className="w-5 h-5" />
             </a>
-            <a href="#" className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition" title="GitHub">
+            <a href="https://github.com/SharvanModi900/landing-page" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition" title="GitHub">
               <Github className="w-5 h-5" />
             </a>
             <a href="mailto:contact@popp.thharko.com" className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition" title="Email">
