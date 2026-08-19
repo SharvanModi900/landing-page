@@ -32,7 +32,12 @@ export default function LeaderboardPage() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [myScore, setMyScore] = useState<MyScore | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"leaderboard" | "myreputation">("leaderboard");
+  const [badges, setBadges] = useState<any[]>([]);
+  const [nfts, setNfts] = useState<any[]>([]);
+  const [insights, setInsights] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"leaderboard" | "myreputation" | "badges" | "nfts" | "insights">("leaderboard");
+  const [syncLoading, setSyncLoading] = useState<string | null>(null);
+  const [syncMsg, setSyncMsg] = useState<{ text: string; ok: boolean } | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -42,17 +47,44 @@ export default function LeaderboardPage() {
         setLeaderboard(Array.isArray(data) ? data : data.leaderboard || []);
       }
       if (connected) {
-        const scoreRes = await fetch(`${BACKEND_API}/api/reputation/my-score`, { headers: getAuthHeaders() });
-        if (scoreRes.ok) {
-          const data = await scoreRes.json();
-          setMyScore(data);
+        const [scoreRes, badgesRes, nftsRes, insightsRes] = await Promise.allSettled([
+          fetch(`${BACKEND_API}/api/reputation/my-score`, { headers: getAuthHeaders() }),
+          fetch(`${BACKEND_API}/api/reputation/badges`, { headers: getAuthHeaders() }),
+          fetch(`${BACKEND_API}/api/reputation/nfts`, { headers: getAuthHeaders() }),
+          fetch(`${BACKEND_API}/api/reputation/insights`, { headers: getAuthHeaders() }),
+        ]);
+        if (scoreRes.status === "fulfilled" && scoreRes.value.ok) setMyScore(await scoreRes.value.json());
+        if (badgesRes.status === "fulfilled" && badgesRes.value.ok) {
+          const d = await badgesRes.value.json();
+          setBadges(Array.isArray(d) ? d : d.badges || []);
         }
+        if (nftsRes.status === "fulfilled" && nftsRes.value.ok) {
+          const d = await nftsRes.value.json();
+          setNfts(Array.isArray(d) ? d : d.nfts || []);
+        }
+        if (insightsRes.status === "fulfilled" && insightsRes.value.ok) setInsights(await insightsRes.value.json());
       }
     } catch { /* ignore */ }
     setLoading(false);
   }, [connected, getAuthHeaders]);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  const handleSync = async (type: "reputation" | "badges" | "nfts") => {
+    setSyncLoading(type); setSyncMsg(null);
+    try {
+      const url = type === "reputation" ? `${BACKEND_API}/api/reputation/sync`
+        : type === "badges" ? `${BACKEND_API}/api/reputation/badges/sync`
+        : `${BACKEND_API}/api/reputation/nfts/mint`;
+      const res = await fetch(url, {
+        method: "POST", headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({}),
+      });
+      if (res.ok) { setSyncMsg({ text: `${type} synced!`, ok: true }); fetchData(); }
+      else { const err = await res.text(); setSyncMsg({ text: err || "Failed", ok: false }); }
+    } catch (e: any) { setSyncMsg({ text: e.message || "Failed", ok: false }); }
+    finally { setSyncLoading(null); }
+  };
 
   const top3 = leaderboard.slice(0, 3);
   const rest = leaderboard.slice(3);
@@ -93,11 +125,11 @@ export default function LeaderboardPage() {
         )}
 
         {/* Tabs */}
-        <div className="flex gap-1.5 mb-4">
-          {(["leaderboard", "myreputation"] as const).map(tab => (
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          {(["leaderboard", "myreputation", "badges", "nfts", "insights"] as const).map(tab => (
             <button key={tab} onClick={() => setActiveTab(tab)}
               className={`px-3 py-1.5 rounded-md text-xs font-semibold transition capitalize ${activeTab === tab ? "bg-gradient-to-r from-yellow-500 to-orange-600 text-white" : "bg-white/5 text-gray-400 hover:text-white border border-white/10"}`}>
-              {tab === "myreputation" ? "My Reputation" : "Leaderboard"}
+              {tab === "myreputation" ? "My Reputation" : tab}
             </button>
           ))}
         </div>
@@ -165,6 +197,7 @@ export default function LeaderboardPage() {
                 </div>
               ) : (
                 <div className="space-y-4">
+                  {syncMsg && <div className={`p-2 rounded-lg text-xs font-semibold ${syncMsg.ok ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`}>{syncMsg.text}</div>}
                   <div className="bg-white/5 border border-white/10 rounded-lg p-4">
                     <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Award size={14} className="text-yellow-400" /> My Stats</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -186,6 +219,18 @@ export default function LeaderboardPage() {
                       </div>
                     </div>
                   </div>
+                  {/* Sync Actions */}
+                  <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+                    <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Zap size={14} className="text-cyan-400" /> Sync & Mint</h3>
+                    <div className="flex flex-wrap gap-2">
+                      <button onClick={() => handleSync("reputation")} disabled={syncLoading !== null}
+                        className="px-3 py-1.5 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-lg text-xs font-semibold disabled:opacity-50">{syncLoading === "reputation" ? "Syncing..." : "Sync Reputation"}</button>
+                      <button onClick={() => handleSync("badges")} disabled={syncLoading !== null}
+                        className="px-3 py-1.5 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg text-xs font-semibold disabled:opacity-50">{syncLoading === "badges" ? "Syncing..." : "Sync Badges"}</button>
+                      <button onClick={() => handleSync("nfts")} disabled={syncLoading !== null}
+                        className="px-3 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-xs font-semibold disabled:opacity-50">{syncLoading === "nfts" ? "Minting..." : "Mint NFT"}</button>
+                    </div>
+                  </div>
                   <div className="bg-white/5 border border-white/10 rounded-lg p-4">
                     <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Shield size={14} className="text-cyan-400" /> How to Earn R-Score</h3>
                     <div className="space-y-2 text-xs text-gray-400">
@@ -195,6 +240,92 @@ export default function LeaderboardPage() {
                       <div className="flex items-center gap-2"><Zap size={11} className="text-purple-400" /> Resolve escalations: +25-100 per resolution</div>
                     </div>
                   </div>
+                </div>
+              )
+            )}
+
+            {/* Badges Tab */}
+            {activeTab === "badges" && (
+              !connected ? (
+                <div className="text-center py-16">
+                  <Award className="w-10 h-10 text-gray-700 mx-auto mb-3" />
+                  <h3 className="text-base font-bold mb-1">Connect Your Wallet</h3>
+                  <button onClick={() => connect()} className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-lg text-sm font-semibold">Connect Wallet</button>
+                </div>
+              ) : (
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Award size={14} className="text-yellow-400" /> My Badges</h3>
+                  {badges.length === 0 ? (
+                    <p className="text-xs text-gray-500 text-center py-6">No badges earned yet</p>
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {badges.map((b: any, i: number) => (
+                        <motion.div key={b.id || i} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}
+                          className="bg-gradient-to-br from-yellow-500/10 to-orange-600/10 border border-yellow-500/20 rounded-xl p-3 text-center">
+                          <div className="text-2xl mb-1">{b.icon || b.emoji || "🏅"}</div>
+                          <div className="text-xs font-bold">{b.name || b.badge_name || "Badge"}</div>
+                          <div className="text-[10px] text-gray-400 mt-0.5">{b.description || ""}</div>
+                          {b.earned_at && <div className="text-[9px] text-gray-500 mt-1">{new Date(b.earned_at).toLocaleDateString()}</div>}
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            )}
+
+            {/* NFTs Tab */}
+            {activeTab === "nfts" && (
+              !connected ? (
+                <div className="text-center py-16">
+                  <Star className="w-10 h-10 text-gray-700 mx-auto mb-3" />
+                  <h3 className="text-base font-bold mb-1">Connect Your Wallet</h3>
+                  <button onClick={() => connect()} className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-lg text-sm font-semibold">Connect Wallet</button>
+                </div>
+              ) : (
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Star size={14} className="text-purple-400" /> My Reputation NFTs</h3>
+                  {nfts.length === 0 ? (
+                    <p className="text-xs text-gray-500 text-center py-6">No reputation NFTs yet</p>
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {nfts.map((n: any, i: number) => (
+                        <motion.div key={n.id || i} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}
+                          className="bg-gradient-to-br from-purple-500/10 to-indigo-600/10 border border-purple-500/20 rounded-xl p-3">
+                          <div className="text-lg font-bold text-purple-400">{n.name || n.token_name || "NFT"}</div>
+                          <div className="text-[10px] text-gray-400 mt-1">{n.description || ""}</div>
+                          {n.token_id && <div className="text-[9px] text-gray-500 mt-1 font-mono">#{n.token_id}</div>}
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            )}
+
+            {/* Insights Tab */}
+            {activeTab === "insights" && (
+              !connected ? (
+                <div className="text-center py-16">
+                  <TrendingUp className="w-10 h-10 text-gray-700 mx-auto mb-3" />
+                  <h3 className="text-base font-bold mb-1">Connect Your Wallet</h3>
+                  <button onClick={() => connect()} className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-lg text-sm font-semibold">Connect Wallet</button>
+                </div>
+              ) : (
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><TrendingUp size={14} className="text-cyan-400" /> Reputation Insights</h3>
+                  {insights ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      {Object.entries(insights).map(([key, val]) => (
+                        <div key={key} className="bg-white/[0.03] rounded-lg p-2.5">
+                          <div className="text-[10px] text-gray-500 capitalize">{key.replace(/_/g, " ")}</div>
+                          <div className="text-base font-bold">{typeof val === "number" ? val.toLocaleString() : String(val)}</div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-gray-500 text-center py-6">No insights available yet</p>
+                  )}
                 </div>
               )
             )}

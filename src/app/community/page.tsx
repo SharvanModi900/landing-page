@@ -10,7 +10,7 @@ const channels = [
     title: "Discord",
     desc: "Real-time chat with validators, developers, and the PoPP community.",
     cta: "Join Server",
-    href: "#",
+    href: "https://discord.gg/u6GqfJBsm",
   },
   {
     icon: <Github className="w-6 h-6 text-blue-400" />,

@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import DarkSelect from "@/components/DarkSelect";
 const ProblemMap = dynamic(() => import("@/components/ProblemMap"), { ssr: false });
 
 const CHAIN_API = "https://chain.thharko.com";
@@ -112,6 +113,12 @@ export default function ExplorerPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(20);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
+  // Nearby submissions
+  const [nearbyLat, setNearbyLat] = useState("");
+  const [nearbyLng, setNearbyLng] = useState("");
+  const [nearbyResults, setNearbyResults] = useState<any[]>([]);
+  const [nearbyLoading, setNearbyLoading] = useState(false);
+  const [showNearby, setShowNearby] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -365,16 +372,17 @@ export default function ExplorerPage() {
               {/* Sort */}
               <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-2">
                 <ArrowUpDown size={14} className="text-gray-500" />
-                <select
+                <DarkSelect
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
-                  className="bg-transparent outline-none text-xs text-gray-300 cursor-pointer"
-                >
-                  <option value="newest">Newest</option>
-                  <option value="oldest">Oldest</option>
-                  <option value="severity">Severity</option>
-                  <option value="consensus">Consensus</option>
-                </select>
+                  compact
+                  options={[
+                    { value: 'newest', label: 'Newest' },
+                    { value: 'oldest', label: 'Oldest' },
+                    { value: 'severity', label: 'Severity' },
+                    { value: 'consensus', label: 'Consensus' },
+                  ]}
+                />
               </div>
 
               <button
@@ -677,6 +685,44 @@ export default function ExplorerPage() {
 
         {/* CTA */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-12">
+          {/* Nearby Submissions */}
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-6">
+            <button onClick={() => setShowNearby(!showNearby)} className="text-sm font-bold flex items-center gap-1.5 text-green-400 mb-2">
+              <MapPin size={14} /> {showNearby ? "Hide" : "Find"} Nearby Submissions
+            </button>
+            {showNearby && (
+              <div className="space-y-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <input value={nearbyLat} onChange={e => setNearbyLat(e.target.value)} placeholder="Latitude" type="number" step="any" className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                  <input value={nearbyLng} onChange={e => setNearbyLng(e.target.value)} placeholder="Longitude" type="number" step="any" className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                </div>
+                <button onClick={async () => {
+                  if (!nearbyLat || !nearbyLng) return;
+                  setNearbyLoading(true);
+                  try {
+                    const params = new URLSearchParams({ latitude: nearbyLat, longitude: nearbyLng });
+                    const res = await fetch(`${BACKEND_API}/api/submissions/nearby?${params}`);
+                    if (res.ok) { const d = await res.json(); setNearbyResults(Array.isArray(d) ? d : d.submissions || []); }
+                  } catch { /* ignore */ }
+                  setNearbyLoading(false);
+                }} disabled={nearbyLoading || !nearbyLat || !nearbyLng} className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg text-xs font-semibold disabled:opacity-50">{nearbyLoading ? "Searching..." : "Search Nearby"}</button>
+                {nearbyResults.length > 0 && (
+                  <div className="space-y-2 mt-2">
+                    {nearbyResults.map((s: any, i: number) => (
+                      <div key={i} className="bg-white/[0.03] rounded-lg p-2.5 flex items-center gap-2">
+                        <MapPin size={12} className="text-green-400 flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-semibold truncate">{s.title || s.id?.slice(0, 8) || `Submission ${i + 1}`}</div>
+                          <div className="text-[10px] text-gray-500">{s.status} {s.distance ? `— ${Number(s.distance).toFixed(0)}m away` : ""}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
           <div className="bg-gradient-to-br from-cyan-500/5 to-blue-600/5 border border-white/10 rounded-xl p-6 text-center">
             <h2 className="text-xl font-bold mb-2">Have a Problem to Report?</h2>
             <p className="text-gray-400 text-sm mb-4 max-w-md mx-auto">

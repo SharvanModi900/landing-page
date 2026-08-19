@@ -42,6 +42,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Proof of Problem Protocol (PoPP)",
     description: "The protocol for verifiable, decentralized problem-solving and truth validation.",
+    site: "@ShravanModi8",
+    creator: "@ShravanModi8",
   },
 };
 

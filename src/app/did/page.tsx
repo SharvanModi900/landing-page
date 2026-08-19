@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Shield, CheckCircle, AlertTriangle, Fingerprint, Key, Building2, BadgeCheck, Hash, FileCheck, Eye } from "lucide-react";
 import Link from "next/link";
 import { useWallet } from "@/lib/wallet";
+import DarkSelect from "@/components/DarkSelect";
 
 const BACKEND_API = "https://popp.thharko.com";
 
@@ -421,12 +422,13 @@ export default function DIDPage() {
                   </div>
                   <div>
                     <label className="text-[10px] text-gray-400 mb-1 block">Credential Type</label>
-                    <select value={instCredType} onChange={e => setInstCredType(e.target.value)}
-                      className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white">
-                      <option value="government_id" className="bg-gray-900">Government ID</option>
-                      <option value="institutional_badge" className="bg-gray-900">Institutional Badge</option>
-                      <option value="professional_license" className="bg-gray-900">Professional License</option>
-                    </select>
+                    <DarkSelect value={instCredType} onChange={e => setInstCredType(e.target.value)}
+                      options={[
+                        { value: 'government_id', label: 'Government ID' },
+                        { value: 'institutional_badge', label: 'Institutional Badge' },
+                        { value: 'professional_license', label: 'Professional License' },
+                      ]}
+                    />
                   </div>
                   <div>
                     <label className="text-[10px] text-gray-400 mb-1 block">Credential Data (JSON)</label>

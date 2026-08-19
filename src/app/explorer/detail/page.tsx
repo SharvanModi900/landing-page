@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import {
   ArrowLeft, MapPin, Globe, Calendar, Shield, Copy, Check,
   AlertTriangle, Zap, FileText, Image as ImageIcon, ExternalLink,
-  MessageSquare, Send, Upload, ThumbsUp, Link as LinkIcon, Activity, Clock,
+  MessageSquare, Send, Upload, ThumbsUp, Link as LinkIcon, Activity, Clock, Flag, Archive,
+  Coins, CheckCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -146,6 +147,34 @@ function DetailContent() {
 
   // Chain ticket state
   const [chainTicket, setChainTicket] = useState<any>(null);
+
+  // Community voice state
+  const [voiceText, setVoiceText] = useState("");
+  const [voiceLoading, setVoiceLoading] = useState(false);
+  const [voiceMsg, setVoiceMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [communityVoices, setCommunityVoices] = useState<any[]>([]);
+
+  // Flag state
+  const [flagReason, setFlagReason] = useState("");
+  const [flagLoading, setFlagLoading] = useState(false);
+  const [flagMsg, setFlagMsg] = useState<{ text: string; ok: boolean } | null>(null);
+
+  // Archive state
+  const [archiveMsg, setArchiveMsg] = useState<{ text: string; ok: boolean } | null>(null);
+
+  // Additional data state
+  const [votes, setVotes] = useState<any[]>([]);
+  const [rewardBreakdown, setRewardBreakdown] = useState<any>(null);
+  const [stateHistory, setStateHistory] = useState<any[]>([]);
+  const [escalationInfo, setEscalationInfo] = useState<any>(null);
+  const [proofData, setProofData] = useState<any>(null);
+  const [archiveData, setArchiveData] = useState<any>(null);
+  const [ipfsData, setIpfsData] = useState<any>(null);
+
+  // Direct chain lookup data
+  const [chainValidations, setChainValidations] = useState<any>(null);
+  const [chainConsensus, setChainConsensus] = useState<any>(null);
+  const [chainProof, setChainProof] = useState<any>(null);
 
   useEffect(() => {
     if (!ticketId) {
@@ -289,6 +318,85 @@ function DetailContent() {
     } catch { /* non-critical */ }
   };
 
+  const fetchVotes = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/votes`);
+      if (res.ok) { const d = await res.json(); setVotes(Array.isArray(d) ? d : d.votes || []); }
+    } catch { /* non-critical */ }
+  };
+
+  const fetchRewardBreakdown = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/reward-breakdown`);
+      if (res.ok) setRewardBreakdown(await res.json());
+    } catch { /* non-critical */ }
+  };
+
+  const fetchStateHistory = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/state-history`);
+      if (res.ok) { const d = await res.json(); setStateHistory(Array.isArray(d) ? d : d.history || []); }
+    } catch { /* non-critical */ }
+  };
+
+  const fetchEscalationInfo = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/escalation-info`);
+      if (res.ok) setEscalationInfo(await res.json());
+    } catch { /* non-critical */ }
+  };
+
+  const fetchProofData = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/proof`);
+      if (res.ok) setProofData(await res.json());
+    } catch { /* non-critical */ }
+  };
+
+  const fetchArchiveData = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/archive`);
+      if (res.ok) setArchiveData(await res.json());
+    } catch { /* non-critical */ }
+  };
+
+  const fetchIpfsData = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/ipfs`);
+      if (res.ok) setIpfsData(await res.json());
+    } catch { /* non-critical */ }
+  };
+
+  const fetchChainLookupData = async () => {
+    const lookupId = backend?.chain_ticket_id || (ticket ? ticketId : null);
+    if (!lookupId) return;
+    try {
+      const [valRes, consRes, proofRes] = await Promise.allSettled([
+        fetch(`${BACKEND_API}/api/chain/validations/${lookupId}`),
+        fetch(`${BACKEND_API}/api/chain/consensus/${lookupId}`),
+        fetch(`${BACKEND_API}/api/chain/proof/${lookupId}`),
+      ]);
+      if (valRes.status === 'fulfilled' && valRes.value.ok) setChainValidations(await valRes.value.json());
+      if (consRes.status === 'fulfilled' && consRes.value.ok) setChainConsensus(await consRes.value.json());
+      if (proofRes.status === 'fulfilled' && proofRes.value.ok) setChainProof(await proofRes.value.json());
+    } catch { /* non-critical */ }
+  };
+
+  const fetchCommunityVoices = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/community-voice`);
+      if (res.ok) { const d = await res.json(); setCommunityVoices(Array.isArray(d) ? d : d.voices || []); }
+    } catch { /* non-critical */ }
+  };
+
   useEffect(() => {
     if (submissionId) {
       fetchComments();
@@ -297,6 +405,15 @@ function DetailContent() {
       fetchUpdates();
       fetchProofChain();
       fetchChainTicket();
+      fetchVotes();
+      fetchRewardBreakdown();
+      fetchStateHistory();
+      fetchEscalationInfo();
+      fetchProofData();
+      fetchArchiveData();
+      fetchIpfsData();
+      fetchCommunityVoices();
+      fetchChainLookupData();
     }
   }, [submissionId]);
 
@@ -793,6 +910,264 @@ function DetailContent() {
             </motion.div>
           )}
 
+          {/* Votes */}
+          {votes.length > 0 && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+              className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                <ThumbsUp size={14} className="text-emerald-400" /> Votes ({votes.length})
+              </h2>
+              <div className="space-y-2">
+                {votes.slice(0, 10).map((v: any, i: number) => (
+                  <div key={i} className="flex items-center gap-2 bg-white/[0.03] rounded-lg p-2.5">
+                    <ThumbsUp size={10} className="text-emerald-400" />
+                    <span className="text-[10px] font-mono text-gray-400 flex-1">{v.voter || v.user_id || v.address || "anon"}</span>
+                    <span className={`text-[10px] font-semibold ${v.vote === "approve" || v.value > 0 ? "text-emerald-400" : "text-red-400"}`}>{v.vote || (v.value > 0 ? "+" : "") + v.value}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Reward Breakdown */}
+          {rewardBreakdown && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.21 }}
+              className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                <Coins size={14} className="text-yellow-400" /> Reward Breakdown
+              </h2>
+              <div className="grid grid-cols-2 gap-3">
+                {rewardBreakdown.submitter_reward != null && (
+                  <div className="bg-white/5 rounded-lg p-2.5">
+                    <div className="text-[10px] text-gray-500">Submitter</div>
+                    <div className="text-sm font-bold text-emerald-400">{rewardBreakdown.submitter_reward}</div>
+                  </div>
+                )}
+                {rewardBreakdown.validator_reward != null && (
+                  <div className="bg-white/5 rounded-lg p-2.5">
+                    <div className="text-[10px] text-gray-500">Validators</div>
+                    <div className="text-sm font-bold text-cyan-400">{rewardBreakdown.validator_reward}</div>
+                  </div>
+                )}
+                {rewardBreakdown.platform_fee != null && (
+                  <div className="bg-white/5 rounded-lg p-2.5">
+                    <div className="text-[10px] text-gray-500">Platform Fee</div>
+                    <div className="text-sm font-bold text-gray-400">{rewardBreakdown.platform_fee}</div>
+                  </div>
+                )}
+                {rewardBreakdown.total_reward != null && (
+                  <div className="bg-white/5 rounded-lg p-2.5">
+                    <div className="text-[10px] text-gray-500">Total</div>
+                    <div className="text-sm font-bold text-yellow-400">{rewardBreakdown.total_reward}</div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* State History */}
+          {stateHistory.length > 0 && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }}
+              className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                <Clock size={14} className="text-blue-400" /> State History
+              </h2>
+              <div className="space-y-2">
+                {stateHistory.map((s: any, i: number) => (
+                  <div key={i} className="flex items-center gap-2 bg-white/[0.03] rounded-lg p-2.5">
+                    <Clock size={10} className="text-blue-400 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[10px] text-gray-400">
+                        <span className="font-semibold text-gray-300">{s.from_state || s.old_status || "?"}</span>
+                        {" → "}
+                        <span className="font-semibold text-blue-400">{s.to_state || s.new_status || "?"}</span>
+                      </div>
+                      {s.reason && <div className="text-[9px] text-gray-500 mt-0.5">{s.reason}</div>}
+                    </div>
+                    {s.changed_at && <span className="text-[9px] text-gray-500">{new Date(s.changed_at).toLocaleString()}</span>}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Escalation Info */}
+          {escalationInfo && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.23 }}
+              className="bg-orange-500/5 border border-orange-500/20 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-orange-400 mb-3 flex items-center gap-2">
+                <AlertTriangle size={14} /> Escalation Info
+              </h2>
+              <div className="space-y-2">
+                {escalationInfo.status && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Status</span>
+                    <span className="text-xs font-semibold text-orange-400">{escalationInfo.status}</span>
+                  </div>
+                )}
+                {escalationInfo.tier != null && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Tier</span>
+                    <span className="text-xs font-semibold">{escalationInfo.tier}</span>
+                  </div>
+                )}
+                {escalationInfo.reason && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Reason</span>
+                    <span className="text-xs text-gray-300">{escalationInfo.reason}</span>
+                  </div>
+                )}
+                {escalationInfo.escalated_at && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Escalated At</span>
+                    <span className="text-xs text-gray-300">{new Date(escalationInfo.escalated_at).toLocaleString()}</span>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Proof Data */}
+          {proofData && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.24 }}
+              className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                <Shield size={14} className="text-purple-400" /> Proof Details
+              </h2>
+              <div className="space-y-2">
+                {proofData.proof_hash && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Proof Hash</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-[10px] font-mono text-purple-400 truncate max-w-[150px]">{proofData.proof_hash}</span>
+                      <CopyButton text={proofData.proof_hash} />
+                    </div>
+                  </div>
+                )}
+                {proofData.proof_level != null && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Level</span>
+                    <span className="text-xs font-semibold text-purple-400">{proofData.proof_level}</span>
+                  </div>
+                )}
+                {proofData.status && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Status</span>
+                    <span className={`text-xs font-semibold ${proofData.status === "valid" ? "text-emerald-400" : proofData.status === "challenged" ? "text-orange-400" : "text-gray-400"}`}>{proofData.status}</span>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Archive Data */}
+          {archiveData && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.245 }}
+              className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                <Archive size={14} className="text-purple-400" /> Archive Status
+              </h2>
+              <div className="space-y-2">
+                {archiveData.arweave_tx && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Arweave TX</span>
+                    <span className="text-[10px] font-mono text-purple-400">{archiveData.arweave_tx}</span>
+                  </div>
+                )}
+                {archiveData.archived_at && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Archived</span>
+                    <span className="text-[10px] text-gray-300">{new Date(archiveData.archived_at).toLocaleString()}</span>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* IPFS Data */}
+          {ipfsData && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
+              className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                <LinkIcon size={14} className="text-teal-400" /> IPFS Status
+              </h2>
+              <div className="space-y-2">
+                {ipfsData.ipfs_hash && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">IPFS Hash</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-[10px] font-mono text-teal-400 truncate max-w-[150px]">{ipfsData.ipfs_hash}</span>
+                      <CopyButton text={ipfsData.ipfs_hash} />
+                    </div>
+                  </div>
+                )}
+                {ipfsData.pinned_at && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Pinned</span>
+                    <span className="text-[10px] text-gray-300">{new Date(ipfsData.pinned_at).toLocaleString()}</span>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Direct Chain Lookup Data */}
+          {(chainValidations || chainConsensus || chainProof) && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.26 }}
+              className="bg-gradient-to-br from-indigo-500/5 to-purple-600/5 border border-indigo-500/20 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-indigo-400 mb-3 flex items-center gap-2">
+                <Shield size={14} /> On-Chain Verification Data
+              </h2>
+              <div className="space-y-4">
+                {/* Chain Validations */}
+                {chainValidations && (
+                  <div className="bg-white/5 rounded-lg p-3">
+                    <h3 className="text-xs font-bold text-cyan-400 mb-2">Validations</h3>
+                    <div className="space-y-1.5">
+                      {Array.isArray(chainValidations) ? chainValidations.map((v: any, i: number) => (
+                        <div key={i} className="flex items-center gap-2 bg-white/[0.03] rounded p-2">
+                          <CheckCircle size={10} className="text-emerald-400" />
+                          <span className="text-[10px] font-mono text-gray-400 flex-1">{v.validator || v.address || 'anon'}</span>
+                          <span className="text-[10px] font-semibold text-cyan-400">{v.verdict || v.vote || ''}</span>
+                        </div>
+                      )) : (
+                        <pre className="text-[10px] text-gray-400 overflow-x-auto">{JSON.stringify(chainValidations, null, 2)}</pre>
+                      )}
+                    </div>
+                  </div>
+                )}
+                {/* Chain Consensus */}
+                {chainConsensus && (
+                  <div className="bg-white/5 rounded-lg p-3">
+                    <h3 className="text-xs font-bold text-yellow-400 mb-2">Consensus</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      {Object.entries(chainConsensus).slice(0, 6).map(([k, v]) => (
+                        <div key={k} className="bg-white/[0.03] rounded p-2">
+                          <div className="text-[9px] text-gray-500">{k.replace(/_/g, ' ')}</div>
+                          <div className="text-xs font-bold">{typeof v === 'number' ? v.toLocaleString() : String(v)}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {/* Chain Proof */}
+                {chainProof && (
+                  <div className="bg-white/5 rounded-lg p-3">
+                    <h3 className="text-xs font-bold text-purple-400 mb-2">Chain Proof</h3>
+                    <div className="space-y-1.5">
+                      {Object.entries(chainProof).slice(0, 6).map(([k, v]) => (
+                        <div key={k} className="flex items-center justify-between">
+                          <span className="text-[10px] text-gray-400">{k.replace(/_/g, ' ')}</span>
+                          <span className="text-[10px] font-mono text-purple-400 truncate max-w-[180px]">{typeof v === 'object' ? JSON.stringify(v) : String(v)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
           {/* Chain Info */}
           {ticket && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
@@ -848,6 +1223,114 @@ function DetailContent() {
               </pre>
             </div>
           </motion.div>
+
+          {/* Community Voice */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+            className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+            <h2 className="text-sm font-semibold mb-3 flex items-center gap-2">
+              <MessageSquare size={14} className="text-blue-400" /> Community Voice {communityVoices.length > 0 && `(${communityVoices.length})`}
+            </h2>
+            {voiceMsg && <div className={`mb-3 p-2 rounded-lg text-xs font-semibold ${voiceMsg.ok ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`}>{voiceMsg.text}</div>}
+            {communityVoices.length > 0 && (
+              <div className="space-y-2 mb-3">
+                {communityVoices.slice(0, 10).map((v: any, i: number) => (
+                  <div key={i} className="bg-white/5 rounded-lg p-2.5">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-mono text-blue-400">{(v.author || v.user_id || "anon").slice(0, 12)}</span>
+                      <span className="text-[9px] text-gray-500">{v.created_at ? new Date(v.created_at).toLocaleDateString() : ""}</span>
+                    </div>
+                    <p className="text-xs text-gray-300">{v.text || v.content || ""}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex gap-2">
+              <input value={voiceText} onChange={e => setVoiceText(e.target.value)} placeholder="Share your voice on this submission..."
+                className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+              <button onClick={async () => {
+                if (!voiceText || !submissionId) return;
+                setVoiceLoading(true); setVoiceMsg(null);
+                try {
+                  const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/community-voice`, {
+                    method: "POST", headers: { "Content-Type": "application/json", ...(connected ? getAuthHeaders() : {}) },
+                    body: JSON.stringify({ text: voiceText }),
+                  });
+                  if (res.ok) { setVoiceMsg({ text: "Voice added!", ok: true }); setVoiceText(""); fetchCommunityVoices(); }
+                  else { const err = await res.text(); setVoiceMsg({ text: err || "Failed", ok: false }); }
+                } catch (e: any) { setVoiceMsg({ text: e.message || "Failed", ok: false }); }
+                finally { setVoiceLoading(false); }
+              }} disabled={voiceLoading || !voiceText} className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-lg text-xs font-semibold disabled:opacity-50">
+                {voiceLoading ? "Sending..." : "Add Voice"}
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Flag Submission */}
+          {connected && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
+              className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+              <h2 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                <Flag size={14} className="text-orange-400" /> Flag This Submission
+              </h2>
+              {flagMsg && <div className={`mb-3 p-2 rounded-lg text-xs font-semibold ${flagMsg.ok ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`}>{flagMsg.text}</div>}
+              <div className="flex gap-2">
+                <input value={flagReason} onChange={e => setFlagReason(e.target.value)} placeholder="Reason for flagging..."
+                  className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                <button onClick={async () => {
+                  if (!flagReason || !submissionId) return;
+                  setFlagLoading(true); setFlagMsg(null);
+                  try {
+                    const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/flag`, {
+                      method: "POST", headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+                      body: JSON.stringify({ reason: flagReason }),
+                    });
+                    if (res.ok) { setFlagMsg({ text: "Flagged!", ok: true }); setFlagReason(""); }
+                    else { const err = await res.text(); setFlagMsg({ text: err || "Failed", ok: false }); }
+                  } catch (e: any) { setFlagMsg({ text: e.message || "Failed", ok: false }); }
+                  finally { setFlagLoading(false); }
+                }} disabled={flagLoading || !flagReason} className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg text-xs font-semibold disabled:opacity-50">
+                  {flagLoading ? "Flagging..." : "Flag"}
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* Archive to Arweave / IPFS */}
+          {connected && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+              className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+              <h2 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                <Archive size={14} className="text-purple-400" /> Archive Submission
+              </h2>
+              {archiveMsg && <div className={`mb-3 p-2 rounded-lg text-xs font-semibold ${archiveMsg.ok ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`}>{archiveMsg.text}</div>}
+              <div className="flex flex-wrap gap-2">
+                <button onClick={async () => {
+                  if (!submissionId) return;
+                  setArchiveMsg(null);
+                  try {
+                    const res = await fetch(`${BACKEND_API}/api/arweave/archive`, {
+                      method: "POST", headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+                      body: JSON.stringify({ submission_id: submissionId }),
+                    });
+                    if (res.ok) setArchiveMsg({ text: "Archived to Arweave!", ok: true });
+                    else { const err = await res.text(); setArchiveMsg({ text: err || "Failed", ok: false }); }
+                  } catch (e: any) { setArchiveMsg({ text: e.message || "Failed", ok: false }); }
+                }} className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg text-xs font-semibold">Archive to Arweave</button>
+                <button onClick={async () => {
+                  if (!submissionId) return;
+                  setArchiveMsg(null);
+                  try {
+                    const res = await fetch(`${BACKEND_API}/api/ipfs/pin`, {
+                      method: "POST", headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+                      body: JSON.stringify({ submission_id: submissionId }),
+                    });
+                    if (res.ok) setArchiveMsg({ text: "Pinned to IPFS!", ok: true });
+                    else { const err = await res.text(); setArchiveMsg({ text: err || "Failed", ok: false }); }
+                  } catch (e: any) { setArchiveMsg({ text: e.message || "Failed", ok: false }); }
+                }} className="px-4 py-2 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-lg text-xs font-semibold">Pin to IPFS</button>
+              </div>
+            </motion.div>
+          )}
         </div>
 
         {/* Sidebar */}

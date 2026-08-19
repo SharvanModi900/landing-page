@@ -240,9 +240,97 @@ export default function EscalationsPage() {
                 <div className="flex gap-2"><span className="text-orange-400 font-bold text-sm">3.</span> Resolutions can approve, reject, or escalate further up the chain</div>
               </div>
             </div>
+
+            {/* Check Escalation */}
+            {connected && (
+              <EscalationExtras connected={connected} getAuthHeaders={getAuthHeaders} />
+            )}
           </>
         )}
       </div>
     </main>
+  );
+}
+
+function EscalationExtras({ connected, getAuthHeaders }: { connected: boolean; getAuthHeaders: () => Record<string, string> }) {
+  const [checkId, setCheckId] = useState("");
+  const [checkResult, setCheckResult] = useState<any>(null);
+  const [checkLoading, setCheckLoading] = useState(false);
+  const [detailId, setDetailId] = useState("");
+  const [detail, setDetail] = useState<any>(null);
+  const [stateHistory, setStateHistory] = useState<any[]>([]);
+
+  const handleCheck = async () => {
+    if (!checkId) return;
+    setCheckLoading(true);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/escalations/check`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({ submission_id: checkId }),
+      });
+      if (res.ok) setCheckResult(await res.json());
+      else setCheckResult(null);
+    } catch { /* ignore */ }
+    setCheckLoading(false);
+  };
+
+  const handleGetDetail = async () => {
+    if (!detailId) return;
+    try {
+      const [detailRes, histRes] = await Promise.allSettled([
+        fetch(`${BACKEND_API}/api/escalations/${detailId}`, { headers: getAuthHeaders() }),
+        fetch(`${BACKEND_API}/api/escalations/${detailId}/state-history`, { headers: getAuthHeaders() }),
+      ]);
+      if (detailRes.status === "fulfilled" && detailRes.value.ok) setDetail(await detailRes.value.json());
+      if (histRes.status === "fulfilled" && histRes.value.ok) {
+        const d = await histRes.value.json();
+        setStateHistory(Array.isArray(d) ? d : d.history || []);
+      }
+    } catch { /* ignore */ }
+  };
+
+  return (
+    <div className="mt-4 space-y-4">
+      <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+        <h3 className="text-sm font-bold mb-3">Check Escalation Status</h3>
+        <div className="flex gap-2">
+          <input value={checkId} onChange={e => setCheckId(e.target.value)} placeholder="Submission ID" className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+          <button onClick={handleCheck} disabled={checkLoading} className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg text-xs font-semibold disabled:opacity-50">{checkLoading ? "Checking..." : "Check"}</button>
+        </div>
+        {checkResult && (
+          <div className="mt-3 bg-white/[0.03] rounded-lg p-3">
+            <div className="text-xs text-gray-300">Status: <span className="font-bold text-orange-400">{checkResult.status || checkResult.escalation_status || "Unknown"}</span></div>
+            {checkResult.tier != null && <div className="text-[10px] text-gray-500">Current tier: {TIER_LABELS[checkResult.tier] || checkResult.tier}</div>}
+          </div>
+        )}
+      </div>
+
+      <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+        <h3 className="text-sm font-bold mb-3">Escalation Detail & History</h3>
+        <div className="flex gap-2 mb-3">
+          <input value={detailId} onChange={e => setDetailId(e.target.value)} placeholder="Escalation ID" className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+          <button onClick={handleGetDetail} className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-xs font-semibold">Load</button>
+        </div>
+        {detail && (
+          <div className="bg-white/[0.03] rounded-lg p-3 mb-3">
+            <div className="text-xs font-semibold">{detail.reason || detail.title || "Escalation"}</div>
+            <div className="text-[10px] text-gray-500 mt-1">Tier: {TIER_LABELS[detail.to_tier] || detail.to_tier} | Status: {detail.status || "—"}</div>
+          </div>
+        )}
+        {stateHistory.length > 0 && (
+          <div className="space-y-1">
+            <div className="text-[10px] text-gray-400 font-semibold">State History</div>
+            {stateHistory.map((s: any, i: number) => (
+              <div key={i} className="flex items-center gap-2 bg-white/[0.03] rounded-lg p-2">
+                <Clock size={10} className="text-gray-500" />
+                <div className="text-[10px] text-gray-400">{s.from_state || s.action || "State change"} → {s.to_state || ""}</div>
+                {s.changed_at && <div className="text-[9px] text-gray-500 ml-auto">{new Date(s.changed_at).toLocaleString()}</div>}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
