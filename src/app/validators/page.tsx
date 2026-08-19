@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function ValidatorsPage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* Hero Section */}
         <section className="relative py-12 px-4 sm:px-6 text-center">
           <motion.h1

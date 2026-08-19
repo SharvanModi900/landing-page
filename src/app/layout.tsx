@@ -45,6 +45,13 @@ export const metadata: Metadata = {
     site: "@ShravanModi8",
     creator: "@ShravanModi8",
   },
+  icons: {
+    icon: [
+      { url: "/logo.png", type: "image/png", sizes: "192x192" },
+      { url: "/logo.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/logo.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export default function RootLayout({

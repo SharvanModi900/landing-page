@@ -42,7 +42,7 @@ const values = [
 export default function OurStoryPage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* HERO */}
         <section className="py-16 sm:py-20 px-4 sm:px-6 text-center">
           <motion.div

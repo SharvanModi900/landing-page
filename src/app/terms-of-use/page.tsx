@@ -61,7 +61,7 @@ export default function TermsOfUsePage() {
 
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* Hero Section */}
         <div className="border-b border-white/10 py-12">
           <div className="max-w-6xl mx-auto px-4 sm:px-6">

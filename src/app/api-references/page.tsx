@@ -191,7 +191,7 @@ export default function ApiReferencesPage() {
 
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16 max-w-5xl mx-auto px-4 sm:px-6 py-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         {/* Hero */}
         <div className="mb-10">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3">

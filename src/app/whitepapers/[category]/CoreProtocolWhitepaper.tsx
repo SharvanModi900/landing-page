@@ -41,7 +41,7 @@ export default function WhitepaperCategoryPage({ category }: { category: string 
 
   return (
     <div className="min-h-screen bg-[#030712] text-white">
-      <div className="pt-16">
+      <div className="">
         {/* Hero Section */}
         <section className="max-w-5xl mx-auto px-6 py-12">
           <Link

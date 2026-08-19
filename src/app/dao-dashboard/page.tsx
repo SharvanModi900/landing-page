@@ -277,7 +277,7 @@ export default function DAODashboardPage() {
 
   return (
     <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* ─── Hero ─────────────────────────────────────────────────────── */}
         <section className="relative py-6 px-4 sm:px-6 text-center overflow-hidden">
           <div className="absolute -top-40 right-0 w-[400px] h-[400px] rounded-full bg-blue-600/10 blur-3xl" />

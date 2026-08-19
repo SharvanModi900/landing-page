@@ -131,7 +131,7 @@ export default function LearningResourcesPage() {
 
   return (
     <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* HERO / SEARCH */}
         <section className="px-4 sm:px-6 py-10">
           <div className="max-w-7xl mx-auto">
