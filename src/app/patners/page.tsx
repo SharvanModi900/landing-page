@@ -6,7 +6,7 @@ import Link from "next/link";
 export default function PartnersPage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* Hero Section */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <motion.div

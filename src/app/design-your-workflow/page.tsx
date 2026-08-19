@@ -46,7 +46,7 @@ export default function DesignYourWorkflowPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white pt-16 overflow-x-hidden">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       {/* ============= HERO (Split) ============= */}
       <section className="relative overflow-hidden">
         {/* subtle background grid lines */}

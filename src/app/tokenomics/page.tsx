@@ -105,7 +105,7 @@ export default function TokenomicsPage() {
 
   return (
     <div className="bg-[#030712] text-white min-h-screen overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* Hero Section */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
           <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold">

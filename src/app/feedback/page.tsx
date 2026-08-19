@@ -3,7 +3,7 @@
 export default function FeedbackPage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16 max-w-3xl mx-auto px-4 sm:px-6 py-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12">
         <h1 className="text-2xl sm:text-4xl font-extrabold mb-4">
           <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
             Your Voice Shapes PoPP

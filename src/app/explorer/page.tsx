@@ -263,7 +263,7 @@ export default function ExplorerPage() {
 
   return (
     <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* Hero */}
         <section className="relative py-8 px-4 sm:px-6 text-center overflow-hidden">
           <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-cyan-600/8 blur-3xl" />

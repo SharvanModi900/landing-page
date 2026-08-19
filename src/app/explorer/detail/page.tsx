@@ -1426,7 +1426,7 @@ function DetailContent() {
 export default function TicketDetailPage() {
   return (
     <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16 max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Back button */}
         <Link href="/explorer" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition mb-6">
           <ArrowLeft size={14} /> Back to Explorer

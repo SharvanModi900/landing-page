@@ -54,7 +54,7 @@ const roadmap: Step[] = [
 export default function RoadmapPage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* HERO */}
         <section className="px-4 sm:px-6 lg:px-20 py-16 lg:py-24">
           <div className="mx-auto max-w-7xl">

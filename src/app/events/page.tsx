@@ -35,7 +35,7 @@ const events = [
 export default function EventsPage() {
   return (
     <div className="bg-[#030712] text-white min-h-screen overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* Hero Section */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 text-center">
           <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4">

@@ -26,7 +26,7 @@ export default function DatasetsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white pt-16 overflow-x-hidden">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <div className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 ring-1 ring-white/10">

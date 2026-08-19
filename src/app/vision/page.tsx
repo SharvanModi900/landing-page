@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function VisionPage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* HERO */}
         <section className="px-4 sm:px-6 lg:px-20 py-16 sm:py-20 lg:py-28">
           <div className="mx-auto max-w-7xl flex flex-col lg:flex-row items-center gap-12">

@@ -39,7 +39,7 @@ const teamMembers = [
 export default function AboutUsPage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16">
+      <div>
         {/* ---- HERO ---- */}
         <section className="py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-b from-[#030712] via-[#050a15] to-[#030712]">
           <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-12">

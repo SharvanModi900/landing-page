@@ -33,7 +33,7 @@ export default function VideosPage() {
 
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* Hero */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">

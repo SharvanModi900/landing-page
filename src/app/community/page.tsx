@@ -50,7 +50,7 @@ const waysToEngage = [
 export default function CommunityPage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
-      <div className="pt-16">
+      <div className="">
         {/* Hero */}
         <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 text-center">
           <motion.div
