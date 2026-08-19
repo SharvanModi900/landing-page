@@ -43,8 +43,8 @@ A modern, responsive landing page for the Proof of Problem Protocol - the decent
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd popp-landing-page
+git clone https://github.com/SharvanModi900/landing-page.git
+cd landing-page
 ```
 
 2. Install dependencies:
@@ -151,6 +151,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Built for the Proof of Problem Protocol community
 - Inspired by the need for decentralized truth validation
 - Designed to make complex protocols accessible to everyone
+
+## 🔗 Related Repositories
+
+- **[Protocol Research](https://github.com/SharvanModi900/proof-of-problem-protocol)** — Whitepaper, chapters, architecture blueprints, and protocol documentation
 
 ## 📞 Support
 

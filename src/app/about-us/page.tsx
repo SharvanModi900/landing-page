@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Twitter, Instagram } from "lucide-react";
+import { Twitter, Instagram, Github, BookOpen } from "lucide-react";
 
 function DiscordIcon({ className }: { className?: string }) {
   return (
@@ -189,6 +189,30 @@ export default function AboutUsPage() {
                   </div>
                 </motion.div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ---- REPOSITORIES ---- */}
+        <section className="py-16 px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <h3 className="text-2xl font-bold text-white mb-3">Open Source Repositories</h3>
+            <p className="text-gray-400 mb-8">PoPP is fully open source. Explore the code, research, and documentation.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <a href="https://github.com/SharvanModi900/landing-page" target="_blank" rel="noopener noreferrer"
+                className="flex flex-col items-center gap-3 p-6 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors group">
+                <Github className="w-8 h-8 text-gray-400 group-hover:text-blue-400 transition" />
+                <h4 className="text-lg font-semibold text-white">Website</h4>
+                <p className="text-sm text-gray-400">Landing page, explorer, validator panel, tokenomics dashboard, and all web interfaces.</p>
+                <span className="text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 transition">View Repository →</span>
+              </a>
+              <a href="https://github.com/SharvanModi900/proof-of-problem-protocol" target="_blank" rel="noopener noreferrer"
+                className="flex flex-col items-center gap-3 p-6 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors group">
+                <BookOpen className="w-8 h-8 text-gray-400 group-hover:text-purple-400 transition" />
+                <h4 className="text-lg font-semibold text-white">Research</h4>
+                <p className="text-sm text-gray-400">Protocol research, whitepaper, chapters, architecture blueprints, and documentation.</p>
+                <span className="text-xs font-semibold text-cyan-400 group-hover:text-cyan-300 transition">View Repository →</span>
+              </a>
             </div>
           </div>
         </section>
