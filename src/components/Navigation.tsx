@@ -15,6 +15,7 @@ import {
   ChartBarIcon,
   GlobeAltIcon,
   ArrowTrendingUpIcon,
+  ArrowUpRightIcon,
 } from "@heroicons/react/24/outline";
 import { Wallet, ChevronDown, X } from "lucide-react";
 import { useWallet } from "@/lib/wallet";
@@ -64,6 +65,14 @@ export const megaMenuSections: MegaSection[] = [
       { title: "Problem Explorer", desc: "Browse submitted problems", href: "/explorer", icon: BookOpenIcon },
       { title: "Validator Panel", desc: "Live dashboard and analytics", href: "/validator-panel", icon: ChartBarIcon },
       { title: "DAO Dashboard", desc: "Governance and proposals", href: "/dao-dashboard", icon: GlobeAltIcon },
+      { title: "Wallet", desc: "Manage tokens and staking", href: "/wallet", icon: StarIcon },
+      { title: "Notifications", desc: "Alerts and updates", href: "/notifications", icon: NewspaperIcon },
+      { title: "Leaderboard", desc: "Reputation rankings", href: "/leaderboard", icon: ArrowTrendingUpIcon },
+      { title: "Resolutions", desc: "Rewards and resolution stats", href: "/resolutions", icon: ShieldCheckIcon },
+      { title: "Infrastructure", desc: "Network infrastructure monitor", href: "/infrastructure", icon: BuildingLibraryIcon },
+{ title: "Escalations", desc: "Resolve escalated submissions", href: "/escalations", icon: ArrowUpRightIcon },
+{ title: "Proofer", desc: "Cryptographic proof generation", href: "/proofer", icon: ShieldCheckIcon },
+{ title: "Identity (DID)", desc: "Decentralized identity management", href: "/did", icon: GlobeAltIcon },
       { title: "Submit Problem", desc: "Report a real-world issue", href: "/report", icon: ArrowTrendingUpIcon },
     ],
   },

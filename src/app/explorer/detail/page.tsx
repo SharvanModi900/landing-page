@@ -4,9 +4,11 @@ import { motion } from "framer-motion";
 import {
   ArrowLeft, MapPin, Globe, Calendar, Shield, Copy, Check,
   AlertTriangle, Zap, FileText, Image as ImageIcon, ExternalLink,
+  MessageSquare, Send, Upload, ThumbsUp, Link as LinkIcon, Activity, Clock,
 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useWallet } from "@/lib/wallet";
 
 const CHAIN_API = "https://chain.thharko.com";
 const BACKEND_API = "https://popp.thharko.com";
@@ -44,6 +46,23 @@ interface BackendDetail {
   chain_ticket_id?: string;
   media_hash?: string;
   media_url?: string;
+}
+
+interface Comment {
+  id: string;
+  user_id?: string;
+  author_address?: string;
+  content: string;
+  created_at: string;
+}
+
+interface EvidenceItem {
+  id: string;
+  evidence_type: string;
+  ipfs_hash?: string;
+  url?: string;
+  description?: string;
+  created_at: string;
 }
 
 function formatDate(ts: string | number): string {
@@ -94,11 +113,39 @@ function DetailContent() {
   const ticketId = searchParams.get("id") || "";
   const isBackend = ticketId.startsWith("backend-");
   const backendId = isBackend ? ticketId.replace("backend-", "") : null;
+  const { connected, connect, getAuthHeaders } = useWallet();
 
   const [ticket, setTicket] = useState<TicketDetail | null>(null);
   const [backend, setBackend] = useState<BackendDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Comments state
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [newComment, setNewComment] = useState("");
+  const [commentLoading, setCommentLoading] = useState(false);
+
+  // Evidence state
+  const [evidence, setEvidence] = useState<EvidenceItem[]>([]);
+  const [evidenceDesc, setEvidenceDesc] = useState("");
+  const [evidenceFile, setEvidenceFile] = useState<File | null>(null);
+  const [evidenceLoading, setEvidenceLoading] = useState(false);
+
+  // Support state
+  const [supportLoading, setSupportLoading] = useState(false);
+  const [supportMsg, setSupportMsg] = useState<{ text: string; ok: boolean } | null>(null);
+
+  // Activity state
+  const [activity, setActivity] = useState<any[]>([]);
+
+  // Submission updates state
+  const [updates, setUpdates] = useState<any[]>([]);
+
+  // Proof chain state
+  const [proofChain, setProofChain] = useState<any>(null);
+
+  // Chain ticket state
+  const [chainTicket, setChainTicket] = useState<any>(null);
 
   useEffect(() => {
     if (!ticketId) {
@@ -171,6 +218,162 @@ function DetailContent() {
     };
     fetchDetail();
   }, [ticketId, isBackend, backendId]);
+
+  // ─── Fetch Comments & Evidence ─────────────────────────────────────────
+
+  const submissionId = backendId || ticketId;
+
+  const fetchComments = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/comments`);
+      if (res.ok) {
+        const data = await res.json();
+        setComments(Array.isArray(data) ? data : []);
+      }
+    } catch { /* non-critical */ }
+  };
+
+  const fetchEvidence = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/evidence`);
+      if (res.ok) {
+        const data = await res.json();
+        setEvidence(Array.isArray(data) ? data : []);
+      }
+    } catch { /* non-critical */ }
+  };
+
+  const fetchActivity = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/activity`);
+      if (res.ok) {
+        const data = await res.json();
+        setActivity(Array.isArray(data) ? data : data.activities || []);
+      }
+    } catch { /* non-critical */ }
+  };
+
+  const fetchUpdates = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/updates`);
+      if (res.ok) {
+        const data = await res.json();
+        setUpdates(Array.isArray(data) ? data : data.updates || []);
+      }
+    } catch { /* non-critical */ }
+  };
+
+  const fetchProofChain = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/proof-chain`);
+      if (res.ok) {
+        const data = await res.json();
+        setProofChain(data);
+      }
+    } catch { /* non-critical */ }
+  };
+
+  const fetchChainTicket = async () => {
+    if (!submissionId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/chain-ticket`);
+      if (res.ok) {
+        const data = await res.json();
+        setChainTicket(data);
+      }
+    } catch { /* non-critical */ }
+  };
+
+  useEffect(() => {
+    if (submissionId) {
+      fetchComments();
+      fetchEvidence();
+      fetchActivity();
+      fetchUpdates();
+      fetchProofChain();
+      fetchChainTicket();
+    }
+  }, [submissionId]);
+
+  // ─── Submit Comment ────────────────────────────────────────────────────
+
+  const handleSubmitComment = async () => {
+    if (!connected) { await connect(); return; }
+    if (!newComment.trim()) return;
+    setCommentLoading(true);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({ content: newComment.trim() }),
+      });
+      if (res.ok) {
+        setNewComment("");
+        fetchComments();
+      }
+    } catch { /* ignore */ }
+    finally { setCommentLoading(false); }
+  };
+
+  // ─── Upload Evidence ───────────────────────────────────────────────────
+
+  const handleUploadEvidence = async () => {
+    if (!connected) { await connect(); return; }
+    if (!evidenceFile) return;
+    setEvidenceLoading(true);
+    try {
+      // Upload file first
+      const formData = new FormData();
+      formData.append("file", evidenceFile);
+      const uploadRes = await fetch(`${BACKEND_API}/api/upload/image`, { method: "POST", body: formData });
+      let hash = "";
+      if (uploadRes.ok) {
+        const uploadData = await uploadRes.json();
+        hash = uploadData.hash || uploadData.ipfs_hash || "";
+      }
+      // Add evidence record
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/evidence`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({ evidence_type: "image", ipfs_hash: hash, description: evidenceDesc || undefined }),
+      });
+      if (res.ok) {
+        setEvidenceDesc("");
+        setEvidenceFile(null);
+        fetchEvidence();
+      }
+    } catch { /* ignore */ }
+    finally { setEvidenceLoading(false); }
+  };
+
+  // ─── Support Submission ────────────────────────────────────────────────
+
+  const handleSupport = async () => {
+    if (!connected) { await connect(); return; }
+    setSupportLoading(true);
+    setSupportMsg(null);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/submissions/${submissionId}/support`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+      });
+      if (res.ok) {
+        setSupportMsg({ text: "You supported this submission!", ok: true });
+      } else {
+        const err = await res.text();
+        setSupportMsg({ text: err || "Failed to support", ok: false });
+      }
+    } catch (e: any) {
+      setSupportMsg({ text: e.message || "Failed", ok: false });
+    } finally {
+      setSupportLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -303,6 +506,73 @@ function DetailContent() {
             </motion.div>
           )}
 
+          {/* Evidence Upload */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.14 }}
+            className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+            <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+              <Upload size={14} className="text-cyan-400" /> Additional Evidence
+            </h2>
+            {/* Existing evidence list */}
+            {evidence.length > 0 && (
+              <div className="space-y-2 mb-3">
+                {evidence.map((ev) => (
+                  <div key={ev.id} className="flex items-center gap-2 bg-white/5 rounded-lg p-2">
+                    <LinkIcon size={12} className="text-cyan-400 flex-shrink-0" />
+                    <span className="text-[11px] text-gray-300 flex-1 truncate">{ev.description || ev.evidence_type}</span>
+                    <span className="text-[10px] text-gray-500">{new Date(ev.created_at).toLocaleDateString()}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            {/* Upload form */}
+            <div className="space-y-2">
+              <input value={evidenceDesc} onChange={e => setEvidenceDesc(e.target.value)}
+                placeholder="Describe this evidence..." className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500" />
+              <input type="file" accept="image/*,video/*" onChange={e => setEvidenceFile(e.target.files?.[0] || null)}
+                className="text-xs text-gray-400 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-500/20 file:text-cyan-400 hover:file:bg-cyan-500/30" />
+              <button onClick={handleUploadEvidence} disabled={evidenceLoading || !evidenceFile}
+                className="px-3 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-xs font-semibold disabled:opacity-50 flex items-center gap-1.5">
+                <Upload size={11} /> {evidenceLoading ? "Uploading..." : "Upload Evidence"}
+              </button>
+              {!connected && <p className="text-[10px] text-gray-500">Connect wallet to upload evidence</p>}
+            </div>
+          </motion.div>
+
+          {/* Comments Section */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}
+            className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+            <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+              <MessageSquare size={14} className="text-cyan-400" /> Comments ({comments.length})
+            </h2>
+            {/* Comment list */}
+            {comments.length > 0 ? (
+              <div className="space-y-2 mb-4">
+                {comments.map((c) => (
+                  <div key={c.id} className="bg-white/5 rounded-lg p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-mono text-cyan-400">{(c.author_address || c.user_id || "anon").slice(0, 12)}...</span>
+                      <span className="text-[10px] text-gray-500">{new Date(c.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <p className="text-xs text-gray-300">{c.content}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-gray-500 mb-3">No comments yet. Be the first to comment.</p>
+            )}
+            {/* Add comment */}
+            <div className="flex gap-2">
+              <input value={newComment} onChange={e => setNewComment(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleSubmitComment()}
+                placeholder={connected ? "Add a comment..." : "Connect wallet to comment"}
+                className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+              <button onClick={handleSubmitComment} disabled={commentLoading || !newComment.trim()}
+                className="px-3 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-xs font-semibold disabled:opacity-50 flex items-center gap-1">
+                <Send size={11} /> {commentLoading ? "..." : "Post"}
+              </button>
+            </div>
+          </motion.div>
+
           {/* Location Map */}
           {(backend?.latitude || ticket?.location) && (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.13 }}
@@ -389,6 +659,137 @@ function DetailContent() {
                   </div>
                 </div>
               )}
+            </motion.div>
+          )}
+
+          {/* Activity Timeline */}
+          {activity.length > 0 && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.17 }}
+              className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                <Activity size={14} className="text-cyan-400" /> Activity Timeline
+              </h2>
+              <div className="space-y-2">
+                {activity.map((act: any, i: number) => (
+                  <div key={i} className="flex items-start gap-2.5">
+                    <div className="w-2 h-2 rounded-full bg-cyan-500 mt-1.5 flex-shrink-0" />
+                    <div className="flex-1 min-w-0 pb-2 border-b border-white/5 last:border-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="text-[10px] px-1.5 py-0.5 bg-white/5 rounded text-gray-400 capitalize">{act.action || act.type || "update"}</span>
+                        <span className="text-[10px] text-gray-500">{act.created_at ? new Date(act.created_at).toLocaleString() : ""}</span>
+                      </div>
+                      <p className="text-xs text-gray-300">{act.description || act.message || ""}</p>
+                      {act.actor && <span className="text-[10px] text-gray-500 mt-0.5">by {act.actor}</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Submission Updates */}
+          {updates.length > 0 && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.18 }}
+              className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                <MessageSquare size={14} className="text-blue-400" /> Submission Updates
+              </h2>
+              <div className="space-y-2">
+                {updates.map((upd: any, i: number) => (
+                  <div key={i} className="bg-white/5 rounded-lg p-3 border-l-2 border-blue-500/50">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] px-1.5 py-0.5 bg-blue-500/20 text-blue-400 rounded capitalize">{upd.update_type || upd.action || "update"}</span>
+                      <span className="text-[10px] text-gray-500">{upd.created_at ? new Date(upd.created_at).toLocaleString() : ""}</span>
+                    </div>
+                    <p className="text-xs text-gray-300">{upd.content || upd.description || upd.message || ""}</p>
+                    {upd.author && <span className="text-[10px] text-gray-500 mt-0.5 block">by {upd.author}</span>}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Proof Chain */}
+          {proofChain && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.19 }}
+              className="bg-white/[0.03] border border-white/10 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
+                <Shield size={14} className="text-purple-400" /> Proof Chain
+              </h2>
+              <div className="space-y-2">
+                {proofChain.pop_id && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">PoP-ID</span>
+                    <span className="text-xs font-mono text-purple-400 break-all max-w-[200px]">{proofChain.pop_id}</span>
+                  </div>
+                )}
+                {proofChain.proof_hash && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Proof Hash</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs font-mono text-gray-300 truncate max-w-[150px]">{proofChain.proof_hash}</span>
+                      <CopyButton text={proofChain.proof_hash} />
+                    </div>
+                  </div>
+                )}
+                {proofChain.proof_level != null && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Proof Level</span>
+                    <span className="text-xs font-semibold text-purple-400">Level {proofChain.proof_level}</span>
+                  </div>
+                )}
+                {proofChain.chain_tx_hash && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Chain TX</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs font-mono text-emerald-400 truncate max-w-[150px]">{proofChain.chain_tx_hash}</span>
+                      <CopyButton text={proofChain.chain_tx_hash} />
+                    </div>
+                  </div>
+                )}
+                {proofChain.status && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Status</span>
+                    <span className={`text-xs font-semibold ${proofChain.status === "signed" ? "text-emerald-400" : proofChain.status === "challenged" ? "text-orange-400" : "text-gray-400"}`}>{proofChain.status}</span>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* Chain Ticket (Backend-linked) */}
+          {chainTicket && (
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.195 }}
+              className="bg-gradient-to-br from-cyan-500/5 to-blue-600/5 border border-cyan-500/20 rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-cyan-400 mb-3 flex items-center gap-2">
+                <LinkIcon size={14} /> Linked Chain Ticket
+              </h2>
+              <div className="space-y-2">
+                {chainTicket.ticket_id && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Ticket ID</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs font-mono text-cyan-400 break-all max-w-[200px]">{chainTicket.ticket_id}</span>
+                      <CopyButton text={chainTicket.ticket_id} />
+                    </div>
+                  </div>
+                )}
+                {chainTicket.chain_tx_hash && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">TX Hash</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs font-mono text-gray-300 truncate max-w-[150px]">{chainTicket.chain_tx_hash}</span>
+                      <CopyButton text={chainTicket.chain_tx_hash} />
+                    </div>
+                  </div>
+                )}
+                {chainTicket.status && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-gray-400">Status</span>
+                    <span className="text-xs font-semibold text-cyan-400">{chainTicket.status}</span>
+                  </div>
+                )}
+              </div>
             </motion.div>
           )}
 
@@ -509,6 +910,19 @@ function DetailContent() {
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
             className="bg-white/[0.03] border border-white/10 rounded-xl p-4 space-y-2">
             <h3 className="text-xs font-semibold text-gray-400 uppercase mb-3">Actions</h3>
+
+            {/* Support Button */}
+            <button onClick={handleSupport} disabled={supportLoading}
+              className="w-full px-3 py-2 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/20 rounded-lg text-xs font-semibold text-emerald-400 transition flex items-center justify-center gap-1.5 disabled:opacity-50">
+              <ThumbsUp size={12} /> {supportLoading ? "Supporting..." : "Support This Problem"}
+            </button>
+            {supportMsg && (
+              <div className={`text-[10px] font-semibold p-1.5 rounded text-center ${supportMsg.ok ? "text-emerald-400 bg-emerald-500/10" : "text-red-400 bg-red-500/10"}`}>
+                {supportMsg.text}
+              </div>
+            )}
+            {!connected && <p className="text-[10px] text-gray-500 text-center">Connect wallet to interact</p>}
+
             <Link href="/report">
               <button className="w-full px-3 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-xs font-semibold hover:shadow-lg hover:shadow-cyan-500/10 transition text-center">
                 Submit Similar Problem

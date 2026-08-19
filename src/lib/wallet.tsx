@@ -4,11 +4,28 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
 /* ------------------------------------------------------------------ */
+interface UserProfile {
+  id: string;
+  wallet_address: string;
+  display_name: string | null;
+  email: string | null;
+  avatar: string | null;
+  r_score: number;
+  satmudra_balance: number;
+  staked_amount: number;
+  tickets_submitted: number;
+  tickets_resolved: number;
+  validations_done: number;
+  validator_level: number;
+}
+
 interface WalletState {
   connected: boolean;
   address: string | null;
   name: string | null;
   balance: string | null;
+  token: string | null;
+  user: UserProfile | null;
 }
 
 interface WalletContextType extends WalletState {
@@ -16,7 +33,13 @@ interface WalletContextType extends WalletState {
   disconnect: () => void;
   loading: boolean;
   error: string | null;
+  /** Returns the Authorization header object, or empty object if not logged in */
+  getAuthHeaders: () => Record<string, string>;
+  /** Refresh user profile from backend */
+  refreshProfile: () => Promise<void>;
 }
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "https://popp.thharko.com";
 
 /* ------------------------------------------------------------------ */
 /*  Context                                                            */
@@ -26,10 +49,14 @@ const WalletContext = createContext<WalletContextType>({
   address: null,
   name: null,
   balance: null,
+  token: null,
+  user: null,
   connect: async () => {},
   disconnect: () => {},
   loading: false,
   error: null,
+  getAuthHeaders: () => ({}),
+  refreshProfile: async () => {},
 });
 
 export const useWallet = () => useContext(WalletContext);
@@ -51,6 +78,8 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     address: null,
     name: null,
     balance: null,
+    token: null,
+    user: null,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -67,6 +96,8 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
             address: parsed.address,
             name: parsed.name || null,
             balance: null,
+            token: parsed.token || null,
+            user: parsed.user || null,
           });
         }
       }
@@ -163,26 +194,67 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
         // balance fetch failed, not critical
       }
 
-      const newState: WalletState = { connected: true, address, name, balance };
+      const newState: WalletState = { connected: true, address, name, balance, token: null, user: null };
       setState(newState);
       localStorage.setItem("popp-wallet", JSON.stringify({ address, name }));
+
+      // ── Authenticate with backend ──
+      try {
+        const authRes = await fetch(`${BACKEND_URL}/api/auth/wallet`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ wallet_address: address, display_name: name || undefined, create_if_missing: true }),
+        });
+        if (authRes.ok) {
+          const authData = await authRes.json();
+          const token = authData.token as string;
+          const user = authData.user as UserProfile;
+          setState(prev => ({ ...prev, token, user }));
+          localStorage.setItem("popp-wallet", JSON.stringify({ address, name, token, user }));
+        }
+      } catch (authErr) {
+        console.warn("Backend auth failed (wallet still connected):", authErr);
+      }
     } catch (err: any) {
       setError(err.message || "Failed to connect wallet");
-      setState({ connected: false, address: null, name: null, balance: null });
+      setState({ connected: false, address: null, name: null, balance: null, token: null, user: null });
     } finally {
       setLoading(false);
     }
   }, []);
 
   const disconnect = useCallback(() => {
-    setState({ connected: false, address: null, name: null, balance: null });
+    setState({ connected: false, address: null, name: null, balance: null, token: null, user: null });
     setError(null);
     localStorage.removeItem("popp-wallet");
   }, []);
 
+  const getAuthHeaders = useCallback((): Record<string, string> => {
+    if (state.token) return { Authorization: `Bearer ${state.token}` };
+    return {};
+  }, [state.token]);
+
+  const refreshProfile = useCallback(async () => {
+    if (!state.token) return;
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/users/me`, {
+        headers: { Authorization: `Bearer ${state.token}` },
+      });
+      if (res.ok) {
+        const user = await res.json();
+        setState(prev => {
+          localStorage.setItem("popp-wallet", JSON.stringify({
+            address: prev.address, name: prev.name, token: prev.token, user,
+          }));
+          return { ...prev, user };
+        });
+      }
+    } catch { /* non-critical */ }
+  }, [state.token, state.address, state.name]);
+
   return (
     <WalletContext.Provider
-      value={{ ...state, connect, disconnect, loading, error }}
+      value={{ ...state, connect, disconnect, loading, error, getAuthHeaders, refreshProfile }}
     >
       {children}
     </WalletContext.Provider>
