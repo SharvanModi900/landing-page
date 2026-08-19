@@ -1,15 +1,15 @@
 "use client";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { MapPin, FileText, Upload, Navigation, Loader2, Camera, Video, Image as ImageIcon, Eye, EyeOff, CheckCircle, AlertCircle } from "lucide-react";
+import {
+  MapPin, Upload, Navigation, Loader2, Eye, EyeOff,
+  CheckCircle, AlertCircle, Camera, Video, Image as ImageIcon,
+  RefreshCw, Shield, Fingerprint, ChevronRight, ChevronLeft, Send,
+  Sparkles, Globe, Lock,
+} from "lucide-react";
 
-// Dynamic Leaflet import to avoid SSR issues
-let L: typeof import("leaflet") | null = null;
-let MapContainer: any = null;
-let TileLayer: any = null;
-let Marker: any = null;
-let useMap: any = null;
-
+// ─── Dynamic Leaflet import (avoids SSR issues) ─────────────────────────────
 function MapClickHandler({ onClick }: { onClick: (lat: number, lng: number) => void }) {
+  const useMap = require("react-leaflet").useMap;
   const map = useMap();
   useEffect(() => {
     const handler = (e: any) => onClick(e.latlng.lat, e.latlng.lng);
@@ -20,83 +20,60 @@ function MapClickHandler({ onClick }: { onClick: (lat: number, lng: number) => v
 }
 
 function LocationMapPicker({
-  lat,
-  lng,
-  onPick,
+  lat, lng, onPick,
 }: {
-  lat: number;
-  lng: number;
-  onPick: (lat: number, lng: number) => void;
+  lat: number; lng: number; onPick: (lat: number, lng: number) => void;
 }) {
   const [ready, setReady] = useState(false);
-  const [mapLib, setMapLib] = useState<{
-    MapContainer: any;
-    TileLayer: any;
-    Marker: any;
-    useMap: any;
-    L: typeof import("leaflet");
-  } | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [mapLib, setMapLib] = useState<any>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     (async () => {
       const leaflet = await import("leaflet");
       const rl = await import("react-leaflet");
-      // Fix default icon paths
       delete (leaflet.default.Icon.Default.prototype as any)._getIconUrl;
       leaflet.default.Icon.Default.mergeOptions({
         iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
         iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
         shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
       });
-      setMapLib({
-        MapContainer: rl.MapContainer,
-        TileLayer: rl.TileLayer,
-        Marker: rl.Marker,
-        useMap: rl.useMap,
-        L: leaflet.default,
-      });
+      setMapLib({ ...rl, L: leaflet.default });
       setReady(true);
     })();
   }, []);
 
-  const handleMapClick = useCallback(
-    (clickedLat: number, clickedLng: number) => {
-      onPick(clickedLat, clickedLng);
-    },
-    [onPick]
-  );
+  const handleMapClick = useCallback((lat: number, lng: number) => onPick(lat, lng), [onPick]);
 
   if (!ready || !mapLib) {
     return (
-      <div className="h-48 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+      <div className="h-52 rounded-2xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-center">
         <Loader2 className="w-5 h-5 text-cyan-400 animate-spin" />
-        <span className="text-sm text-gray-400 ml-2">Loading map...</span>
+        <span className="text-sm text-gray-500 ml-2">Loading map...</span>
       </div>
     );
   }
 
-  const { MapContainer: MC, TileLayer: TL, Marker: Mk, useMap: UM, L: leafletLib } = mapLib;
-  const icon = leafletLib.icon({
+  const { MapContainer, TileLayer, Marker, useMap: UM, L } = mapLib;
+  const icon = L.icon({
     iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
     iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
     shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
+    iconSize: [25, 41], iconAnchor: [12, 41],
   });
 
   return (
-    <div className="rounded-xl overflow-hidden border border-white/10" style={{ height: 250 }}>
-      <MC center={[lat, lng]} zoom={13} style={{ height: "100%", width: "100%" }}>
-        <TL url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OpenStreetMap" />
-        <Mk position={[lat, lng]} icon={icon} />
+    <div className="rounded-2xl overflow-hidden border border-white/[0.06]" style={{ height: 240 }}>
+      <MapContainer center={[lat, lng]} zoom={13} style={{ height: "100%", width: "100%" }}>
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OSM" />
+        <Marker position={[lat, lng]} icon={icon} />
         <MapClickHandler onClick={handleMapClick} />
-      </MC>
+      </MapContainer>
     </div>
   );
 }
 
+// ─── Utilities ───────────────────────────────────────────────────────────────
 async function hashFile(file: File): Promise<string> {
   const buffer = await file.arrayBuffer();
   const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
@@ -115,23 +92,25 @@ async function fileToBase64(file: File): Promise<string> {
 
 const BACKEND_URL = "https://popp.thharko.com";
 
-const CATEGORIES = {
+const CATEGORIES: Record<string, { label: string; icon: string; color: string }> = {
   infrastructure: { label: "Infrastructure", icon: "🏗️", color: "#f59e0b" },
-  health: { label: "Public Health", icon: "🏥", color: "#ef4444" },
-  corruption: { label: "Corruption", icon: "🛡️", color: "#8b5cf6" },
-  environment: { label: "Environment", icon: "🌿", color: "#22c55e" },
-  education: { label: "Education", icon: "🏫", color: "#3b82f6" },
-  legal: { label: "Legal", icon: "⚖️", color: "#ec4899" },
-  other: { label: "Other", icon: "⚪", color: "#6b7280" },
+  health:         { label: "Public Health",  icon: "🏥", color: "#ef4444" },
+  corruption:     { label: "Corruption",     icon: "🛡️", color: "#8b5cf6" },
+  environment:    { label: "Environment",    icon: "🌿", color: "#22c55e" },
+  education:      { label: "Education",      icon: "🏫", color: "#3b82f6" },
+  legal:          { label: "Legal",          icon: "⚖️", color: "#ec4899" },
+  other:          { label: "Other",          icon: "⚪", color: "#6b7280" },
 };
 
 type Category = keyof typeof CATEGORIES;
 
-export default function SubmissionForm({
-  onSuccess,
-}: {
-  onSuccess: (data: any) => void;
-}) {
+// ─── Shared styles ───────────────────────────────────────────────────────────
+const inputCls = "w-full rounded-xl px-4 py-3.5 bg-white/[0.03] border border-white/[0.08] text-white text-sm placeholder:text-gray-600 focus:border-cyan-500/40 focus:outline-none focus:ring-2 focus:ring-cyan-500/10 transition-all";
+const labelCls = "text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block";
+const cardCls = "bg-white/[0.02] border border-white/[0.06] rounded-xl";
+
+// ─── Main Component ─────────────────────────────────────────────────────────
+export default function SubmissionForm({ onSuccess }: { onSuccess: (data: any) => void }) {
   const [step, setStep] = useState(1);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -144,55 +123,29 @@ export default function SubmissionForm({
   const [location, setLocation] = useState<{ lat: number; lng: number; address: string } | null>(null);
   const [locationStatus, setLocationStatus] = useState<"idle" | "detecting" | "denied" | "success">("idle");
 
-  useEffect(() => {
-    detectLocation();
-  }, []);
+  useEffect(() => { detectLocation(); }, []);
 
   const detectLocation = () => {
-    if (!("geolocation" in navigator)) {
-      setLocationStatus("denied");
-      return;
-    }
-
+    if (!("geolocation" in navigator)) { setLocationStatus("denied"); return; }
     setLocationStatus("detecting");
-
-    // Try high accuracy (GPS) first
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        // Reverse geocode to get address
+        const lat = pos.coords.latitude, lng = pos.coords.longitude;
         let address = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-        try {
-          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-          if (res.ok) {
-            const data = await res.json();
-            address = data.display_name || address;
-          }
-        } catch {}
+        try { const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`); if (r.ok) { const d = await r.json(); address = d.display_name || address; } } catch {}
         setLocation({ lat, lng, address });
         setLocationStatus("success");
       },
       () => {
-        // High accuracy failed — fallback to low accuracy (IP/WiFi)
         navigator.geolocation.getCurrentPosition(
           async (pos) => {
-            const lat = pos.coords.latitude;
-            const lng = pos.coords.longitude;
+            const lat = pos.coords.latitude, lng = pos.coords.longitude;
             let address = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-            try {
-              const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-              if (res.ok) {
-                const data = await res.json();
-                address = data.display_name || address;
-              }
-            } catch {}
+            try { const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`); if (r.ok) { const d = await r.json(); address = d.display_name || address; } } catch {}
             setLocation({ lat, lng, address });
             setLocationStatus("success");
           },
-          () => {
-            setLocationStatus("denied");
-          },
+          () => setLocationStatus("denied"),
           { enableHighAccuracy: false, timeout: 15000, maximumAge: 0 }
         );
       },
@@ -202,29 +155,20 @@ export default function SubmissionForm({
 
   const handleMapPick = async (lat: number, lng: number) => {
     let address = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-    try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-      if (res.ok) {
-        const data = await res.json();
-        address = data.display_name || address;
-      }
-    } catch {}
+    try { const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`); if (r.ok) { const d = await r.json(); address = d.display_name || address; } } catch {}
     setLocation({ lat, lng, address });
     setLocationStatus("success");
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newFiles = Array.from(e.target.files);
-      setFiles([...files, ...newFiles]);
-      // Generate previews for image files
-      newFiles.forEach((file) => {
-        if (file.type.startsWith("image/")) {
-          const url = URL.createObjectURL(file);
-          setFilePreviews((prev) => [...prev, url]);
-        }
-      });
-    }
+    if (!e.target.files) return;
+    const newFiles = Array.from(e.target.files);
+    setFiles([...files, ...newFiles]);
+    newFiles.forEach((file) => {
+      if (file.type.startsWith("image/")) {
+        setFilePreviews((prev) => [...prev, URL.createObjectURL(file)]);
+      }
+    });
   };
 
   const removeFile = (index: number) => {
@@ -232,118 +176,88 @@ export default function SubmissionForm({
     setFilePreviews(filePreviews.filter((_, i) => i !== index));
   };
 
-  const canProceedToStep2 = () => {
-    return title.trim() && description.trim() && category && location;
-  };
+  const canProceed = () => title.trim() && description.trim() && category && location;
 
   const handleSubmit = async () => {
-    if (!title || !description || !category || !location) {
-      setError("Please fill in all required fields");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-
+    if (!title || !description || !category || !location) { setError("Please fill in all required fields"); return; }
+    setLoading(true); setError("");
     try {
-      let media_hash = "";
-      let media: string[] = [];
+      let media_hash = ""; let media: string[] = [];
       if (files.length > 0) {
         media_hash = await hashFile(files[0]);
-        // Convert first file to base64 data URI
-        const base64 = await fileToBase64(files[0]);
-        media = [base64];
+        media = [await fileToBase64(files[0])];
       }
-
       const res = await fetch(`${BACKEND_URL}/api/submissions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title,
-          description,
-          latitude: location.lat,
-          longitude: location.lng,
-          landmark_name: location.address,
-          category,
-          media_hash: media_hash || undefined,
-          media: media.length > 0 ? media : undefined,
+          title, description, latitude: location.lat, longitude: location.lng,
+          landmark_name: location.address, category,
+          media_hash: media_hash || undefined, media: media.length > 0 ? media : undefined,
           anonymous: isAnonymous,
         }),
       });
-
       if (!res.ok) throw new Error("Submission failed");
       const data = await res.json();
       onSuccess(data);
-
-      // Reset form
-      setTitle("");
-      setDescription("");
-      setCategory(null);
-      setIsAnonymous(true);
-      setFiles([]);
-      setFilePreviews([]);
-      setStep(1);
-    } catch (err: any) {
-      setError(err.message || "Unknown error");
-    } finally {
-      setLoading(false);
-    }
+      setTitle(""); setDescription(""); setCategory(null); setIsAnonymous(true);
+      setFiles([]); setFilePreviews([]); setStep(1);
+    } catch (err: any) { setError(err.message || "Unknown error"); }
+    finally { setLoading(false); }
   };
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Progress Steps */}
-      <div className="flex items-center justify-center gap-8 mb-4">
-        {[1, 2, 3].map((s) => (
-          <div key={s} className="flex flex-col items-center gap-2">
-            <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${
-                s <= step
-                  ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/20"
-                  : "bg-white/5 text-gray-500 border border-white/10"
-              }`}
-            >
-              {s < step ? "✓" : s}
-            </div>
-            <span className={`text-xs font-medium ${s <= step ? "text-cyan-400" : "text-gray-600"}`}>
-              {s === 1 ? "Details" : s === 2 ? "Evidence" : "Review"}
-            </span>
-          </div>
-        ))}
+      {/* ── Step Indicator ── */}
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-3">
+          {[
+            { n: 1, label: "Details", icon: Sparkles },
+            { n: 2, label: "Evidence", icon: Camera },
+            { n: 3, label: "Review", icon: Lock },
+          ].map((s, i) => {
+            const active = s.n <= step;
+            const current = s.n === step;
+            return (
+              <React.Fragment key={s.n}>
+                {i > 0 && <div className={`w-8 sm:w-12 h-px ${s.n <= step ? "bg-cyan-500/40" : "bg-white/[0.06]"}`} />}
+                <button onClick={() => s.n < step && setStep(s.n)}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all ${
+                    current ? "bg-cyan-500/10 border border-cyan-500/20" : "border border-transparent"
+                  } ${s.n < step ? "cursor-pointer hover:bg-white/[0.03]" : ""}`}>
+                  <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-bold ${
+                    active ? "bg-cyan-500 text-white" : "bg-white/[0.04] text-gray-600"
+                  }`}>
+                    {s.n < step ? "✓" : s.n}
+                  </div>
+                  <span className={`text-xs font-medium hidden sm:inline ${current ? "text-cyan-400" : active ? "text-gray-400" : "text-gray-600"}`}>{s.label}</span>
+                </button>
+              </React.Fragment>
+            );
+          })}
+        </div>
+        <div className="text-[10px] text-gray-600">Step {step}/3</div>
       </div>
 
-      {/* Step 1: Details */}
+      {/* ═══════════════════ STEP 1: DETAILS ═══════════════════ */}
       {step === 1 && (
         <div className="flex flex-col gap-5">
-          {/* Category Selection */}
+          {/* Category */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-3">
-              <FileText className="w-4 h-4 text-cyan-400" />
-              Category *
-            </label>
-            <div className="grid grid-cols-3 gap-3">
+            <label className={labelCls}>Category</label>
+            <div className="grid grid-cols-4 sm:grid-cols-7 gap-2">
               {(Object.entries(CATEGORIES) as [Category, typeof CATEGORIES[Category]][]).map(([key, cat]) => {
-                const isActive = category === key;
+                const active = category === key;
                 return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => setCategory(key)}
-                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all ${
-                      isActive
-                        ? "border-2 shadow-lg"
-                        : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20"
+                  <button key={key} type="button" onClick={() => setCategory(key)}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-xl border transition-all duration-200 ${
+                      active
+                        ? "border-2 shadow-lg scale-[1.02]"
+                        : "border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1]"
                     }`}
-                    style={
-                      isActive
-                        ? { borderColor: cat.color, backgroundColor: cat.color + "20", boxShadow: `0 4px 12px ${cat.color}20` }
-                        : {}
-                    }
+                    style={active ? { borderColor: cat.color, backgroundColor: cat.color + "12", boxShadow: `0 8px 20px ${cat.color}10` } : {}}
                   >
                     <span className="text-2xl">{cat.icon}</span>
-                    <span className={`text-xs font-medium ${isActive ? "text-white" : "text-gray-400"}`}>
-                      {cat.label}
-                    </span>
+                    <span className={`text-[10px] font-medium leading-tight text-center ${active ? "text-white" : "text-gray-500"}`}>{cat.label}</span>
                   </button>
                 );
               })}
@@ -352,339 +266,254 @@ export default function SubmissionForm({
 
           {/* Title */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
-              <FileText className="w-4 h-4 text-cyan-400" />
-              Title *
-            </label>
-            <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-xl px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/20 transition-all"
-              placeholder="Brief description of the problem"
-              maxLength={100}
-              required
-            />
-            <div className="text-xs text-gray-500 text-right mt-1">{title.length}/100</div>
+            <label className={labelCls}>Title</label>
+            <input value={title} onChange={(e) => setTitle(e.target.value)} className={inputCls}
+              placeholder="Brief description of the problem" maxLength={100} />
+            <div className="flex justify-between mt-1.5">
+              <span className="text-[10px] text-gray-700">Be specific and factual</span>
+              <span className="text-[10px] text-gray-600">{title.length}/100</span>
+            </div>
           </div>
 
           {/* Description */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
-              <FileText className="w-4 h-4 text-cyan-400" />
-              Description *
-            </label>
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={4}
-              className="w-full rounded-xl px-4 py-3 bg-white/5 border border-white/10 text-white placeholder:text-gray-600 focus:border-cyan-500/50 focus:outline-none focus:ring-1 focus:ring-cyan-500/20 transition-all resize-none"
-              placeholder="Provide details: what, where, when, who is affected..."
-              maxLength={1000}
-              required
-            />
-            <div className="text-xs text-gray-500 text-right mt-1">{description.length}/1000</div>
+            <label className={labelCls}>Description</label>
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} className={`${inputCls} resize-none`}
+              placeholder="Provide details: what happened, where, when, who is affected..." maxLength={1000} />
+            <div className="flex justify-between mt-1.5">
+              <span className="text-[10px] text-gray-700">Include context and impact</span>
+              <span className="text-[10px] text-gray-600">{description.length}/1000</span>
+            </div>
           </div>
 
           {/* Anonymous Toggle */}
-          <button
-            type="button"
-            onClick={() => setIsAnonymous(!isAnonymous)}
-            className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all"
-          >
-            <div className="flex items-center gap-3">
-              {isAnonymous ? <EyeOff className="w-5 h-5 text-gray-400" /> : <Eye className="w-5 h-5 text-cyan-400" />}
-              <div className="text-left">
-                <div className="text-sm font-medium text-white">
-                  {isAnonymous ? "Anonymous" : "Verified Identity"}
+          <div>
+            <label className={labelCls}>Identity</label>
+            <button type="button" onClick={() => setIsAnonymous(!isAnonymous)}
+              className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${cardCls} hover:bg-white/[0.03] group`}>
+              <div className="flex items-center gap-3">
+                <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${isAnonymous ? "bg-cyan-500/10" : "bg-white/[0.04]"}`}>
+                  {isAnonymous ? <EyeOff className="w-4 h-4 text-cyan-400" /> : <Eye className="w-4 h-4 text-gray-400" />}
                 </div>
-                <div className="text-xs text-gray-500">
-                  {isAnonymous ? "Your identity will be hidden" : "Your identity will be visible"}
+                <div className="text-left">
+                  <div className="text-sm font-medium text-white">{isAnonymous ? "Anonymous Submission" : "Verified Identity"}</div>
+                  <div className="text-[10px] text-gray-600">{isAnonymous ? "Your identity will be cryptographically hidden" : "Your identity will be visible to validators"}</div>
                 </div>
               </div>
-            </div>
-            <div
-              className={`w-11 h-6 rounded-full transition-all ${
-                isAnonymous ? "bg-cyan-500" : "bg-white/20"
-              }`}
-            >
-              <div
-                className={`w-5 h-5 rounded-full bg-white transition-transform ${
-                  isAnonymous ? "translate-x-5" : "translate-x-0.5"
-                } mt-0.5`}
-              />
-            </div>
-          </button>
+              <div className={`w-11 h-[24px] rounded-full transition-all ${isAnonymous ? "bg-cyan-500" : "bg-white/10"}`}>
+                <div className={`w-[20px] h-[20px] rounded-full bg-white transition-transform shadow-sm ${isAnonymous ? "translate-x-[22px]" : "translate-x-[2px]"} mt-[2px]`} />
+              </div>
+            </button>
+          </div>
 
           {/* Location */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
-              <MapPin className="w-4 h-4 text-cyan-400" />
-              Location
-            </label>
-            <div className="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
+            <label className={labelCls}>Location</label>
+            <div className={`flex items-center gap-3 p-4 rounded-xl ${cardCls} mb-3`}>
               {locationStatus === "detecting" ? (
-                <>
-                  <Loader2 className="w-5 h-5 text-cyan-400 animate-spin" />
-                  <span className="text-sm text-gray-400">Detecting location...</span>
-                </>
+                <><Loader2 className="w-5 h-5 text-cyan-400 animate-spin" /><span className="text-sm text-gray-500">Detecting your location...</span></>
               ) : locationStatus === "success" && location ? (
                 <>
-                  <MapPin className="w-5 h-5 text-cyan-400 flex-shrink-0" />
+                  <div className="w-9 h-9 rounded-lg bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-4 h-4 text-cyan-400" />
+                  </div>
                   <span className="text-sm text-gray-300 flex-1 truncate">{location.address}</span>
-                  <button
-                    type="button"
-                    onClick={detectLocation}
-                    className="text-cyan-400 hover:text-cyan-300 transition-colors"
-                  >
-                    <Navigation className="w-5 h-5" />
+                  <button type="button" onClick={detectLocation} className="p-2 rounded-lg hover:bg-white/[0.04] transition-colors text-cyan-400 hover:text-cyan-300">
+                    <RefreshCw className="w-4 h-4" />
                   </button>
                 </>
               ) : (
                 <>
-                  <MapPin className="w-5 h-5 text-gray-500" />
-                  <span className="text-sm text-gray-500 flex-1">Location unavailable</span>
-                  <button
-                    type="button"
-                    onClick={detectLocation}
-                    className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
-                  >
-                    Retry
-                  </button>
+                  <div className="w-9 h-9 rounded-lg bg-white/[0.04] flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-gray-600" />
+                  </div>
+                  <span className="text-sm text-gray-600 flex-1">Location unavailable</span>
+                  <button type="button" onClick={detectLocation} className="text-sm text-cyan-400 hover:text-cyan-300 font-medium">Retry</button>
                 </>
               )}
             </div>
             {locationStatus === "denied" && (
-              <div className="flex items-center gap-2 mt-2 text-xs text-amber-400">
-                <AlertCircle className="w-3 h-3" />
-                Location access denied — enable in browser settings
+              <div className="flex items-center gap-2 mb-3 px-3 py-2 rounded-lg bg-amber-500/5 border border-amber-500/10 text-xs text-amber-400">
+                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" /> Location access denied — enable in browser settings or click the map below
               </div>
             )}
-            {/* Map picker for manual location selection */}
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] text-gray-600">Click anywhere on the map to adjust</span>
+              {location && <span className="text-[10px] text-gray-700 font-mono">{location.lat.toFixed(4)}, {location.lng.toFixed(4)}</span>}
+            </div>
             {location ? (
-              <div className="mt-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-gray-500">Click map to adjust location</span>
-                  <span className="text-xs text-gray-600">{location.lat.toFixed(4)}, {location.lng.toFixed(4)}</span>
-                </div>
-                <LocationMapPicker lat={location.lat} lng={location.lng} onPick={handleMapPick} />
-              </div>
+              <LocationMapPicker lat={location.lat} lng={location.lng} onPick={handleMapPick} />
             ) : (
-              <div className="mt-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-amber-400">Auto-detect failed — click map to pick your location</span>
-                </div>
-                <LocationMapPicker lat={20.5937} lng={78.9629} onPick={handleMapPick} />
-              </div>
+              <LocationMapPicker lat={20.5937} lng={78.9629} onPick={handleMapPick} />
             )}
           </div>
 
-          {/* Next Button */}
-          <button
-            type="button"
-            onClick={() => setStep(2)}
-            disabled={!canProceedToStep2()}
-            className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-cyan-500/20 transition-all"
-          >
-            Next: Add Evidence
-            <Navigation className="w-4 h-4" />
+          {/* Next */}
+          <button type="button" onClick={() => setStep(2)} disabled={!canProceed()}
+            className="w-full flex items-center justify-center gap-2 px-5 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl font-semibold text-sm text-white disabled:opacity-30 disabled:cursor-not-allowed hover:opacity-90 transition-all shadow-lg shadow-cyan-500/15">
+            Continue to Evidence <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       )}
 
-      {/* Step 2: Evidence */}
+      {/* ═══════════════════ STEP 2: EVIDENCE ═══════════════════ */}
       {step === 2 && (
         <div className="flex flex-col gap-5">
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
-              <Upload className="w-4 h-4 text-cyan-400" />
-              Add Evidence (Optional)
-            </label>
-            <p className="text-xs text-gray-500 mb-3">
-              Photos with GPS will auto-verify location. Image date, camera info & coordinates are extracted automatically.
-            </p>
+            <label className={labelCls}>Evidence (Optional)</label>
+            <p className="text-xs text-gray-500 mb-4">Photos with GPS metadata will auto-verify location. Image date, camera info & coordinates are extracted automatically.</p>
 
-            {/* Evidence Preview */}
+            {/* Evidence Preview Grid */}
             {files.length > 0 && (
-              <div className="grid grid-cols-3 gap-3 mb-4">
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-4">
                 {files.map((file, index) => (
                   <div key={index} className="relative group">
                     {filePreviews[index] ? (
-                      <img
-                        src={filePreviews[index]}
-                        alt={file.name}
-                        className="w-full h-24 object-cover rounded-lg border border-white/10"
-                      />
+                      <img src={filePreviews[index]} alt={file.name} className="w-full h-24 object-cover rounded-xl border border-white/[0.06]" />
                     ) : (
-                      <div className="w-full h-24 flex items-center justify-center bg-white/5 rounded-lg border border-white/10">
-                        <FileText className="w-8 h-8 text-cyan-400" />
+                      <div className="w-full h-24 flex items-center justify-center bg-white/[0.03] rounded-xl border border-white/[0.06]">
+                        <Upload className="w-6 h-6 text-cyan-400/40" />
                       </div>
                     )}
-                    <button
-                      type="button"
-                      onClick={() => removeFile(index)}
-                      className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
+                    <button type="button" onClick={() => removeFile(index)}
+                      className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
                       <span className="text-white text-xs">×</span>
                     </button>
-                    <div className="absolute bottom-1 left-1 px-1.5 py-0.5 bg-black/60 rounded text-xs text-white">
-                      {file.type.startsWith("image/") ? "📷" : file.type.startsWith("video/") ? "🎥" : "📄"}
+                    <div className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 bg-black/60 backdrop-blur-sm rounded-md text-[10px] text-white">
+                      {file.type.startsWith("image/") ? "📷 Photo" : file.type.startsWith("video/") ? "🎥 Video" : "📄 File"}
                     </div>
                   </div>
                 ))}
               </div>
             )}
 
-            {/* Upload Area */}
-            <label className="flex flex-col items-center justify-center w-full h-32 rounded-xl border border-dashed border-white/15 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/25 transition-all cursor-pointer">
-              <input
-                type="file"
-                accept="image/*,video/*,.pdf,audio/*"
-                multiple
-                onChange={handleFileChange}
-                className="hidden"
-              />
-              <div className="text-center">
-                <Upload className="w-8 h-8 text-gray-500 mx-auto mb-2" />
-                <span className="text-sm text-gray-400">Drop files or click to upload</span>
-                <span className="text-xs text-gray-600 block mt-1">Images, video, PDF, audio</span>
-              </div>
-            </label>
+            {/* Upload buttons */}
+            <div className="grid grid-cols-3 gap-3">
+              <label className="flex flex-col items-center gap-3 p-5 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] transition-all cursor-pointer group">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-cyan-500/10 group-hover:scale-110 transition-transform">
+                  <Camera className="w-5 h-5 text-cyan-400" />
+                </div>
+                <span className="text-xs text-gray-500 font-medium">Photo</span>
+                <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+              </label>
+              <label className="flex flex-col items-center gap-3 p-5 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] transition-all cursor-pointer group">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-500/10 group-hover:scale-110 transition-transform">
+                  <Video className="w-5 h-5 text-amber-400" />
+                </div>
+                <span className="text-xs text-gray-500 font-medium">Video</span>
+                <input type="file" accept="video/*" onChange={handleFileChange} className="hidden" />
+              </label>
+              <label className="flex flex-col items-center gap-3 p-5 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.1] transition-all cursor-pointer group">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-purple-500/10 group-hover:scale-110 transition-transform">
+                  <ImageIcon className="w-5 h-5 text-purple-400" />
+                </div>
+                <span className="text-xs text-gray-500 font-medium">Gallery</span>
+                <input type="file" accept="image/*,video/*" multiple onChange={handleFileChange} className="hidden" />
+              </label>
+            </div>
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={() => setStep(1)}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-white/5 border border-white/10 rounded-xl font-semibold text-gray-300 hover:bg-white/10 transition-all"
-            >
-              <Navigation className="w-4 h-4 rotate-180" />
-              Back
+          {/* Nav */}
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={() => setStep(1)}
+              className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm text-gray-400 border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] transition-all">
+              <ChevronLeft className="w-4 h-4" /> Back
             </button>
-            <button
-              type="button"
-              onClick={() => setStep(3)}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold text-white hover:shadow-lg hover:shadow-cyan-500/20 transition-all"
-            >
-              Next: Review
-              <Navigation className="w-4 h-4" />
+            <button type="button" onClick={() => setStep(3)}
+              className="flex-[2] flex items-center justify-center gap-2 px-5 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl font-semibold text-sm text-white hover:opacity-90 transition-all shadow-lg shadow-cyan-500/15">
+              Review Submission <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
       )}
 
-      {/* Step 3: Review */}
+      {/* ═══════════════════ STEP 3: REVIEW ═══════════════════ */}
       {step === 3 && (
         <div className="flex flex-col gap-5">
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-3">
-              <CheckCircle className="w-4 h-4 text-cyan-400" />
-              Review Your Submission
-            </label>
+            <label className={labelCls}>Review Your Submission</label>
+            <p className="text-xs text-gray-500 -mt-1 mb-4">Verify all details before submitting to the network.</p>
+          </div>
 
-            <div className="space-y-4 p-5 rounded-xl bg-white/5 border border-white/10">
-              {/* Category */}
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-500 uppercase tracking-wider">Category</span>
-                {category && (
-                  <div
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg"
-                    style={{ backgroundColor: CATEGORIES[category].color + "20" }}
-                  >
-                    <span className="text-lg">{CATEGORIES[category].icon}</span>
-                    <span className="text-sm font-medium" style={{ color: CATEGORIES[category].color }}>
-                      {CATEGORIES[category].label}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Title */}
-              <div>
-                <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Title</div>
-                <div className="text-sm text-white">{title}</div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Description</div>
-                <div className="text-sm text-gray-300 line-clamp-3">{description}</div>
-              </div>
-
-              {/* Identity */}
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-500 uppercase tracking-wider">Identity</span>
-                <span className="text-sm text-white">{isAnonymous ? "Anonymous" : "Verified"}</span>
-              </div>
-
-              {/* Location */}
-              <div>
-                <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">Location</div>
-                <div className="text-sm text-gray-300 truncate">
-                  {location ? location.address : "Not available"}
-                </div>
-              </div>
-
-              {/* Evidence */}
-              {files.length > 0 && (
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-500 uppercase tracking-wider">Evidence</span>
-                  <span className="text-sm text-white">{files.length} file(s) attached</span>
+          <div className={`${cardCls} divide-y divide-white/[0.04]`}>
+            {/* Category */}
+            <div className="flex items-center justify-between p-4">
+              <span className="text-xs text-gray-600">Category</span>
+              {category && (
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ backgroundColor: CATEGORIES[category].color + "12" }}>
+                  <span className="text-base">{CATEGORIES[category].icon}</span>
+                  <span className="text-xs font-semibold" style={{ color: CATEGORIES[category].color }}>{CATEGORIES[category].label}</span>
                 </div>
               )}
             </div>
+            {/* Title */}
+            <div className="p-4">
+              <div className="text-xs text-gray-600 mb-1">Title</div>
+              <div className="text-sm text-white font-medium">{title}</div>
+            </div>
+            {/* Description */}
+            <div className="p-4">
+              <div className="text-xs text-gray-600 mb-1">Description</div>
+              <div className="text-sm text-gray-400 leading-relaxed">{description}</div>
+            </div>
+            {/* Identity */}
+            <div className="flex items-center justify-between p-4">
+              <span className="text-xs text-gray-600">Identity</span>
+              <div className="flex items-center gap-2">
+                {isAnonymous ? <EyeOff className="w-3.5 h-3.5 text-cyan-400" /> : <Eye className="w-3.5 h-3.5 text-gray-400" />}
+                <span className="text-xs text-white font-medium">{isAnonymous ? "Anonymous" : "Verified"}</span>
+              </div>
+            </div>
+            {/* Location */}
+            <div className="p-4">
+              <div className="text-xs text-gray-600 mb-1">Location</div>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
+                <span className="text-xs text-gray-400 truncate">{location ? location.address : "Not available"}</span>
+              </div>
+            </div>
+            {/* Evidence */}
+            {files.length > 0 && (
+              <div className="flex items-center justify-between p-4">
+                <span className="text-xs text-gray-600">Evidence</span>
+                <span className="text-xs text-white font-medium">{files.length} file(s) attached</span>
+              </div>
+            )}
           </div>
 
           {/* PoP-ID Preview */}
-          <div className="flex items-center gap-3 p-4 rounded-xl bg-cyan-500/5 border border-cyan-500/20">
-            <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
-              <FileText className="w-4 h-4 text-cyan-400" />
+          <div className="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-cyan-500/[0.05] to-blue-500/[0.03] border border-cyan-500/10">
+            <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center flex-shrink-0">
+              <Fingerprint className="w-4 h-4 text-cyan-400" />
             </div>
-            <div className="text-xs text-gray-400">
-              PoP-ID will be generated: <span className="text-cyan-400 font-mono">pop://.../{category || "category"}/hash</span>
+            <div>
+              <div className="text-[10px] text-gray-600 uppercase tracking-wider">PoP-ID Preview</div>
+              <div className="text-xs text-cyan-400/70 font-mono">pop://.../{category || "category"}/hash</div>
             </div>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-sm text-red-400">
-              {error}
+            <div className="px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/15 text-sm text-red-400 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 flex-shrink-0" /> {error}
             </div>
           )}
 
-          {/* Navigation Buttons */}
+          {/* Nav */}
           <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={() => setStep(2)}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-white/5 border border-white/10 rounded-xl font-semibold text-gray-300 hover:bg-white/10 transition-all"
-            >
-              <Navigation className="w-4 h-4 rotate-180" />
-              Back
+            <button type="button" onClick={() => setStep(2)}
+              className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm text-gray-400 border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] transition-all">
+              <ChevronLeft className="w-4 h-4" /> Back
             </button>
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={loading}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-cyan-500/20 transition-all"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  <CheckCircle className="w-4 h-4" />
-                  Submit Problem
-                </>
-              )}
+            <button type="button" onClick={handleSubmit} disabled={loading}
+              className="flex-[2] flex items-center justify-center gap-2 px-5 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl font-semibold text-sm text-white disabled:opacity-30 hover:opacity-90 transition-all shadow-lg shadow-cyan-500/15">
+              {loading ? (<><Loader2 className="w-4 h-4 animate-spin" /> Processing...</>) : (<><Send className="w-4 h-4" /> Submit to Network</>)}
             </button>
           </div>
 
-          <p className="text-xs text-gray-600 text-center">
-            By submitting, you agree to the PoPP Protocol terms. All submissions are
-            cryptographically hashed.
+          <p className="text-[10px] text-gray-700 text-center flex items-center justify-center gap-1.5">
+            <Lock className="w-3 h-3" />
+            By submitting, you agree to the PoPP Protocol terms. All submissions are cryptographically hashed.
           </p>
         </div>
       )}

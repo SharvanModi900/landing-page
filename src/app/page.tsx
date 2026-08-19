@@ -5,6 +5,7 @@ import HeroSection from "@/components/HeroSection";
 import PipelineSection from "@/components/PipelineSection";
 import ValidatorSection from "@/components/validators/validators";
 import WhoNeedsPoPP from "@/components/WhoNeedsPoPP/WhoNeedsPoPP";
+import LiveMapSection from "@/components/LiveMapSection";
 
 /* ------------------------------------------------------------------ */
 /*  Case Studies data                                                 */
@@ -74,6 +75,9 @@ export default function Home() {
 
       {/* 2. Pipeline */}
       <PipelineSection />
+
+      {/* 2.5 Live Map */}
+      <LiveMapSection />
 
       {/* 3. Validators */}
       <ValidatorSection />
