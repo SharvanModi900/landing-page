@@ -2,10 +2,10 @@
 
 export default function ValidatorDocsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
-      <div className="container mx-auto px-4 py-16">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white overflow-x-hidden">
+      <div className="container mx-auto px-4 sm:px-6 py-16">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
             Validator Documentation
           </h1>
           <p className="text-xl text-gray-300">
@@ -26,7 +26,7 @@ export default function ValidatorDocsPage() {
 
           <section className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
             <h2 className="text-3xl font-bold mb-4 text-blue-300">Validator Tiers</h2>
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-gradient-to-br from-amber-900/30 to-amber-700/20 rounded-xl p-6 border border-amber-500/30">
                 <h3 className="text-xl font-bold mb-2 text-amber-300">Tier 1: Community</h3>
                 <p className="text-sm text-gray-300 mb-2">R-Score: 0-99</p>

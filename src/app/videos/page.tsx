@@ -32,13 +32,13 @@ export default function VideosPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero */}
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
-              <h1 className="text-5xl font-extrabold">
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold">
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                   PoPP Video Hub
                 </span>
@@ -55,7 +55,7 @@ export default function VideosPage() {
         </div>
 
         {/* Categories */}
-        <div className="max-w-7xl mx-auto px-6 pb-12 space-y-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-12 space-y-10">
           {categories.map((cat, idx) => (
             <div key={idx}>
               <div className="mb-4">
@@ -65,7 +65,7 @@ export default function VideosPage() {
                 <p className="text-gray-400 text-sm mt-1">{cat.desc}</p>
               </div>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {cat.videos.map((video, vIdx) => (
                   <div
                     key={vIdx}

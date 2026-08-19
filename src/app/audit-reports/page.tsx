@@ -48,12 +48,12 @@ export default function AuditReportsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero */}
-        <div className="max-w-7xl mx-auto px-6 py-12 grid md:grid-cols-2 gap-8 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div>
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 Audit Reports
               </span>
@@ -69,7 +69,7 @@ export default function AuditReportsPage() {
         </div>
 
         {/* Search */}
-        <div className="max-w-5xl mx-auto px-6 py-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
           <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
             <Search className="w-5 h-5 text-gray-400" />
             <input
@@ -83,7 +83,7 @@ export default function AuditReportsPage() {
         </div>
 
         {/* Reports Grid */}
-        <div className="max-w-6xl mx-auto px-6 py-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredReports.map((r, idx) => (
             <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-5">
               <FileText className="w-8 h-8 text-cyan-400 mb-3" />
@@ -99,8 +99,8 @@ export default function AuditReportsPage() {
         </div>
 
         {/* Workflow Diagram */}
-        <div className="max-w-6xl mx-auto px-6 py-12">
-          <h2 className="text-3xl font-bold text-center mb-8">Audit Lifecycle</h2>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8">Audit Lifecycle</h2>
           <div className="relative">
             <svg viewBox="0 0 800 200" className="w-full h-48">
               <defs>

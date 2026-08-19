@@ -129,14 +129,14 @@ export default function LearningResourcesPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* HERO / SEARCH */}
-        <section className="px-6 py-10">
+        <section className="px-4 sm:px-6 py-10">
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-12 gap-6 items-center">
               <div className="lg:col-span-7">
-                <h1 className="text-4xl md:text-5xl font-extrabold">
+                <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold">
                   Master the Future —{" "}
                   <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                     Learn, Build, Contribute
@@ -279,8 +279,8 @@ export default function LearningResourcesPage() {
         </section>
 
         {/* LEARNING PATH */}
-        <section id="path" className="max-w-6xl mx-auto px-6 py-8">
-          <h2 className="text-3xl font-bold mb-4">Learning Path</h2>
+        <section id="path" className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Learning Path</h2>
           <div className="relative overflow-x-auto">
             <div className="flex gap-4 py-4 min-w-[900px]">
               {[
@@ -323,9 +323,9 @@ export default function LearningResourcesPage() {
         </section>
 
         {/* VIDEO CAROUSEL */}
-        <section className="max-w-7xl mx-auto px-6 py-8">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-3xl font-bold">Video Tutorials</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold">Video Tutorials</h2>
             <div className="flex items-center gap-2">
               <button onClick={() => scrollVideo("left")} className="rounded-full bg-white/5 p-2">◀</button>
               <button onClick={() => scrollVideo("right")} className="rounded-full bg-white/5 p-2">▶</button>
@@ -358,9 +358,9 @@ export default function LearningResourcesPage() {
         </section>
 
         {/* RESOURCE GRID */}
-        <section className="max-w-7xl mx-auto px-6 py-8">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-3xl font-bold">All Resources</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold">All Resources</h2>
             <div className="text-sm text-gray-400">Showing {filtered.length} results</div>
           </div>
 
@@ -416,8 +416,8 @@ export default function LearningResourcesPage() {
         </section>
 
         {/* DOWNLOADS */}
-        <section className="max-w-6xl mx-auto px-6 py-8">
-          <h2 className="text-2xl font-bold mb-3">Downloadables</h2>
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+          <h2 className="text-xl sm:text-2xl font-bold mb-3">Downloadables</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {[
               { name: "Security Checklist", size: "120KB", href: "/downloads/security-checklist.pdf" },
@@ -438,7 +438,7 @@ export default function LearningResourcesPage() {
         </section>
 
         {/* COMMUNITY + Leaderboard */}
-        <section className="max-w-7xl mx-auto px-6 py-8 grid lg:grid-cols-3 gap-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-8 grid lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2 bg-white/5 rounded-xl p-4 border border-white/10">
             <h3 className="text-lg font-bold mb-2">Community Discussions</h3>
             <p className="text-xs text-gray-400 mb-3">Ask questions, share resources, and get help from peers.</p>
@@ -489,7 +489,7 @@ export default function LearningResourcesPage() {
         </section>
 
         {/* UPCOMING WORKSHOPS */}
-        <section className="max-w-6xl mx-auto px-6 py-8">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
           <h2 className="text-2xl font-bold mb-3">Upcoming Workshops & Live Events</h2>
           <div className="grid md:grid-cols-3 gap-3">
             {[
@@ -510,7 +510,7 @@ export default function LearningResourcesPage() {
         </section>
 
         {/* FINAL CTA */}
-        <section className="py-10 px-6 bg-gradient-to-r from-cyan-500 to-blue-600">
+        <section className="py-10 px-4 sm:px-6 bg-gradient-to-r from-cyan-500 to-blue-600">
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
             <div>
               <h3 className="text-2xl font-bold">Ready to level up?</h3>

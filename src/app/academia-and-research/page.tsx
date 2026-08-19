@@ -150,17 +150,17 @@ const studentPrograms = [
 
 export default function AcademiaResearchPage() {
   return (
-    <main className="min-h-screen bg-[#030712] text-white pt-16">
+    <main className="min-h-screen bg-[#030712] text-white pt-16 overflow-x-hidden">
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <header className="relative overflow-hidden border-b border-white/10">
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-cyan-600/10 blur-3xl" />
 
-        <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-10 md:grid-cols-2">
+        <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 sm:px-6 py-10 md:grid-cols-2">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-400">
               <GraduationCap size={14} className="text-cyan-400" /> Academia & Research
             </div>
-            <h1 className="mb-3 text-3xl font-bold leading-tight tracking-tight">
+            <h1 className="mb-3 text-2xl sm:text-3xl md:text-4xl font-bold leading-tight tracking-tight">
               Scientific backbone for decentralized problem‑solving
             </h1>
             <p className="mb-6 max-w-2xl text-gray-400">
@@ -195,7 +195,7 @@ export default function AcademiaResearchPage() {
       </header>
 
       {/* ─── Research Collaborations ─────────────────────────────────────── */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-10">
+      <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-6 flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 ring-1 ring-white/10">
             <Globe2 size={18} className="text-cyan-400" />
@@ -230,7 +230,7 @@ export default function AcademiaResearchPage() {
 
       {/* ─── Publications ──────────────────────────────────────────────── */}
       <div className="bg-white/[0.03] border-y border-white/[0.06]">
-        <section className="mx-auto w-full max-w-7xl px-6 py-10">
+        <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-6 flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 ring-1 ring-white/10">
               <BookOpen size={18} className="text-cyan-400" />
@@ -268,7 +268,7 @@ export default function AcademiaResearchPage() {
       </div>
 
       {/* ─── Ongoing Research Areas ────────────────────────────────────── */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-10">
+      <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-6 flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 ring-1 ring-white/10">
             <FlaskConical size={18} className="text-cyan-400" />
@@ -298,7 +298,7 @@ export default function AcademiaResearchPage() {
 
       {/* ─── Programs ──────────────────────────────────────────────────── */}
       <div className="bg-white/[0.03] border-y border-white/[0.06]">
-        <section className="mx-auto w-full max-w-7xl px-6 py-10">
+        <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-6 flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 ring-1 ring-white/10">
               <Users size={18} className="text-cyan-400" />
@@ -331,7 +331,7 @@ export default function AcademiaResearchPage() {
       </div>
 
       {/* ─── Events ────────────────────────────────────────────────────── */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-10">
+      <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-6 flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 ring-1 ring-white/10">
             <CalendarDays size={18} className="text-cyan-400" />
@@ -359,7 +359,7 @@ export default function AcademiaResearchPage() {
       </section>
 
       {/* ─── Student Zone ──────────────────────────────────────────────── */}
-      <section className="mx-auto w-full max-w-7xl px-6 py-10">
+      <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-6 flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5 ring-1 ring-white/10">
             <Users size={18} className="text-emerald-400" />
@@ -379,7 +379,7 @@ export default function AcademiaResearchPage() {
       </section>
 
       {/* ─── CTA ───────────────────────────────────────────────────────── */}
-      <section id="join" className="mx-auto my-10 w-full max-w-7xl px-6">
+      <section id="join" className="mx-auto my-10 w-full max-w-7xl px-4 sm:px-6">
         <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
           className="relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-6">
           <div className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-cyan-600/10 blur-3xl" />

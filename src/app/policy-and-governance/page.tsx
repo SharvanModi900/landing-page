@@ -92,11 +92,11 @@ export default function PolicyGovernancePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#050710] via-[#071224] to-[#081018] text-white mt-[70px]">
+    <div className="min-h-screen bg-[#030712] text-white mt-[70px] overflow-x-hidden">
       {/* HERO */}
-      <header className="max-w-7xl mx-auto px-6 py-12 flex flex-col lg:flex-row gap-8 items-start">
+      <header className="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex flex-col lg:flex-row gap-8 items-start">
         <div className="flex-1">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#FF7E3A] via-[#FFD49A] to-[#8EDFFF]">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-[#FF7E3A] via-[#FFD49A] to-[#8EDFFF]">
             Policy & Governance
           </h1>
           <p className="mt-4 text-gray-300 max-w-2xl">
@@ -172,7 +172,7 @@ export default function PolicyGovernancePage() {
       </header>
 
       {/* MAIN: sidebar + content */}
-      <div className="max-w-7xl mx-auto px-6 pb-28 grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pb-28 grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* LEFT NAV */}
         <nav className="lg:col-span-3 hidden lg:block sticky top-28 h-fit self-start">
           <div className="rounded-2xl p-4 bg-white/3 border border-white/8">

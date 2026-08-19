@@ -54,7 +54,7 @@ export default function ValidatorExamPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-black text-white p-6">
+    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-black text-white overflow-x-hidden p-4 sm:p-6">
       {!showResult ? (
         <motion.div
           className="max-w-2xl mx-auto bg-slate-800 rounded-2xl p-8 shadow-xl"

@@ -46,7 +46,7 @@ export default function DesignYourWorkflowPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white pt-16">
+    <main className="min-h-screen bg-[#030712] text-white pt-16 overflow-x-hidden">
       {/* ============= HERO (Split) ============= */}
       <section className="relative overflow-hidden">
         {/* subtle background grid lines */}
@@ -58,14 +58,14 @@ export default function DesignYourWorkflowPage() {
         <div aria-hidden className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-cyan-500/20 blur-3xl" />
         <div aria-hidden className="absolute -bottom-32 -right-24 h-96 w-96 rounded-full bg-blue-500/20 blur-3xl" />
 
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-12 md:grid-cols-2 md:py-16 lg:px-10">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 py-12 md:grid-cols-2 md:py-16 lg:px-10">
           {/* Left: copy */}
           <div className="z-10 flex max-w-xl flex-col gap-6">
             <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-gray-300">
               <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-cyan-400" />
               Builder Preview
             </span>
-            <h1 className="text-4xl font-extrabold leading-tight md:text-5xl">
+            <h1 className="text-2xl sm:text-4xl font-extrabold leading-tight md:text-5xl">
               Design Your Own{' '}
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 PoPP Workflow
@@ -116,7 +116,7 @@ export default function DesignYourWorkflowPage() {
 
       {/* ============= HORIZONTAL PROCESS STEPS (non-centered) ============= */}
       <section className="border-t border-white/[0.06] bg-white/[0.03]">
-        <div className="mx-auto max-w-7xl px-6 py-10 lg:px-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-10 lg:px-10">
           <h2 className="mb-6 text-2xl font-bold text-gray-100">How it works</h2>
           <div className="no-scrollbar flex snap-x gap-6 overflow-x-auto pb-2">
             {roleSteps.map((s, i) => (
@@ -135,7 +135,7 @@ export default function DesignYourWorkflowPage() {
 
       {/* ============= READ-ONLY PREVIEW (interactive hover) ============= */}
       <section className="relative border-t border-white/[0.06] bg-white/[0.03]">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-12 md:grid-cols-2 lg:px-10">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 py-12 md:grid-cols-2 lg:px-10">
           <div className="max-w-lg">
             <h3 className="text-2xl font-bold">Preview a workflow</h3>
             <p className="mt-3 text-gray-300">
@@ -163,7 +163,7 @@ export default function DesignYourWorkflowPage() {
 
       {/* ============= TEMPLATE LIBRARY (non-centered grid) ============= */}
       <section className="border-t border-white/[0.06]">
-        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12 lg:px-10">
           <div className="mb-8 flex items-end justify-between">
             <div>
               <h3 className="text-2xl font-bold">Templates library</h3>
@@ -204,7 +204,7 @@ export default function DesignYourWorkflowPage() {
 
       {/* ============= ADVANCED FEATURES (split) ============= */}
       <section className="border-t border-white/[0.06] bg-white/[0.03]">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-12 md:grid-cols-2 lg:px-10">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 sm:px-6 py-12 md:grid-cols-2 lg:px-10">
           <div className="max-w-xl">
             <h3 className="text-2xl font-bold">Advanced capabilities</h3>
             <ul className="mt-6 space-y-4 text-gray-300">
@@ -248,14 +248,14 @@ export default function DesignYourWorkflowPage() {
 
       {/* ============= CTA ============= */}
       <section className="relative border-t border-white/[0.06] bg-white/[0.03]">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-6 py-12 md:grid-cols-2 lg:px-10">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-4 sm:px-6 py-12 md:grid-cols-2 lg:px-10">
           <div>
-            <h3 className="text-3xl font-extrabold">Turn ideas into provable workflows</h3>
+            <h3 className="text-2xl sm:text-3xl font-extrabold">Turn ideas into provable workflows</h3>
             <p className="mt-3 max-w-xl text-gray-300">
               Build once, reuse everywhere. Share templates with your network, simulate outcomes, and publish transparent results.
             </p>
           </div>
-          <div className="flex gap-4 md:justify-end">
+          <div className="flex flex-col sm:flex-row gap-4 md:justify-end">
             <button className="rounded-xl bg-white px-6 py-3 font-semibold text-slate-900 hover:bg-gray-100 transition">
               Start Designing
             </button>

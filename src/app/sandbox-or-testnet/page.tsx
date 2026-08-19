@@ -32,11 +32,11 @@ fetch("https://testnet.popp.io/faucet", {
   };
 
   return (
-    <div className="bg-[#030712] text-white min-h-screen">
+    <div className="bg-[#030712] text-white min-h-screen overflow-x-hidden">
       <div className="pt-16">
         {/* Hero Section */}
-        <section className="max-w-5xl mx-auto px-6 py-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 text-center">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               PoPP Sandbox & Testnet
             </span>
@@ -47,13 +47,13 @@ fetch("https://testnet.popp.io/faucet", {
         </section>
 
         {/* Interactive Playground */}
-        <section className="max-w-5xl mx-auto px-6 py-8">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
           <h2 className="text-2xl font-bold mb-4 text-center">Interactive Sandbox Playground</h2>
           <p className="text-center text-gray-400 mb-6">
             Write and run API calls directly against the PoPP Testnet.
           </p>
 
-          <div className="grid md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Code Editor */}
             <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
               <Editor
@@ -92,12 +92,12 @@ fetch("https://testnet.popp.io/faucet", {
         </section>
 
         {/* CTA */}
-        <section className="bg-white/[0.03] border-y border-white/[0.06] py-10 px-6 text-center">
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-3">Ready to Build?</h2>
+        <section className="bg-white/[0.03] border-y border-white/[0.06] py-10 px-4 sm:px-6 text-center">
+          <h2 className="text-2xl sm:text-3xl font-extrabold mb-3">Ready to Build?</h2>
           <p className="text-gray-400 max-w-2xl mx-auto mb-6">
             Join thousands of developers testing workflows, validators, and governance on PoPP Testnet.
           </p>
-          <div className="flex justify-center gap-3">
+          <div className="flex flex-col sm:flex-row justify-center gap-3">
             <button className="bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-2.5 rounded-xl font-semibold">
               Start Testing
             </button>

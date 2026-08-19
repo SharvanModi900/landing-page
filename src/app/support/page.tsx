@@ -25,11 +25,11 @@ export default function SupportPageHero() {
   ];
 
   return (
-    <div className="bg-[#030712] text-white min-h-screen">
+    <div className="bg-[#030712] text-white min-h-screen overflow-x-hidden">
       <div className="pt-16">
         {/* Hero Section */}
-        <section className="max-w-5xl mx-auto px-6 py-12">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Need Help? We're Here
             </span>
@@ -44,7 +44,7 @@ export default function SupportPageHero() {
         </section>
 
         {/* Support Cards Section */}
-        <section className="max-w-5xl mx-auto px-6 py-8 grid md:grid-cols-3 gap-5">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 md:grid-cols-3 gap-5">
           {supportCards.map((card, idx) => (
             <motion.div
               key={idx}

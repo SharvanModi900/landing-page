@@ -26,8 +26,8 @@ export default function DatasetsPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white pt-16">
-      <section className="max-w-7xl mx-auto px-6 py-10">
+    <div className="min-h-screen bg-[#030712] text-white pt-16 overflow-x-hidden">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <div className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 ring-1 ring-white/10">
             <Database className="h-5 w-5 text-cyan-400" />
@@ -39,7 +39,7 @@ export default function DatasetsPage() {
         </p>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 py-6">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         <div className="space-y-5">
           {datasets.map((ds, i) => (
             <div key={i} className="bg-white/5 border border-white/10 rounded-xl p-5">
@@ -55,7 +55,7 @@ export default function DatasetsPage() {
                   <div className="font-semibold">{ds.format}</div>
                 </div>
               </div>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-sm font-semibold flex items-center gap-2">
                   <Download size={16} /> Download
                 </button>

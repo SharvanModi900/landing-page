@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 
 export default function PoPPLifecycle() {
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900">
-      <div className="max-w-6xl mx-auto px-4">
+    <section className="py-16 sm:py-20 bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -15,10 +15,10 @@ export default function PoPPLifecycle() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
+          <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
             How <span className="text-blue-400">PoPP</span> Works
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto">
             From complaint to action in 5 simple steps
           </p>
         </motion.div>
@@ -96,24 +96,24 @@ export default function PoPPLifecycle() {
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
               <div className="space-y-6">
                 {/* Flow visualization */}
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-0">
                   <div className="text-center">
                     <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center text-xl mb-2">📝</div>
                     <div className="text-sm text-gray-300">Submit</div>
                   </div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-red-500 to-orange-500 mx-4"></div>
+                  <div className="hidden sm:block flex-1 h-px bg-gradient-to-r from-red-500 to-orange-500 mx-4"></div>
                   <div className="text-center">
                     <div className="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center text-xl mb-2">🔎</div>
                     <div className="text-sm text-gray-300">Validate</div>
                   </div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-orange-500 to-green-500 mx-4"></div>
+                  <div className="hidden sm:block flex-1 h-px bg-gradient-to-r from-orange-500 to-green-500 mx-4"></div>
                   <div className="text-center">
                     <div className="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center text-xl mb-2">🔐</div>
                     <div className="text-sm text-gray-300">Prove</div>
                   </div>
                 </div>
                 
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-0">
                   <div className="text-center">
                     <div className="w-12 h-12 bg-blue-500/20 rounded-full flex items-center justify-center text-xl mb-2">⚙️</div>
                     <div className="text-sm text-gray-300">Escalate</div>

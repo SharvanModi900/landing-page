@@ -9,25 +9,14 @@ export default function StakingPage() {
     { label: "Claim or Re-stake", desc: "Claim rewards or reinvest for compounding." },
   ];
 
-  const validators = [
-    { title: "Validate Problems", desc: "Confirm the authenticity of submitted problems.", icon: "🛡️" },
-    { title: "Maintain Network", desc: "Ensure protocol uptime and consistency.", icon: "⚙️" },
-    { title: "Distribute Rewards", desc: "Handle reward payouts to stakers.", icon: "💎" },
-  ];
-
-  const rewards = [
-    { title: "Base APY", value: "8%" },
-    { title: "Performance Bonus", value: "2-5%" },
-    { title: "Compounding", value: "Flexible Re-stake" },
-  ];
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero Section */}
-        <section className="max-w-7xl mx-auto px-6 py-12 grid md:grid-cols-2 gap-8 items-center">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div>
-            <h1 className="text-4xl md:text-5xl font-extrabold">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold">
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 Staking Mechanics
               </span>
@@ -36,7 +25,7 @@ export default function StakingPage() {
               Understand how PoPP staking works, from delegation to rewards. Boost validator performance
               and maximize your token benefits securely and transparently.
             </p>
-            <div className="flex gap-3 mt-4">
+            <div className="flex flex-col sm:flex-row gap-3 mt-4">
               <button className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold">
                 Start Staking
               </button>
@@ -60,51 +49,31 @@ export default function StakingPage() {
           </div>
         </section>
 
-        {/* Validator Roles */}
-        <section className="max-w-7xl mx-auto px-6 py-10">
-          <h2 className="text-3xl font-bold mb-6 text-center">
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-              Validator Roles
-            </span>
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {validators.map((v, idx) => (
-              <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-5">
-                <div className="text-3xl mb-3">{v.icon}</div>
-                <h3 className="font-semibold text-lg mb-1">{v.title}</h3>
-                <p className="text-gray-400 text-sm">{v.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Reward Mechanics */}
-        <section className="bg-white/[0.03] border-y border-white/[0.06] py-10 px-6">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-3xl font-bold mb-6 text-center">
+        {/* Learn More */}
+        <section className="bg-white/[0.03] border-y border-white/[0.06] py-10 px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-                Reward Mechanics
+                Tokenomics & Rewards
               </span>
             </h2>
-            <div className="grid md:grid-cols-3 gap-6 text-center">
-              {rewards.map((r, idx) => (
-                <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-5">
-                  <h3 className="font-semibold text-lg mb-1">{r.title}</h3>
-                  <p className="text-cyan-400 font-bold text-2xl">{r.value}</p>
-                </div>
-              ))}
-            </div>
+            <p className="text-gray-400 max-w-2xl mx-auto mb-6">
+              For detailed information on reward distribution, token types, and incentive structures, visit the tokenomics page.
+            </p>
+            <a href="/tokenomics" className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold inline-block">
+              View Tokenomics
+            </a>
           </div>
         </section>
 
         {/* Security Guarantees */}
-        <section className="max-w-7xl mx-auto px-6 py-10">
-          <h2 className="text-3xl font-bold mb-6 text-center">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Protocol Security
             </span>
           </h2>
-          <div className="grid md:grid-cols-4 gap-6 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
               { icon: "🔒", label: "End-to-End Encryption" },
               { icon: "🛡️", label: "Zero-Trust Protocol" },
@@ -120,8 +89,8 @@ export default function StakingPage() {
         </section>
 
         {/* CTA */}
-        <section className="max-w-7xl mx-auto px-6 py-10 text-center">
-          <h2 className="text-3xl font-bold mb-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Ready to Stake Your PoPP?
             </span>

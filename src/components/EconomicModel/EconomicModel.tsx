@@ -303,7 +303,7 @@ export default function IndustrialFoundryWheel() {
   ];
 
   return (
-    <section className="relative py-20 px-6 bg-gradient-to-br from-zinc-900 via-slate-900 to-zinc-950 overflow-hidden">
+    <section className="relative py-12 sm:py-20 px-4 sm:px-6 bg-gradient-to-br from-zinc-900 via-slate-900 to-zinc-950 overflow-hidden">
       {/* Ambient glows & particles */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-0 top-0 w-96 h-96 rounded-full bg-amber-700/6 blur-3xl" />
@@ -312,7 +312,7 @@ export default function IndustrialFoundryWheel() {
 
       {/* Heading */}
       <div className="relative max-w-6xl mx-auto text-center mb-12 z-10">
-        <h2 className="text-4xl lg:text-5xl font-extrabold text-white mb-3">
+        <h2 className="text-2xl sm:text-3xl lg:text-5xl font-extrabold text-white mb-3">
           Industrial <span className="text-amber-400">Foundry</span> Wheel
         </h2>
         <p className="text-lg text-gray-300 max-w-3xl mx-auto">

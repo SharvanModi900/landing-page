@@ -44,11 +44,11 @@ export default function ToolsPage() {
   ];
 
   return (
-    <div className="bg-[#0a0e23] text-gray-200 min-h-screen">
+    <div className="bg-[#030712] text-white min-h-screen overflow-x-hidden">
       {/* Hero */}
-      <section className="relative py-24 px-6 bg-gradient-to-r from-blue-900/40 to-purple-900/30">
+      <section className="relative py-16 sm:py-24 px-4 sm:px-6 bg-gradient-to-r from-blue-900/40 to-purple-900/30">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-5xl font-extrabold text-white mb-6">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-white mb-6">
             PoPP <span className="text-blue-400">Tools</span>
           </h1>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto">
@@ -58,16 +58,16 @@ export default function ToolsPage() {
       </section>
 
       {/* Tools Grid */}
-      <section className="max-w-7xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-bold text-white mb-12 text-center">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
+        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-8 sm:mb-12 text-center">
           🧰 Available Tools
         </h2>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-10">
           {tools.map((tool) => (
             <a
               key={tool.title}
               href={tool.link}
-              className="group p-8 rounded-2xl bg-[#1a213d] border border-gray-700/50 hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/10 transition"
+              className="group p-8 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-blue-400/50 hover:shadow-lg hover:shadow-blue-500/10 transition"
             >
               <div className="mb-4">{tool.icon}</div>
               <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-blue-400 transition">
@@ -80,9 +80,9 @@ export default function ToolsPage() {
       </section>
 
       {/* Coming Soon */}
-      <section className="bg-[#11172e] py-20 px-6">
+      <section className="bg-white/[0.02] py-12 sm:py-20 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">
             🚀 More Tools Coming Soon
           </h2>
           <p className="text-gray-300 mb-6">

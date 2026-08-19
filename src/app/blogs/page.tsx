@@ -65,11 +65,11 @@ const categories = ["All", "Protocol", "Validators", "Story", "Technical", "Gove
 
 export default function BlogsPage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
-      <div className="pt-16 max-w-6xl mx-auto px-6 py-12">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+      <div className="pt-16 max-w-6xl mx-auto px-4 sm:px-6 py-12">
         {/* Hero */}
         <div className="mb-10">
-          <h1 className="text-4xl font-bold mb-3">
+          <h1 className="text-2xl sm:text-4xl font-bold mb-3">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               PoPP Blog
             </span>
@@ -92,7 +92,7 @@ export default function BlogsPage() {
         </div>
 
         {/* Blog Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogs.map((blog, idx) => (
             <motion.article
               key={idx}

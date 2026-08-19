@@ -34,11 +34,11 @@ const events = [
 
 export default function EventsPage() {
   return (
-    <div className="bg-[#030712] text-white min-h-screen">
+    <div className="bg-[#030712] text-white min-h-screen overflow-x-hidden">
       <div className="pt-16">
         {/* Hero Section */}
-        <section className="max-w-5xl mx-auto px-6 py-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12 text-center">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               PoPP Events
             </span>
@@ -49,7 +49,7 @@ export default function EventsPage() {
         </section>
 
         {/* Upcoming Events Timeline */}
-        <section className="max-w-4xl mx-auto px-6 py-8">
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
           <h2 className="text-2xl font-bold mb-6">Upcoming Events</h2>
           <div className="relative border-l border-white/10 pl-6">
             {events
@@ -76,7 +76,7 @@ export default function EventsPage() {
         </section>
 
         {/* Past Events Grid */}
-        <section className="max-w-4xl mx-auto px-6 py-8 border-t border-white/10">
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 py-8 border-t border-white/10">
           <h2 className="text-2xl font-bold mb-6 text-center">Past Events</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {events

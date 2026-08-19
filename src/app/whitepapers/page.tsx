@@ -36,11 +36,11 @@ export default function KnowledgeHub() {
   );
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero Section */}
-        <section className="max-w-5xl mx-auto px-6 py-12">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-4">
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Knowledge Hub
             </span>
@@ -52,9 +52,9 @@ export default function KnowledgeHub() {
         </section>
 
         {/* Main Content */}
-        <div className="max-w-5xl mx-auto px-6 py-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
           {/* Tabs */}
-          <div className="flex gap-6 border-b border-white/10 mb-6 relative">
+          <div className="flex flex-wrap gap-4 sm:gap-6 border-b border-white/10 mb-6 relative">
             {["whitepapers", "news", "blogs", "events"].map((tab) => (
               <button
                 key={tab}

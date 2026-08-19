@@ -195,10 +195,10 @@ export default function NFTViewerPage() {
   // ─── Render ─────────────────────────────────────────────────────────────
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* ─── Hero ─────────────────────────────────────────────────────── */}
-        <section className="relative py-6 px-6 text-center overflow-hidden">
+        <section className="relative py-6 px-4 sm:px-6 text-center overflow-hidden">
           <div className="absolute -top-40 right-0 w-[400px] h-[400px] rounded-full bg-purple-600/10 blur-3xl" />
 
           <motion.div initial={{ opacity: 0, y: -15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="relative z-10">
@@ -217,8 +217,8 @@ export default function NFTViewerPage() {
         </section>
 
         {/* ─── Stats ────────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 mb-4">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-purple-500/20 to-cyan-600/20 border border-white/10 rounded-lg p-2.5">
               <div className="flex items-center gap-1.5 mb-1"><Fingerprint className="h-3.5 w-3.5 text-purple-400" /><span className="text-[11px] text-gray-400">Total NFTs</span></div>
               <div className="text-lg font-bold">{loading ? "—" : totalProofs}</div>
@@ -234,7 +234,7 @@ export default function NFTViewerPage() {
         </section>
 
         {/* ─── Search & Filters ─────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 mb-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
           <div className="bg-white/5 border border-white/10 rounded-lg p-3">
             <div className="flex flex-col md:flex-row gap-2">
               {/* Search */}
@@ -276,7 +276,7 @@ export default function NFTViewerPage() {
         </section>
 
         {/* ─── Gallery ──────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 pb-6">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
               <div className="flex flex-col items-center gap-2">
@@ -372,7 +372,7 @@ export default function NFTViewerPage() {
         </section>
 
         {/* ─── CTA ──────────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 pb-6">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-lg p-5 text-center">
             <h2 className="text-lg font-bold mb-1">Validate Problems to Mint Truth NFTs</h2>

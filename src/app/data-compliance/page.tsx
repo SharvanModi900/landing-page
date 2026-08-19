@@ -22,16 +22,16 @@ export default function DataCompliancePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* HERO */}
         <header className="relative border-b border-white/10 py-10">
-          <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-8 items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
               <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-3 py-1 text-xs tracking-wide text-cyan-200">
                 Compliance • GDPR • CCPA • ISO/27001-ready
               </div>
-              <h1 className="mt-4 text-4xl md:text-5xl font-extrabold">
+              <h1 className="mt-4 text-2xl sm:text-4xl md:text-5xl font-extrabold">
                 <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                   Data Compliance
                 </span>
@@ -47,7 +47,7 @@ export default function DataCompliancePage() {
         </header>
 
         {/* BODY: sticky toc + content */}
-        <main className="max-w-7xl mx-auto px-6 py-8 grid md:grid-cols-[280px_1fr] gap-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 md:grid-cols-[280px_1fr] gap-8">
           {/* TOC */}
           <aside className="hidden md:block">
             <div className="sticky top-24 rounded-xl border border-white/10 bg-white/5 p-3">

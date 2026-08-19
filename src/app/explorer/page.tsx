@@ -5,9 +5,11 @@ import {
   Search, Filter, Calendar, MapPin, Shield, CheckCircle, Clock,
   AlertTriangle, Globe, Activity, ChevronDown, X, ExternalLink,
   Layers, ArrowRight, Hash, Zap, Eye, ChevronRight, ChevronLeft,
-  ArrowUpDown, TrendingUp,
+  ArrowUpDown, TrendingUp, Map, List,
 } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+const ProblemMap = dynamic(() => import("@/components/ProblemMap"), { ssr: false });
 
 const CHAIN_API = "https://chain.thharko.com";
 const BACKEND_API = "https://popp.thharko.com";
@@ -109,6 +111,7 @@ export default function ExplorerPage() {
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "severity" | "consensus">("newest");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(20);
+  const [viewMode, setViewMode] = useState<"list" | "map">("list");
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -252,17 +255,17 @@ export default function ExplorerPage() {
   })).filter((c) => c.count > 0);
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero */}
-        <section className="relative py-8 px-6 text-center overflow-hidden">
+        <section className="relative py-8 px-4 sm:px-6 text-center overflow-hidden">
           <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-cyan-600/8 blur-3xl" />
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10">
             <div className="inline-flex items-center gap-2 mb-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 ring-1 ring-cyan-500/30">
                 <Globe className="h-5 w-5 text-cyan-400" />
               </div>
-              <h1 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 bg-clip-text text-transparent">
                 Problem Explorer
               </h1>
             </div>
@@ -273,7 +276,7 @@ export default function ExplorerPage() {
         </section>
 
         {/* Stats */}
-        <section className="max-w-6xl mx-auto px-6 mb-6">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 mb-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { label: "On-Chain Tickets", value: chainCount, icon: <Layers className="h-4 w-4 text-cyan-400" />, gradient: "from-cyan-500/10 to-blue-600/10", border: "border-cyan-500/20" },
@@ -319,7 +322,7 @@ export default function ExplorerPage() {
         </section>
 
         {/* Search & Filters */}
-        <section className="max-w-6xl mx-auto px-6 mb-4">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 mb-4">
           <div className="bg-white/[0.03] border border-white/10 rounded-xl p-4">
             <div className="flex flex-col lg:flex-row gap-3">
               {/* Search */}
@@ -438,7 +441,23 @@ export default function ExplorerPage() {
         </section>
 
         {/* Results */}
-        <section className="max-w-6xl mx-auto px-6 pb-8">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 pb-8">
+          {/* Stats Badge - Mobile App Style */}
+          {!loading && filtered.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-4"
+            >
+              <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2">
+                <Activity size={14} className="text-cyan-400" />
+                <span className="text-sm font-semibold text-gray-200">
+                  {chainCount} chain · {backendCount} submissions · {filtered.length} problems
+                </span>
+              </div>
+            </motion.div>
+          )}
+
           {loading ? (
             <div className="flex items-center justify-center py-16">
               <div className="flex flex-col items-center gap-3">
@@ -456,15 +475,86 @@ export default function ExplorerPage() {
             </div>
           ) : (
             <>
-              {/* Results count */}
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs text-gray-400">
-                  Showing {paginatedItems.length} of {filtered.length} results
-                  {totalPages > 1 && ` (Page ${currentPage} of ${totalPages})`}
-                </span>
+              {/* Results Header with View Toggle */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-gray-300 font-medium">
+                    {filtered.length} {filtered.length === 1 ? "Problem" : "Problems"}
+                  </span>
+                  {totalPages > 1 && (
+                    <span className="text-xs text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center bg-white/5 border border-white/10 rounded-lg p-0.5">
+                    <button
+                      onClick={() => setViewMode("list")}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                        viewMode === "list"
+                          ? "bg-gradient-to-r from-cyan-500/20 to-blue-600/20 text-cyan-400 border border-cyan-500/30"
+                          : "text-gray-400 hover:text-gray-200"
+                      }`}
+                    >
+                      <List size={13} />
+                      <span>List</span>
+                    </button>
+                    <button
+                      onClick={() => setViewMode("map")}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                        viewMode === "map"
+                          ? "bg-gradient-to-r from-cyan-500/20 to-blue-600/20 text-cyan-400 border border-cyan-500/30"
+                          : "text-gray-400 hover:text-gray-200"
+                      }`}
+                    >
+                      <Map size={13} />
+                      <span>Map</span>
+                    </button>
+                  </div>
+                </div>
               </div>
 
-              <div className="space-y-3">
+              {/* Map View — always mounted, hidden via display:none, invalidateSize on show */}
+              <div className={viewMode === "map" ? "h-[350px] sm:h-[550px] mb-6" : "hidden"}>
+                <ProblemMap
+                  visible={viewMode === "map"}
+                  markers={filtered.map((item) => {
+                    const lat = item.source === "backend" 
+                      ? parseFloat(item.location.split(",")[0]) 
+                      : null;
+                    const lng = item.source === "backend"
+                      ? parseFloat(item.location.split(",")[1])
+                      : null;
+                    const itemStatusStyle = getStatusStyle(item.status);
+                    const colorMap: Record<string, string> = {
+                      "text-blue-400": "#3b82f6",
+                      "text-yellow-400": "#f59e0b",
+                      "text-emerald-400": "#22c55e",
+                      "text-purple-400": "#a855f7",
+                      "text-orange-400": "#f97316",
+                      "text-cyan-400": "#06b6d4",
+                      "text-red-400": "#ef4444",
+                      "text-gray-400": "#6b7280",
+                    };
+                    return {
+                      id: `${item.source}-${item.id}`,
+                      latitude: lat || 0,
+                      longitude: lng || 0,
+                      title: item.title,
+                      description: item.description?.slice(0, 100) || "",
+                      category: item.category,
+                      status: item.status,
+                      color: colorMap[itemStatusStyle.color] || "#6b7280",
+                      source: item.source,
+                      media_url: item.media_url,
+                    };
+                  }).filter((m) => m.latitude && m.longitude && Math.abs(m.latitude) > 0.001 && Math.abs(m.longitude) > 0.001)}
+                />
+              </div>
+
+              {/* List View — always mounted, just hidden */}
+              <div className={viewMode === "list" ? "block space-y-3" : "hidden"}>
                 {paginatedItems.map((item, i) => {
                   const statusStyle = getStatusStyle(item.status);
                   const detailHref = `/explorer/detail?id=${encodeURIComponent(item.id)}`;
@@ -547,46 +637,46 @@ export default function ExplorerPage() {
                     </motion.div>
                   );
                 })}
-              </div>
 
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 mt-6">
-                  <button
-                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                    disabled={currentPage === 1}
-                    className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition"
-                  >
-                    <ChevronLeft size={16} />
-                  </button>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-6">
                     <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`w-8 h-8 rounded-lg text-xs font-semibold transition ${
-                        currentPage === page
-                          ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white"
-                          : "bg-white/5 border border-white/10 text-gray-400 hover:text-white"
-                      }`}
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition"
                     >
-                      {page}
+                      <ChevronLeft size={16} />
                     </button>
-                  ))}
-                  <button
-                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                    disabled={currentPage === totalPages}
-                    className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition"
-                  >
-                    <ChevronRight size={16} />
-                  </button>
-                </div>
-              )}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-8 h-8 rounded-lg text-xs font-semibold transition ${
+                          currentPage === page
+                            ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white"
+                            : "bg-white/5 border border-white/10 text-gray-400 hover:text-white"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="p-2 rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition"
+                    >
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
+                )}
+              </div>
             </>
           )}
         </section>
 
         {/* CTA */}
-        <section className="max-w-5xl mx-auto px-6 pb-12">
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 pb-12">
           <div className="bg-gradient-to-br from-cyan-500/5 to-blue-600/5 border border-white/10 rounded-xl p-6 text-center">
             <h2 className="text-xl font-bold mb-2">Have a Problem to Report?</h2>
             <p className="text-gray-400 text-sm mb-4 max-w-md mx-auto">

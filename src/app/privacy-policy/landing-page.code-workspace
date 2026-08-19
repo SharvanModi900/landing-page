@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../layer-3-core-rust-api"
+		},
+		{
+			"path": "../../../../offchain-intelligence"
+		},
+		{
+			"path": "../../../../popp"
+		},
+		{
+			"path": "../../../../popp_offchain"
+		},
+		{
+			"path": "../../../../popp-mobile"
+		},
+		{
+			"path": "../../../../popp-chain"
+		},
+		{
+			"path": "../../../../popp-battle"
+		}
+	],
+	"settings": {}
+}

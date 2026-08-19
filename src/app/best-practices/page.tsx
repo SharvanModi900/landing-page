@@ -30,12 +30,12 @@ export default function BestPracticesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero */}
-        <div className="max-w-7xl mx-auto px-6 py-12 grid md:grid-cols-2 gap-8 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 grid md:grid-cols-2 gap-8 items-center">
           <div>
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 Best Practices for PoPP
               </span>
@@ -45,7 +45,7 @@ export default function BestPracticesPage() {
               These best practices guide contributors, civic activists, NGOs, media, and researchers
               to responsibly document, validate, and escalate problems.
             </p>
-            <div className="flex gap-3 mt-4">
+            <div className="flex flex-col sm:flex-row gap-3 mt-4">
               <Link href="/security">
                 <button className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold text-sm">
                   View Security Guidelines
@@ -64,8 +64,8 @@ export default function BestPracticesPage() {
         </div>
 
         {/* Principles */}
-        <div className="max-w-7xl mx-auto px-6 py-10">
-          <h2 className="text-3xl font-bold mb-6 text-center">Core Principles</h2>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Core Principles</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {principles.map((p, idx) => (
               <div key={idx} className="bg-white/5 border border-white/10 rounded-xl p-5">
@@ -78,8 +78,8 @@ export default function BestPracticesPage() {
         </div>
 
         {/* Contributor Best Practices */}
-        <div className="max-w-5xl mx-auto px-6 py-10">
-          <h2 className="text-3xl font-bold mb-4">Contributor Best Practices</h2>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Contributor Best Practices</h2>
           <ul className="space-y-3">
             {contributorChecklist.map((c, idx) => (
               <li key={idx} className="flex items-start gap-3">
@@ -91,8 +91,8 @@ export default function BestPracticesPage() {
         </div>
 
         {/* Security Reporting Practices */}
-        <div className="max-w-5xl mx-auto px-6 py-10">
-          <h2 className="text-3xl font-bold mb-3">Security Reporting Practices</h2>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3">Security Reporting Practices</h2>
           <p className="text-gray-400 mb-4">
             Vulnerabilities must be reported responsibly. Use our{" "}
             <span className="text-cyan-400">PGP key</span> for encrypted submissions
@@ -109,8 +109,8 @@ export default function BestPracticesPage() {
         </div>
 
         {/* Workflow Diagram */}
-        <div className="max-w-5xl mx-auto px-6 py-10">
-          <h2 className="text-3xl font-bold mb-6 text-center">Responsible Workflow</h2>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center">Responsible Workflow</h2>
           <div className="relative">
             <svg viewBox="0 0 800 200" className="w-full h-48">
               <defs>
@@ -136,8 +136,8 @@ export default function BestPracticesPage() {
         </div>
 
         {/* Community Guidelines */}
-        <div className="max-w-5xl mx-auto px-6 py-10">
-          <h2 className="text-3xl font-bold mb-4">Community Interaction Guidelines</h2>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Community Interaction Guidelines</h2>
           <ul className="space-y-3">
             {communityGuidelines.map((c, idx) => (
               <li key={idx} className="flex items-start gap-3">
@@ -149,10 +149,10 @@ export default function BestPracticesPage() {
         </div>
 
         {/* Closing */}
-        <div className="text-center py-12 border-t border-white/10">
+        <div className="text-center py-12 border-t border-white/10 px-4 sm:px-6">
           <h3 className="text-2xl font-bold mb-3">Contribute Responsibly</h3>
           <p className="text-gray-400 mb-4">Together, we ensure PoPP remains secure, ethical, and effective.</p>
-          <div className="flex justify-center gap-3">
+          <div className="flex flex-col sm:flex-row justify-center gap-3">
             <Link href="/contribute">
               <button className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold">
                 Start Contributing

@@ -37,17 +37,17 @@ const metrics = [
 
 export default function ImpactPage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero */}
-        <section className="py-20 px-6 text-center">
+        <section className="py-16 sm:py-20 px-4 sm:px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4">
+            <h1 className="text-2xl sm:text-4xl md:text-6xl font-extrabold text-white mb-4">
               Real-World{" "}
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 Impact

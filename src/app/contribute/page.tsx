@@ -23,17 +23,17 @@ export default function ContributePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* HERO */}
-        <section className="py-16 px-6 text-center">
+        <section className="py-16 px-4 sm:px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold mb-4">
               Contribute
               <span className="block bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 Help build and improve
@@ -64,14 +64,14 @@ export default function ContributePage() {
         </section>
 
         {/* CONTRIBUTION PATHS */}
-        <section className="py-16 px-6">
+        <section className="py-16 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold mb-4 text-center">Ways to Contribute</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-center">Ways to Contribute</h2>
             <p className="text-center text-gray-400 max-w-2xl mx-auto mb-10">
               Choose what fits you best — every bit helps.
             </p>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {contributionPaths.map((p, i) => (
                 <motion.article
                   key={i}
@@ -102,8 +102,8 @@ export default function ContributePage() {
         </section>
 
         {/* GETTING STARTED */}
-        <section id="getting-started" className="py-16 px-6">
-          <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+        <section id="getting-started" className="py-16 px-4 sm:px-6">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">Quick Start</h2>
               <p className="text-gray-400 mb-6 text-sm">
@@ -164,8 +164,8 @@ export default function ContributePage() {
         </section>
 
         {/* GUIDELINES & BADGES */}
-        <section className="py-16 px-6">
-          <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 items-start">
+        <section className="py-16 px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <div>
               <h3 className="text-xl font-bold text-white mb-3">Contributor Covenant & Guidelines</h3>
               <p className="text-sm text-gray-400 mb-4">
@@ -200,11 +200,11 @@ export default function ContributePage() {
         </section>
 
         {/* FINAL CTA */}
-        <section className="py-12 px-6">
+        <section className="py-12 px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-center">
             <h3 className="text-2xl font-bold text-white mb-3">Ready to contribute?</h3>
             <p className="text-gray-400 mb-6">Pick an area above and start by opening an issue or joining the discussion.</p>
-            <div className="flex gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <Link href="#" className="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 font-semibold hover:shadow-lg hover:shadow-cyan-500/20 transition">
                 Go to GitHub
               </Link>

@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 
 function PipelineTeaser() {
   const stages = [
-    { label: 'Problem', color: '#ef4444', y: 50 },
-    { label: 'Proof', color: '#a855f7', y: 130 },
+    { label: 'Problem', color: '#06b6d4', y: 50 },
+    { label: 'Proof', color: '#3b82f6', y: 130 },
     { label: 'Validate', color: '#10b981', y: 210 },
     { label: 'Reward', color: '#f59e0b', y: 290 },
   ];
@@ -15,10 +15,10 @@ function PipelineTeaser() {
       <svg viewBox="0 0 300 340" className="w-full h-auto">
         <defs>
           <linearGradient id="pipeGlow" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#ef4444" stopOpacity="0.8" />
-            <stop offset="33%" stopColor="#a855f7" stopOpacity="0.8" />
-            <stop offset="66%" stopColor="#10b981" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.8" />
+            <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.9" />
+            <stop offset="33%" stopColor="#3b82f6" stopOpacity="0.9" />
+            <stop offset="66%" stopColor="#10b981" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.9" />
           </linearGradient>
           <filter id="nodeGlow">
             <feGaussianBlur stdDeviation="4" result="blur" />
@@ -121,26 +121,27 @@ function PipelineTeaser() {
 
 export default function HeroSection() {
   return (
-    <section className="relative bg-gradient-to-b from-[#030712] to-[#0a0f1e] text-white min-h-screen flex flex-col justify-center font-sans overflow-hidden">
-      {/* Subtle background glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full bg-purple-500/5 blur-[160px] pointer-events-none" />
+    <section className="relative bg-gradient-to-b from-[#0a0e1a] via-[#0d1526] to-[#0a0f1a] text-white min-h-screen flex flex-col justify-center font-sans overflow-hidden">
+      {/* Ambient glow orbs */}
+      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-cyan-500/[0.04] blur-[160px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-blue-500/[0.03] blur-[140px] pointer-events-none" />
 
       <div className="w-full max-w-7xl mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center gap-12 lg:gap-16 pt-20 lg:pt-0 relative z-10">
         {/* Left Side — text content */}
-        <div className="flex-1 max-w-lg space-y-5">
-          <div className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-sm text-gray-400 inline-block">
+        <div className="flex-1 max-w-lg space-y-6">
+          <div className="px-4 py-1.5 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-sm text-cyan-300 inline-block">
             Open Protocol &middot; Decentralized Trust
           </div>
 
           <h1 className="text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight">
             <span className="text-white">Every Problem</span>
             <br />
-            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-amber-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Becomes Proof
             </span>
           </h1>
 
-          <p className="text-base lg:text-lg text-gray-400 max-w-md leading-relaxed">
+          <p className="text-base lg:text-lg text-gray-300 max-w-md leading-relaxed">
             PoPP is the decentralized protocol that transforms real-world problems
             into cryptographically validated truths &mdash; proven, immutable, actionable.
           </p>
@@ -148,13 +149,13 @@ export default function HeroSection() {
           <div className="flex flex-wrap gap-3">
             <a
               href="/report"
-              className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-semibold shadow-lg hover:shadow-cyan-500/25 hover:scale-105 transition-all duration-200 text-sm"
+              className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg font-semibold shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 hover:scale-[1.02] transition-all duration-200 text-sm"
             >
               Submit a Problem
             </a>
             <a
               href="#pipeline"
-              className="px-6 py-3 bg-white/5 border border-white/15 hover:bg-white/10 rounded-lg font-semibold text-gray-300 transition-colors text-sm"
+              className="px-6 py-3 bg-white/[0.06] border border-white/[0.12] hover:bg-white/[0.10] rounded-lg font-semibold text-gray-200 transition-colors text-sm"
             >
               Watch the Pipeline
             </a>
@@ -163,15 +164,17 @@ export default function HeroSection() {
           {/* App Download */}
           <div className="flex items-center gap-3">
             <a
-              href="/app/popp.apk"
-              className="inline-flex items-center gap-2.5 px-4 py-2.5 bg-white/[0.05] border border-white/10 rounded-xl hover:bg-white/[0.08] transition-colors"
+              href="https://docs.google.com/forms/d/e/1FAIpQLSc1uzrlQPc3q_DignaVOK2yzKKaLgtGMQNvCx5iZmgmcx-VAeA/viewform"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 px-4 py-2.5 bg-white/[0.04] border border-white/[0.08] rounded-xl hover:bg-white/[0.07] transition-colors"
             >
-              <svg viewBox="0 0 24 24" className="w-5 h-5 text-green-400" fill="currentColor">
-                <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.01 5.732 7.708-8.034zm3.196-1.832l2.386 1.361a1 1 0 010 1.728l-2.386 1.361-2.533-2.533 2.533-2.917zM5.791 3.252l10.01 5.732-2.302 2.302-7.708-8.034z" />
+              <svg className="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
               </svg>
               <div>
-                <div className="text-[10px] text-gray-400 leading-none">Download for</div>
-                <div className="text-sm font-semibold text-white leading-tight">Android</div>
+                <div className="text-[10px] text-gray-400 leading-none">Join</div>
+                <div className="text-sm font-semibold text-white leading-tight">Early Access</div>
               </div>
             </a>
             <span className="text-xs text-gray-500">Free &middot; Open Source</span>

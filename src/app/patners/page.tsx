@@ -5,16 +5,16 @@ import Link from "next/link";
 
 export default function PartnersPage() {
   return (
-    <div className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* Hero Section */}
-        <section className="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-24 grid md:grid-cols-2 gap-12 items-center">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
               Partner with{" "}
               <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                 PoPP
@@ -24,7 +24,7 @@ export default function PartnersPage() {
               Join forces with the Proof-of-Problem Protocol and be part of a global revolution.
               Together, we solve real-world issues with blockchain-backed transparency.
             </p>
-            <div className="mt-8 flex gap-4">
+            <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <Link
                 href="/contact"
                 className="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 font-semibold hover:shadow-lg hover:shadow-cyan-500/20 transition"
@@ -55,17 +55,17 @@ export default function PartnersPage() {
         </section>
 
         {/* Why Partner With Us */}
-        <section className="max-w-6xl mx-auto px-6 lg:px-8 py-16">
+        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-3xl font-bold text-center mb-12"
+            className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12"
           >
             Why Partner With Us?
           </motion.h2>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { title: "Global Reach", desc: "Expand your impact with a worldwide community." },
               { title: "Innovation", desc: "Be part of cutting-edge blockchain solutions." },
@@ -87,7 +87,7 @@ export default function PartnersPage() {
         </section>
 
         {/* Types of Partnerships */}
-        <section className="py-16 px-6 lg:px-8">
+        <section className="py-16 px-4 sm:px-6 lg:px-8">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -97,7 +97,7 @@ export default function PartnersPage() {
           >
             Types of Partnerships
           </motion.h2>
-          <div className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
             {["Technology", "Community", "Enterprise", "Investors"].map((type, i) => (
               <motion.div
                 key={i}
@@ -114,7 +114,7 @@ export default function PartnersPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 px-6 text-center">
+        <section className="py-16 px-4 sm:px-6 text-center">
           <div className="max-w-4xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}

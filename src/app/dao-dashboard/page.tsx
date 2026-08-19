@@ -21,6 +21,7 @@ import {
   Wallet,
 } from "lucide-react";
 import Link from "next/link";
+import { useWallet } from "@/lib/wallet";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -98,20 +99,29 @@ function timeUntil(dateStr: string): string {
 // ─── Page ───────────────────────────────────────────────────────────────────
 
 export default function DAODashboardPage() {
+  const { connected, connect, getAuthHeaders } = useWallet();
   const [proposals, setProposals] = useState<Proposal[]>([]);
+  const [backendProposals, setBackendProposals] = useState<any[]>([]);
   const [stakingPool, setStakingPool] = useState<StakingPool | null>(null);
   const [supply, setSupply] = useState<Supply | null>(null);
+  const [treasury, setTreasury] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState("all");
+  const [voteTarget, setVoteTarget] = useState<string | null>(null);
+  const [voteOption, setVoteOption] = useState<string>("");
+  const [voteLoading, setVoteLoading] = useState(false);
+  const [voteMsg, setVoteMsg] = useState<{ text: string; ok: boolean } | null>(null);
 
   // ─── Fetch ──────────────────────────────────────────────────────────────
 
   const fetchData = useCallback(async () => {
     try {
-      const [proposalsRes, poolRes, supplyRes] = await Promise.allSettled([
+      const [proposalsRes, poolRes, supplyRes, treasuryRes, backendProposalsRes] = await Promise.allSettled([
         fetch(`${CHAIN_API}/cosmos/gov/v1beta1/proposals?pagination.limit=50`).then((r) => r.json()),
         fetch(`${CHAIN_API}/cosmos/staking/v1beta1/pool`).then((r) => r.json()),
         fetch(`${CHAIN_API}/cosmos/bank/v1beta1/supply`).then((r) => r.json()),
+        fetch(`${BACKEND_API}/api/governance/treasury`).then((r) => r.ok ? r.json() : null),
+        fetch(`${BACKEND_API}/api/governance/proposals`).then((r) => r.ok ? r.json() : []),
       ]);
 
       if (proposalsRes.status === "fulfilled" && proposalsRes.value?.proposals) {
@@ -124,6 +134,12 @@ export default function DAODashboardPage() {
         const stakeSupply = supplyRes.value.supply.find((s: Supply) => s.denom === "stake");
         if (stakeSupply) setSupply(stakeSupply);
       }
+      if (treasuryRes.status === "fulfilled" && treasuryRes.value) {
+        setTreasury(treasuryRes.value);
+      }
+      if (backendProposalsRes.status === "fulfilled" && Array.isArray(backendProposalsRes.value)) {
+        setBackendProposals(backendProposalsRes.value);
+      }
     } catch {
       // Silent
     }
@@ -131,6 +147,59 @@ export default function DAODashboardPage() {
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  // ─── Cast Vote ────────────────────────────────────────────────────────
+
+  const handleVote = async (proposalId: string) => {
+    if (!connected) { await connect(); return; }
+    if (!voteOption) return;
+    setVoteLoading(true);
+    setVoteMsg(null);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/governance/proposals/${proposalId}/vote`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({ vote: voteOption }),
+      });
+      if (res.ok) {
+        setVoteMsg({ text: "Vote cast successfully!", ok: true });
+        setVoteTarget(null);
+        fetchData();
+      } else {
+        const err = await res.text();
+        setVoteMsg({ text: err || "Vote failed", ok: false });
+      }
+    } catch (e: any) {
+      setVoteMsg({ text: e.message || "Vote failed", ok: false });
+    } finally {
+      setVoteLoading(false);
+    }
+  };
+
+  // ─── Create Proposal ──────────────────────────────────────────────────
+
+  const [showCreateProposal, setShowCreateProposal] = useState(false);
+  const [newProposal, setNewProposal] = useState({ title: "", description: "" });
+  const [createLoading, setCreateLoading] = useState(false);
+
+  const handleCreateProposal = async () => {
+    if (!connected) { await connect(); return; }
+    if (!newProposal.title || !newProposal.description) return;
+    setCreateLoading(true);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/governance/proposals`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({ title: newProposal.title, description: newProposal.description, proposal_type: "text" }),
+      });
+      if (res.ok) {
+        setNewProposal({ title: "", description: "" });
+        setShowCreateProposal(false);
+        fetchData();
+      }
+    } catch { /* ignore */ }
+    finally { setCreateLoading(false); }
+  };
 
   // ─── Derived ────────────────────────────────────────────────────────────
 
@@ -153,10 +222,10 @@ export default function DAODashboardPage() {
   // ─── Render ─────────────────────────────────────────────────────────────
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* ─── Hero ─────────────────────────────────────────────────────── */}
-        <section className="relative py-6 px-6 text-center overflow-hidden">
+        <section className="relative py-6 px-4 sm:px-6 text-center overflow-hidden">
           <div className="absolute -top-40 right-0 w-[400px] h-[400px] rounded-full bg-blue-600/10 blur-3xl" />
 
           <motion.div initial={{ opacity: 0, y: -15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="relative z-10">
@@ -175,8 +244,8 @@ export default function DAODashboardPage() {
         </section>
 
         {/* ─── Stats ────────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 mb-4">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-blue-500/20 to-purple-600/20 border border-white/10 rounded-lg p-2.5">
               <div className="flex items-center gap-1.5 mb-1"><Vote className="h-3.5 w-3.5 text-blue-400" /><span className="text-[11px] text-gray-400">Proposals</span></div>
               <div className="text-lg font-bold">{loading ? "—" : proposals.length}</div>
@@ -201,7 +270,7 @@ export default function DAODashboardPage() {
         </section>
 
         {/* ─── Treasury & Staking ───────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 mb-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Staking Overview */}
             <div className="bg-white/5 border border-white/10 rounded-lg p-4">
@@ -259,10 +328,10 @@ export default function DAODashboardPage() {
         </section>
 
         {/* ─── Proposals ────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 pb-6">
-          <div className="flex items-center justify-between mb-3">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-3 gap-2">
             <h2 className="text-sm font-bold flex items-center gap-1.5"><FileText size={14} className="text-blue-400" /> Proposals</h2>
-            <div className="flex gap-1">
+            <div className="flex flex-wrap gap-1">
               {["all", "PROPOSAL_STATUS_DEPOSIT_PERIOD", "PROPOSAL_STATUS_VOTING_PERIOD", "PROPOSAL_STATUS_PASSED", "PROPOSAL_STATUS_REJECTED"].map((s) => (
                 <button key={s} onClick={() => setStatusFilter(s)}
                   className={`px-2 py-0.5 rounded-full text-[10px] font-semibold transition ${statusFilter === s ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white" : "bg-white/5 text-gray-400 hover:text-white border border-white/10"}`}>
@@ -354,7 +423,8 @@ export default function DAODashboardPage() {
                         )}
                       </div>
                       {(proposal.status === "PROPOSAL_STATUS_VOTING_PERIOD") && (
-                        <button className="px-2.5 py-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-md text-[10px] font-semibold flex items-center gap-0.5">
+                        <button onClick={() => { setVoteTarget(proposal.proposal_id); setVoteOption(""); setVoteMsg(null); }}
+                          className="px-2.5 py-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-md text-[10px] font-semibold flex items-center gap-0.5">
                           Vote <ArrowUpRight size={10} />
                         </button>
                       )}
@@ -366,14 +436,113 @@ export default function DAODashboardPage() {
           )}
         </section>
 
+        {/* ─── Vote Modal ────────────────────────────────────────────────── */}
+        {voteTarget && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="bg-[#0d1117] border border-white/10 rounded-xl p-5 max-w-sm w-full">
+              <h3 className="text-base font-bold mb-3">Vote on Proposal #{voteTarget}</h3>
+              {voteMsg && (
+                <div className={`mb-3 p-2 rounded text-xs font-semibold ${voteMsg.ok ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`}>{voteMsg.text}</div>
+              )}
+              <div className="space-y-2 mb-4">
+                {VOTE_OPTIONS.map((opt) => (
+                  <button key={opt.label} onClick={() => setVoteOption(opt.label.toLowerCase().replace(/ /g, "_"))}
+                    className={`w-full text-left px-3 py-2 rounded-lg text-sm font-semibold transition ${voteOption === opt.label.toLowerCase().replace(/ /g, "_") ? `${opt.bg} ${opt.color} border border-white/20` : "bg-white/5 text-gray-400 hover:text-white border border-white/10"}`}>
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-2">
+                <button onClick={() => handleVote(voteTarget)} disabled={!voteOption || voteLoading}
+                  className="flex-1 px-3 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-sm font-semibold disabled:opacity-50">
+                  {voteLoading ? "Submitting..." : "Submit Vote"}
+                </button>
+                <button onClick={() => setVoteTarget(null)} className="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-400">Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ─── Create Proposal Modal ──────────────────────────────────────── */}
+        {showCreateProposal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="bg-[#0d1117] border border-white/10 rounded-xl p-5 max-w-md w-full">
+              <h3 className="text-base font-bold mb-3">Create Proposal</h3>
+              <input value={newProposal.title} onChange={e => setNewProposal(p => ({ ...p, title: e.target.value }))}
+                placeholder="Proposal title" className="w-full mb-2 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500" />
+              <textarea value={newProposal.description} onChange={e => setNewProposal(p => ({ ...p, description: e.target.value }))}
+                placeholder="Describe your proposal..." rows={4} className="w-full mb-3 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500 resize-none" />
+              <div className="flex gap-2">
+                <button onClick={handleCreateProposal} disabled={createLoading || !newProposal.title || !newProposal.description}
+                  className="flex-1 px-3 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-sm font-semibold disabled:opacity-50">
+                  {createLoading ? "Submitting..." : "Submit Proposal"}
+                </button>
+                <button onClick={() => setShowCreateProposal(false)} className="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-400">Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ─── Backend Proposals ───────────────────────────────────────────── */}
+        {backendProposals.length > 0 && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-4">
+            <h2 className="text-sm font-bold flex items-center gap-1.5 mb-3"><Activity size={14} className="text-cyan-400" /> Backend Governance Proposals</h2>
+            <div className="space-y-2">
+              {backendProposals.map((bp: any, i: number) => (
+                <div key={bp.id || i} className="bg-white/5 border border-white/10 rounded-lg p-3">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-[10px] font-mono text-gray-500">#{(bp.id || "").slice(0, 8)}</span>
+                    <span className={`rounded-full px-2 py-px text-[9px] font-semibold ${bp.status === "active" ? "bg-blue-500/20 text-blue-400" : bp.status === "passed" ? "bg-emerald-500/20 text-emerald-400" : "bg-gray-500/20 text-gray-400"}`}>{bp.status || "pending"}</span>
+                  </div>
+                  <h3 className="text-sm font-semibold">{bp.title || "Untitled Proposal"}</h3>
+                  <p className="text-[11px] text-gray-400 line-clamp-2 mt-0.5">{bp.description || ""}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ─── Treasury (Backend) ──────────────────────────────────────────── */}
+        {treasury && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-4">
+            <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+              <h3 className="text-sm font-bold mb-2 flex items-center gap-1.5"><Coins size={14} className="text-yellow-400" /> DAO Treasury</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {treasury.balance != null && (
+                  <div className="bg-white/[0.03] rounded-lg p-2.5">
+                    <div className="text-[10px] text-gray-500">Balance</div>
+                    <div className="text-sm font-bold">{typeof treasury.balance === "number" ? treasury.balance.toLocaleString() : treasury.balance}</div>
+                  </div>
+                )}
+                {treasury.total_rewards != null && (
+                  <div className="bg-white/[0.03] rounded-lg p-2.5">
+                    <div className="text-[10px] text-gray-500">Total Rewards</div>
+                    <div className="text-sm font-bold">{typeof treasury.total_rewards === "number" ? treasury.total_rewards.toLocaleString() : treasury.total_rewards}</div>
+                  </div>
+                )}
+                {treasury.total_slashed != null && (
+                  <div className="bg-white/[0.03] rounded-lg p-2.5">
+                    <div className="text-[10px] text-gray-500">Total Slashed</div>
+                    <div className="text-sm font-bold">{typeof treasury.total_slashed === "number" ? treasury.total_slashed.toLocaleString() : treasury.total_slashed}</div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* ─── CTA ──────────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 pb-6">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-lg p-5 text-center">
             <h2 className="text-lg font-bold mb-1">Shape the Future of PoPP</h2>
             <p className="text-gray-400 text-sm mb-4">Stake tokens, submit proposals, and vote on governance decisions.</p>
             <div className="flex flex-wrap gap-2 justify-center">
-              <Link href="/validators"><button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-sm font-semibold">Become a Validator</button></Link>
+              <button onClick={() => { if (!connected) connect(); else setShowCreateProposal(true); }}
+                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-sm font-semibold">
+                {connected ? "Create Proposal" : "Connect Wallet to Propose"}
+              </button>
+              <Link href="/validators"><button className="px-4 py-2 bg-white/5 border border-white/15 hover:bg-white/10 rounded-lg text-sm font-semibold text-gray-300 transition">Become a Validator</button></Link>
               <Link href="/explorer"><button className="px-4 py-2 bg-white/5 border border-white/15 hover:bg-white/10 rounded-lg text-sm font-semibold text-gray-300 transition">Explore Network</button></Link>
             </div>
           </motion.div>

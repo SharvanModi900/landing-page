@@ -27,19 +27,52 @@ http.createServer((req, res) => {
   let urlPath = decodeURIComponent(req.url.split('?')[0]);
   if (urlPath === '/') urlPath = '/index.html';
 
+  // Handle Next.js RSC requests (client-side navigation only)
+  // Only 'rsc: 1' header indicates a true RSC flight data request
+  // 'next-router-prefetch' is for prefetching and still needs HTML, not .txt
+  const isRSC = req.headers['rsc'] === '1';
+
+  // Block direct access to .txt RSC flight data files
+  // Redirect to the corresponding HTML page instead
+  if (urlPath.endsWith('.txt') && !isRSC) {
+    const htmlPath = urlPath.replace(/\.txt$/, '');
+    res.writeHead(302, { 'Location': htmlPath });
+    res.end();
+    return;
+  }
+
   let filePath = path.join(OUT_DIR, urlPath);
 
-  // If no extension, try appending .html (for Next.js static export routes)
+  // If no extension, handle route resolution
   if (!path.extname(filePath)) {
-    if (fs.existsSync(filePath + '.html')) {
-      filePath = filePath + '.html';
-    } else if (fs.existsSync(path.join(filePath, 'index.html'))) {
-      filePath = path.join(filePath, 'index.html');
+    if (isRSC) {
+      // RSC request: serve the .txt flight data file
+      if (fs.existsSync(filePath + '.txt')) {
+        filePath = filePath + '.txt';
+      } else if (fs.existsSync(path.join(filePath, 'index.txt'))) {
+        filePath = path.join(filePath, 'index.txt');
+      } else if (fs.existsSync(filePath + '.html')) {
+        filePath = filePath + '.html';
+      } else if (fs.existsSync(path.join(filePath, 'index.html'))) {
+        filePath = path.join(filePath, 'index.html');
+      }
+    } else {
+      // Normal request: serve HTML
+      if (fs.existsSync(filePath + '.html')) {
+        filePath = filePath + '.html';
+      } else if (fs.existsSync(path.join(filePath, 'index.html'))) {
+        filePath = path.join(filePath, 'index.html');
+      }
     }
   }
 
   const ext = path.extname(filePath).toLowerCase();
-  const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+  let contentType = MIME_TYPES[ext] || 'application/octet-stream';
+
+  // RSC flight data needs special content type
+  if (ext === '.txt' && isRSC) {
+    contentType = 'text/x-component';
+  }
 
   fs.readFile(filePath, (err, data) => {
     if (err) {
@@ -58,7 +91,7 @@ http.createServer((req, res) => {
     }
     res.writeHead(200, {
       'Content-Type': contentType,
-      'Cache-Control': ext === '.html' ? 'no-cache' : 'public, max-age=31536000, immutable',
+      'Cache-Control': (ext === '.html' || ext === '.txt') ? 'no-cache' : 'public, max-age=31536000, immutable',
     });
     res.end(data);
   });

@@ -18,8 +18,14 @@ import {
   Eye,
   ArrowUpRight,
   Layers,
+  ThumbsUp,
+  ThumbsDown,
+  FileX,
+  Copy,
+  LogIn,
 } from "lucide-react";
 import Link from "next/link";
+import { useWallet } from "@/lib/wallet";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -59,6 +65,24 @@ interface BackendValidation {
   created_at: string;
 }
 
+interface Assignment {
+  id: string;
+  submission_id: string;
+  title?: string;
+  description?: string;
+  category?: string;
+  assigned_at: string;
+  status: string;
+}
+
+interface ValidatorStatus {
+  id: string;
+  level: number;
+  is_active: boolean;
+  total_validations: number;
+  reputation_score: number;
+}
+
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
 function truncateAddr(addr: string): string {
@@ -79,10 +103,15 @@ function timeAgo(ts: number): string {
 // ─── Page ───────────────────────────────────────────────────────────────────
 
 export default function ValidatorPanelPage() {
+  const { connected, address, connect, getAuthHeaders, user } = useWallet();
   const [validators, setValidators] = useState<ChainValidator[]>([]);
   const [validations, setValidations] = useState<BackendValidation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"overview" | "leaderboard" | "activity">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "leaderboard" | "activity" | "mywork">("overview");
+  const [myStatus, setMyStatus] = useState<ValidatorStatus | null>(null);
+  const [myAssignments, setMyAssignments] = useState<Assignment[]>([]);
+  const [voteLoading, setVoteLoading] = useState<string | null>(null);
+  const [voteMsg, setVoteMsg] = useState<{ text: string; ok: boolean } | null>(null);
 
   // ─── Fetch ──────────────────────────────────────────────────────────────
 
@@ -108,6 +137,71 @@ export default function ValidatorPanelPage() {
 
   useEffect(() => { fetchData(); }, [fetchData]);
 
+  // ─── Fetch My Validator Data ──────────────────────────────────────────
+
+  const fetchMyData = useCallback(async () => {
+    if (!connected) return;
+    const headers = getAuthHeaders();
+    try {
+      const [statusRes, assignRes] = await Promise.allSettled([
+        fetch(`${BACKEND_API}/api/validators/status`, { headers }).then(r => r.ok ? r.json() : null),
+        fetch(`${BACKEND_API}/api/validators/my-assignment`, { headers }).then(r => r.ok ? r.json() : []),
+      ]);
+      if (statusRes.status === "fulfilled" && statusRes.value) setMyStatus(statusRes.value);
+      if (assignRes.status === "fulfilled" && Array.isArray(assignRes.value)) setMyAssignments(assignRes.value);
+    } catch { /* non-critical */ }
+  }, [connected, getAuthHeaders]);
+
+  useEffect(() => { fetchMyData(); }, [fetchMyData]);
+
+  // ─── Submit Vote ──────────────────────────────────────────────────────
+
+  const handleVote = async (submissionId: string, voteType: string) => {
+    setVoteLoading(`${submissionId}-${voteType}`);
+    setVoteMsg(null);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/validators/vote`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({ submission_id: submissionId, vote_type: voteType, confidence: 80 }),
+      });
+      if (res.ok) {
+        setVoteMsg({ text: "Vote submitted successfully!", ok: true });
+        fetchMyData();
+      } else {
+        const err = await res.text();
+        setVoteMsg({ text: err || "Vote failed", ok: false });
+      }
+    } catch (e: any) {
+      setVoteMsg({ text: e.message || "Vote failed", ok: false });
+    } finally {
+      setVoteLoading(null);
+    }
+  };
+
+  // ─── Self-Assign ──────────────────────────────────────────────────────
+
+  const handleSelfAssign = async (submissionId: string) => {
+    setVoteLoading(`assign-${submissionId}`);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/validators/self-assign/${submissionId}`, {
+        method: "POST",
+        headers: getAuthHeaders(),
+      });
+      if (res.ok) {
+        setVoteMsg({ text: "Submission assigned to you!", ok: true });
+        fetchMyData();
+      } else {
+        const err = await res.text();
+        setVoteMsg({ text: err || "Assignment failed", ok: false });
+      }
+    } catch (e: any) {
+      setVoteMsg({ text: e.message || "Assignment failed", ok: false });
+    } finally {
+      setVoteLoading(null);
+    }
+  };
+
   // ─── Stats ──────────────────────────────────────────────────────────────
 
   const activeValidators = validators.filter((v) => v.active).length;
@@ -127,10 +221,10 @@ export default function ValidatorPanelPage() {
   // ─── Render ─────────────────────────────────────────────────────────────
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="pt-16">
         {/* ─── Hero ─────────────────────────────────────────────────────── */}
-        <section className="relative py-6 px-6 text-center overflow-hidden">
+        <section className="relative py-6 px-4 sm:px-6 text-center overflow-hidden">
           <div className="absolute -top-40 left-0 w-[400px] h-[400px] rounded-full bg-cyan-600/10 blur-3xl" />
 
           <motion.div initial={{ opacity: 0, y: -15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="relative z-10">
@@ -149,8 +243,8 @@ export default function ValidatorPanelPage() {
         </section>
 
         {/* ─── Stats ────────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 mb-4">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-white/10 rounded-lg p-2.5">
               <div className="flex items-center gap-1.5 mb-1"><Users className="h-3.5 w-3.5 text-cyan-400" /><span className="text-[11px] text-gray-400">Active</span></div>
               <div className="text-lg font-bold">{loading ? "—" : activeValidators}</div>
@@ -175,9 +269,9 @@ export default function ValidatorPanelPage() {
         </section>
 
         {/* ─── Tabs ─────────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 mb-4">
-          <div className="flex gap-1.5">
-            {(["overview", "leaderboard", "activity"] as const).map((tab) => (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
+          <div className="flex flex-wrap gap-1.5">
+            {(["overview", "leaderboard", "activity", "mywork"] as const).map((tab) => (
               <button key={tab} onClick={() => setActiveTab(tab)}
                 className={`px-3 py-1.5 rounded-md text-xs font-semibold transition capitalize ${
                   activeTab === tab ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white" : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
@@ -190,7 +284,7 @@ export default function ValidatorPanelPage() {
 
         {/* ─── Overview Tab ─────────────────────────────────────────────── */}
         {activeTab === "overview" && (
-          <section className="max-w-7xl mx-auto px-6 pb-6">
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Level Distribution */}
               <div className="bg-white/5 border border-white/10 rounded-lg p-4">
@@ -301,8 +395,8 @@ export default function ValidatorPanelPage() {
                 </Link>
               </div>
             ) : (
-              <div className="bg-white/5 border border-white/10 rounded-lg overflow-hidden">
-                <div className="grid grid-cols-2 md:grid-cols-7 gap-3 px-3 py-2 bg-white/[0.03] border-b border-white/10 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+              <div className="bg-white/5 border border-white/10 rounded-lg overflow-x-auto">
+                <div className="grid grid-cols-2 md:grid-cols-7 gap-3 px-3 py-2 bg-white/[0.03] border-b border-white/10 text-[10px] font-semibold text-gray-400 uppercase tracking-wider min-w-[600px]">
                   <div>#</div>
                   <div>Address</div>
                   <div>Level</div>
@@ -315,7 +409,7 @@ export default function ValidatorPanelPage() {
                   const lvl = VALIDATOR_LEVELS[v.level] || VALIDATOR_LEVELS[0];
                   return (
                     <motion.div key={v.address} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }}
-                      className="grid grid-cols-2 md:grid-cols-7 gap-3 px-3 py-2 border-b border-white/10 hover:bg-white/[0.03] transition">
+                      className="grid grid-cols-2 md:grid-cols-7 gap-3 px-3 py-2 border-b border-white/10 hover:bg-white/[0.03] transition min-w-[600px]">
                       <div className="text-[11px] font-bold text-gray-500">#{i + 1}</div>
                       <div className="font-mono text-[11px] text-cyan-400 truncate" title={v.address}>{truncateAddr(v.address)}</div>
                       <div>
@@ -369,8 +463,108 @@ export default function ValidatorPanelPage() {
           </section>
         )}
 
+        {/* ─── My Work Tab ──────────────────────────────────────────────── */}
+        {activeTab === "mywork" && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+            {!connected ? (
+              <div className="text-center py-12">
+                <LogIn className="w-10 h-10 text-gray-700 mx-auto mb-3" />
+                <h3 className="text-base font-bold mb-1">Connect Your Wallet</h3>
+                <p className="text-sm text-gray-400 mb-4">Connect your wallet to access validator tools.</p>
+                <button onClick={() => connect()} className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-sm font-semibold">Connect Wallet</button>
+              </div>
+            ) : (
+              <>
+                {/* Validator Status Card */}
+                <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-4">
+                  <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Shield size={14} className="text-cyan-400" /> My Validator Status</h3>
+                  {myStatus ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      <div className="bg-white/[0.03] rounded-lg p-2.5">
+                        <div className="text-[10px] text-gray-500">Level</div>
+                        <div className="text-base font-bold">{VALIDATOR_LEVELS[myStatus.level]?.label || "Unknown"}</div>
+                      </div>
+                      <div className="bg-white/[0.03] rounded-lg p-2.5">
+                        <div className="text-[10px] text-gray-500">Status</div>
+                        <div className={`text-base font-bold ${myStatus.is_active ? "text-emerald-400" : "text-gray-500"}`}>{myStatus.is_active ? "Active" : "Inactive"}</div>
+                      </div>
+                      <div className="bg-white/[0.03] rounded-lg p-2.5">
+                        <div className="text-[10px] text-gray-500">Validations</div>
+                        <div className="text-base font-bold">{myStatus.total_validations}</div>
+                      </div>
+                      <div className="bg-white/[0.03] rounded-lg p-2.5">
+                        <div className="text-[10px] text-gray-500">Reputation</div>
+                        <div className="text-base font-bold text-yellow-400">{myStatus.reputation_score}</div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center py-4">
+                      <p className="text-sm text-gray-400 mb-3">You are not registered as a validator yet.</p>
+                      <Link href="/validators/exam"><button className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-sm font-semibold">Take Validator Exam</button></Link>
+                    </div>
+                  )}
+                </div>
+
+                {/* Vote Message */}
+                {voteMsg && (
+                  <div className={`mb-4 p-3 rounded-lg text-sm font-semibold ${voteMsg.ok ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}>
+                    {voteMsg.text}
+                  </div>
+                )}
+
+                {/* My Assignments */}
+                <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+                  <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Target size={14} className="text-yellow-400" /> My Assignments ({myAssignments.length})</h3>
+                  {myAssignments.length === 0 ? (
+                    <div className="text-center py-6">
+                      <Eye className="w-8 h-8 text-gray-700 mx-auto mb-2" />
+                      <p className="text-xs text-gray-500">No pending assignments. Browse the explorer to self-assign submissions.</p>
+                      <Link href="/explorer"><button className="mt-3 px-3 py-1.5 bg-white/5 border border-white/15 rounded-lg text-xs font-semibold">Browse Explorer</button></Link>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {myAssignments.map((a) => (
+                        <div key={a.id} className="bg-white/[0.03] border border-white/10 rounded-lg p-3">
+                          <div className="flex items-start justify-between gap-2 mb-2">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-sm font-bold truncate">{a.title || `Submission #${a.submission_id.slice(0, 8)}`}</h4>
+                              <p className="text-[11px] text-gray-400 line-clamp-2">{a.description || "No description"}</p>
+                              {a.category && <span className="inline-block mt-1 text-[10px] bg-white/10 rounded px-1.5 py-0.5 text-gray-300">{a.category}</span>}
+                            </div>
+                            <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${a.status === "pending" ? "bg-yellow-500/20 text-yellow-400" : "bg-gray-500/20 text-gray-400"}`}>{a.status}</span>
+                          </div>
+                          {a.status === "pending" && (
+                            <div className="flex flex-wrap gap-1.5 mt-2">
+                              <button onClick={() => handleVote(a.submission_id, "valid")} disabled={voteLoading !== null}
+                                className="flex items-center gap-1 px-2.5 py-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 rounded text-[11px] font-semibold transition disabled:opacity-50">
+                                <ThumbsUp size={10} /> Valid {voteLoading === `${a.submission_id}-valid` && "..."}
+                              </button>
+                              <button onClick={() => handleVote(a.submission_id, "invalid")} disabled={voteLoading !== null}
+                                className="flex items-center gap-1 px-2.5 py-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded text-[11px] font-semibold transition disabled:opacity-50">
+                                <ThumbsDown size={10} /> Invalid {voteLoading === `${a.submission_id}-invalid` && "..."}
+                              </button>
+                              <button onClick={() => handleVote(a.submission_id, "spam")} disabled={voteLoading !== null}
+                                className="flex items-center gap-1 px-2.5 py-1 bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 rounded text-[11px] font-semibold transition disabled:opacity-50">
+                                <FileX size={10} /> Spam {voteLoading === `${a.submission_id}-spam` && "..."}
+                              </button>
+                              <button onClick={() => handleVote(a.submission_id, "duplicate")} disabled={voteLoading !== null}
+                                className="flex items-center gap-1 px-2.5 py-1 bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded text-[11px] font-semibold transition disabled:opacity-50">
+                                <Copy size={10} /> Duplicate {voteLoading === `${a.submission_id}-duplicate` && "..."}
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </section>
+        )}
+
         {/* ─── CTA ──────────────────────────────────────────────────────── */}
-        <section className="max-w-7xl mx-auto px-6 pb-6">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
           <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 rounded-lg p-5 text-center">
             <h2 className="text-lg font-bold mb-1">Become a Validator</h2>
