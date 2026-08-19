@@ -149,7 +149,7 @@ export default function ContributePage() {
                 Chat with contributors, find mentors, and coordinate efforts.
               </p>
               <div className="flex flex-col gap-3">
-                <Link className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 hover:bg-white/[0.07] transition" href="#" target="_blank" rel="noreferrer">
+                <Link className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 hover:bg-white/[0.07] transition" href="https://discord.gg/u6GqfJBsm" target="_blank" rel="noreferrer">
                   Join Discord
                 </Link>
                 <Link className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 hover:bg-white/[0.07] transition" href="https://matrix.org" target="_blank" rel="noreferrer">

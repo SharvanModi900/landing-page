@@ -71,7 +71,13 @@ function timeAgo(dateStr: string): string {
 
 export default function ProoferPage() {
   const { connected, connect, getAuthHeaders } = useWallet();
-  const [activeTab, setActiveTab] = useState<"overview" | "verify" | "stats">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "verify" | "stats" | "challenge">("overview");
+  const [challengePopId, setChallengePopId] = useState("");
+  const [challengeReason, setChallengeReason] = useState("");
+  const [challengeLoading, setChallengeLoading] = useState(false);
+  const [challengeMsg, setChallengeMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [relatedPopId, setRelatedPopId] = useState("");
+  const [relatedProofs, setRelatedProofs] = useState<any[]>([]);
   const [myProofer, setMyProofer] = useState<ProoferData | null>(null);
   const [stats, setStats] = useState<ProoferStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -223,6 +229,7 @@ export default function ProoferPage() {
             { key: "overview", label: "Overview", icon: Shield },
             { key: "verify", label: "Verify Proof", icon: Search },
             { key: "stats", label: "Network Stats", icon: TrendingUp },
+            { key: "challenge", label: "Challenge", icon: AlertTriangle },
           ].map(tab => (
             <button key={tab.key} onClick={() => setActiveTab(tab.key as typeof activeTab)}
               className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md text-xs font-semibold transition ${activeTab === tab.key ? "bg-white/10 text-white" : "text-gray-400 hover:text-white"}`}>
@@ -407,7 +414,67 @@ export default function ProoferPage() {
           </div>
         )}
 
-        {/* STATS TAB */}
+        {/* Challenge Tab */}
+        {activeTab === "challenge" && (
+          <div className="space-y-4">
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+              <h3 className="text-sm font-bold mb-3">Challenge Proof</h3>
+              {challengeMsg && <div className={`mb-3 p-2 rounded-lg text-xs font-semibold ${challengeMsg.ok ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`}>{challengeMsg.text}</div>}
+              {!connected ? (
+                <p className="text-xs text-gray-400 text-center py-4">Connect wallet to challenge proofs</p>
+              ) : (
+                <div className="space-y-2">
+                  <input value={challengePopId} onChange={e => setChallengePopId(e.target.value)} placeholder="PoP-ID to challenge" className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                  <textarea value={challengeReason} onChange={e => setChallengeReason(e.target.value)} placeholder="Reason for challenge" rows={2} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                  <button onClick={async () => {
+                    if (!challengePopId || !challengeReason) return;
+                    setChallengeLoading(true); setChallengeMsg(null);
+                    try {
+                      const res = await fetch(`${BACKEND_API}/api/submissions/${challengePopId}/proof/challenge`, {
+                        method: "POST", headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+                        body: JSON.stringify({ pop_id: challengePopId, reason: challengeReason }),
+                      });
+                      if (res.ok) setChallengeMsg({ text: "Challenge submitted!", ok: true });
+                      else { const err = await res.text(); setChallengeMsg({ text: err || "Failed", ok: false }); }
+                    } catch (e: any) { setChallengeMsg({ text: e.message || "Failed", ok: false }); }
+                    finally { setChallengeLoading(false); }
+                  }} disabled={challengeLoading || !challengePopId || !challengeReason} className="px-4 py-2 bg-gradient-to-r from-red-500 to-orange-600 rounded-lg text-xs font-semibold disabled:opacity-50">
+                    {challengeLoading ? "Challenging..." : "Challenge Proof"}
+                  </button>
+                </div>
+              )}
+            </div>
+        
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+              <h3 className="text-sm font-bold mb-3">Related Proofs</h3>
+              <div className="flex gap-2 mb-3">
+                <input value={relatedPopId} onChange={e => setRelatedPopId(e.target.value)} placeholder="Enter PoP-ID to find related proofs" className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                <button onClick={async () => {
+                  if (!relatedPopId) return;
+                  try {
+                    const res = await fetch(`${BACKEND_API}/api/submissions/${relatedPopId}/proof/related`);
+                    if (res.ok) {
+                      const data = await res.json();
+                      setRelatedProofs(Array.isArray(data) ? data : data.proofs || []);
+                    }
+                  } catch { /* ignore */ }
+                }} className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-xs font-semibold">Search</button>
+              </div>
+              {relatedProofs.length > 0 && (
+                <div className="space-y-2">
+                  {relatedProofs.map((p: any, i: number) => (
+                    <div key={i} className="bg-white/[0.03] rounded-lg p-2.5">
+                      <div className="text-xs font-mono text-cyan-400 truncate">{p.pop_id || p.proof_hash || "Proof"}</div>
+                      <div className="text-[10px] text-gray-500">Level: {p.proof_level || "—"} | {p.created_at ? new Date(p.created_at).toLocaleDateString() : ""}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        
+        {/* Stats Tab */}
         {activeTab === "stats" && (
           <div className="space-y-4">
             <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}

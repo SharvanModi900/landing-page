@@ -38,20 +38,24 @@ export default function WalletPage() {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [actionMsg, setActionMsg] = useState<{ text: string; ok: boolean } | null>(null);
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState<"overview" | "stake" | "transactions" | "earnings">("overview");
+  const [burnAmount, setBurnAmount] = useState("");
+  const [supplyInfo, setSupplyInfo] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"overview" | "stake" | "transactions" | "earnings" | "burn" | "supply">("overview");
 
   const fetchData = useCallback(async () => {
     if (!connected) return;
     setLoading(true);
     try {
-      const [balRes, txRes, earnRes] = await Promise.allSettled([
+      const [balRes, txRes, earnRes, supplyRes] = await Promise.allSettled([
         fetch(`${BACKEND_API}/api/wallet/balance`, { headers: getAuthHeaders() }).then(r => r.ok ? r.json() : null),
         fetch(`${BACKEND_API}/api/wallet/transactions`, { headers: getAuthHeaders() }).then(r => r.ok ? r.json() : []),
         fetch(`${BACKEND_API}/api/wallet/earnings`, { headers: getAuthHeaders() }).then(r => r.ok ? r.json() : []),
+        fetch(`${BACKEND_API}/api/wallet/supply`).then(r => r.ok ? r.json() : null),
       ]);
       if (balRes.status === "fulfilled" && balRes.value) setBalance(balRes.value);
       if (txRes.status === "fulfilled" && Array.isArray(txRes.value)) setTransactions(txRes.value.slice(0, 30));
       if (earnRes.status === "fulfilled" && Array.isArray(earnRes.value)) setEarnings(earnRes.value.slice(0, 30));
+      if (supplyRes.status === "fulfilled" && supplyRes.value) setSupplyInfo(supplyRes.value);
     } catch { /* ignore */ }
     setLoading(false);
   }, [connected, getAuthHeaders]);
@@ -82,6 +86,20 @@ export default function WalletPage() {
       });
       if (res.ok) { setActionMsg({ text: "Withdrawn successfully!", ok: true }); setWithdrawAmount(""); fetchData(); }
       else { const err = await res.text(); setActionMsg({ text: err || "Withdraw failed", ok: false }); }
+    } catch (e: any) { setActionMsg({ text: e.message || "Failed", ok: false }); }
+    finally { setActionLoading(null); }
+  };
+
+  const handleBurn = async () => {
+    if (!burnAmount || parseFloat(burnAmount) <= 0) return;
+    setActionLoading("burn"); setActionMsg(null);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/wallet/burn`, {
+        method: "POST", headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({ amount: parseFloat(burnAmount) }),
+      });
+      if (res.ok) { setActionMsg({ text: "Tokens burned successfully!", ok: true }); setBurnAmount(""); fetchData(); }
+      else { const err = await res.text(); setActionMsg({ text: err || "Burn failed", ok: false }); }
     } catch (e: any) { setActionMsg({ text: e.message || "Failed", ok: false }); }
     finally { setActionLoading(null); }
   };
@@ -138,7 +156,7 @@ export default function WalletPage() {
 
             {/* Tabs */}
             <div className="flex flex-wrap gap-1.5 mb-4">
-              {(["overview", "stake", "transactions", "earnings"] as const).map(tab => (
+              {(["overview", "stake", "transactions", "earnings", "burn", "supply"] as const).map(tab => (
                 <button key={tab} onClick={() => setActiveTab(tab)}
                   className={`px-3 py-1.5 rounded-md text-xs font-semibold transition capitalize ${activeTab === tab ? "bg-gradient-to-r from-emerald-500 to-cyan-600 text-white" : "bg-white/5 text-gray-400 hover:text-white border border-white/10"}`}>
                   {tab}
@@ -223,6 +241,57 @@ export default function WalletPage() {
                       </div>
                     ))}
                   </div>
+                )}
+              </div>
+            )}
+
+            {/* Burn Tab */}
+            {activeTab === "burn" && (
+              <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+                <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Flame size={14} className="text-orange-400" /> Burn Tokens</h3>
+                <p className="text-xs text-gray-400 mb-3">Permanently destroy tokens to reduce circulating supply. This action is irreversible.</p>
+                <input type="number" value={burnAmount} onChange={e => setBurnAmount(e.target.value)} placeholder="Amount to burn"
+                  className="w-full mb-3 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder:text-gray-500" />
+                <button onClick={handleBurn} disabled={actionLoading !== null || !burnAmount}
+                  className="w-full px-3 py-2 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg text-xs font-semibold disabled:opacity-50">
+                  {actionLoading === "burn" ? "Burning..." : "Burn Tokens"}
+                </button>
+              </div>
+            )}
+
+            {/* Supply Tab */}
+            {activeTab === "supply" && (
+              <div className="bg-white/5 border border-white/10 rounded-lg p-4">
+                <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Coins size={14} className="text-cyan-400" /> Token Supply Info</h3>
+                {supplyInfo ? (
+                  <div className="grid grid-cols-2 gap-3">
+                    {supplyInfo.total_supply != null && (
+                      <div className="bg-white/5 rounded-lg p-2.5">
+                        <div className="text-[10px] text-gray-400">Total Supply</div>
+                        <div className="text-base font-bold">{Number(supplyInfo.total_supply).toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+                      </div>
+                    )}
+                    {supplyInfo.circulating_supply != null && (
+                      <div className="bg-white/5 rounded-lg p-2.5">
+                        <div className="text-[10px] text-gray-400">Circulating</div>
+                        <div className="text-base font-bold">{Number(supplyInfo.circulating_supply).toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+                      </div>
+                    )}
+                    {supplyInfo.total_burned != null && (
+                      <div className="bg-white/5 rounded-lg p-2.5">
+                        <div className="text-[10px] text-gray-400">Total Burned</div>
+                        <div className="text-base font-bold text-orange-400">{Number(supplyInfo.total_burned).toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+                      </div>
+                    )}
+                    {supplyInfo.total_staked != null && (
+                      <div className="bg-white/5 rounded-lg p-2.5">
+                        <div className="text-[10px] text-gray-400">Total Staked</div>
+                        <div className="text-base font-bold text-purple-400">{Number(supplyInfo.total_staked).toLocaleString(undefined, { maximumFractionDigits: 0 })}</div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-500 text-center py-6">Supply info not available</p>
                 )}
               </div>
             )}

@@ -107,27 +107,40 @@ export default function ValidatorPanelPage() {
   const [validators, setValidators] = useState<ChainValidator[]>([]);
   const [validations, setValidations] = useState<BackendValidation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"overview" | "leaderboard" | "activity" | "mywork">("overview");
   const [myStatus, setMyStatus] = useState<ValidatorStatus | null>(null);
   const [myAssignments, setMyAssignments] = useState<Assignment[]>([]);
   const [voteLoading, setVoteLoading] = useState<string | null>(null);
   const [voteMsg, setVoteMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [valDashboard, setValDashboard] = useState<any>(null);
+  const [valHistory, setValHistory] = useState<any[]>([]);
+  const [valLevelInfo, setValLevelInfo] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"overview" | "leaderboard" | "activity" | "mywork" | "dashboard" | "history">("overview");
+
+  // Additional validator actions state
+  const [validatorMe, setValidatorMe] = useState<any>(null);
+  const [applyLoading, setApplyLoading] = useState(false);
+  const [applyMsg, setApplyMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [registerLoading, setRegisterLoading] = useState(false);
+  const [registerMsg, setRegisterMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [assignId, setAssignId] = useState("");
+  const [assignLoading, setAssignLoading] = useState(false);
+  const [assignMsg, setAssignMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [assignmentsData, setAssignmentsData] = useState<any>(null);
+  const [reassignLoading, setReassignLoading] = useState(false);
+  const [sensitivityId, setSensitivityId] = useState("");
+  const [sensitivityValue, setSensitivityValue] = useState("");
+  const [sensitivityLoading, setSensitivityLoading] = useState(false);
 
   // ─── Fetch ──────────────────────────────────────────────────────────────
 
   const fetchData = useCallback(async () => {
     try {
-      const [validatorsRes, validationsRes] = await Promise.allSettled([
+      const [validatorsRes] = await Promise.allSettled([
         fetch(`${CHAIN_API}/popp/validation/validators?pagination.limit=50`).then((r) => r.json()),
-        fetch(`${BACKEND_API}/api/validations`).then((r) => r.ok ? r.json() : []),
       ]);
 
       if (validatorsRes.status === "fulfilled" && validatorsRes.value?.validators) {
         setValidators(validatorsRes.value.validators);
-      }
-
-      if (validationsRes.status === "fulfilled" && Array.isArray(validationsRes.value)) {
-        setValidations(validationsRes.value.slice(0, 20));
       }
     } catch {
       // Silent fail
@@ -143,12 +156,20 @@ export default function ValidatorPanelPage() {
     if (!connected) return;
     const headers = getAuthHeaders();
     try {
-      const [statusRes, assignRes] = await Promise.allSettled([
+      const [statusRes, assignRes, dashRes, histRes, levelRes, meRes] = await Promise.allSettled([
         fetch(`${BACKEND_API}/api/validators/status`, { headers }).then(r => r.ok ? r.json() : null),
         fetch(`${BACKEND_API}/api/validators/my-assignment`, { headers }).then(r => r.ok ? r.json() : []),
+        fetch(`${BACKEND_API}/api/validators/dashboard`, { headers }).then(r => r.ok ? r.json() : null),
+        fetch(`${BACKEND_API}/api/validators/history`, { headers }).then(r => r.ok ? r.json() : []),
+        fetch(`${BACKEND_API}/api/validators/level-info`, { headers }).then(r => r.ok ? r.json() : null),
+        fetch(`${BACKEND_API}/api/validators/me`, { headers }).then(r => r.ok ? r.json() : null),
       ]);
       if (statusRes.status === "fulfilled" && statusRes.value) setMyStatus(statusRes.value);
       if (assignRes.status === "fulfilled" && Array.isArray(assignRes.value)) setMyAssignments(assignRes.value);
+      if (dashRes.status === "fulfilled" && dashRes.value) setValDashboard(dashRes.value);
+      if (histRes.status === "fulfilled" && Array.isArray(histRes.value)) setValHistory(histRes.value);
+      if (levelRes.status === "fulfilled" && levelRes.value) setValLevelInfo(levelRes.value);
+      if (meRes.status === "fulfilled" && meRes.value) setValidatorMe(meRes.value);
     } catch { /* non-critical */ }
   }, [connected, getAuthHeaders]);
 
@@ -200,6 +221,80 @@ export default function ValidatorPanelPage() {
     } finally {
       setVoteLoading(null);
     }
+  };
+
+  const handleApply = async () => {
+    setApplyLoading(true); setApplyMsg(null);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/validators/apply`, {
+        method: "POST", headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({}),
+      });
+      if (res.ok) setApplyMsg({ text: "Application submitted!", ok: true });
+      else { const err = await res.text(); setApplyMsg({ text: err || "Failed", ok: false }); }
+    } catch (e: any) { setApplyMsg({ text: e.message || "Failed", ok: false }); }
+    finally { setApplyLoading(false); }
+  };
+
+  const handleRegister = async () => {
+    setRegisterLoading(true); setRegisterMsg(null);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/validators/register`, {
+        method: "POST", headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({}),
+      });
+      if (res.ok) { setRegisterMsg({ text: "Registered as validator!", ok: true }); fetchMyData(); }
+      else { const err = await res.text(); setRegisterMsg({ text: err || "Failed", ok: false }); }
+    } catch (e: any) { setRegisterMsg({ text: e.message || "Failed", ok: false }); }
+    finally { setRegisterLoading(false); }
+  };
+
+  const handleAssign = async () => {
+    if (!assignId) return;
+    setAssignLoading(true); setAssignMsg(null);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/validators/assign/${assignId}`, {
+        method: "POST", headers: getAuthHeaders(),
+      });
+      if (res.ok) { setAssignMsg({ text: "Assigned!", ok: true }); setAssignId(""); fetchMyData(); }
+      else { const err = await res.text(); setAssignMsg({ text: err || "Failed", ok: false }); }
+    } catch (e: any) { setAssignMsg({ text: e.message || "Failed", ok: false }); }
+    finally { setAssignLoading(false); }
+  };
+
+  const handleFetchAssignments = async () => {
+    if (!assignId) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/validators/assignments/${assignId}`, { headers: getAuthHeaders() });
+      if (res.ok) setAssignmentsData(await res.json());
+    } catch { /* ignore */ }
+  };
+
+  const handleReassign = async () => {
+    if (!assignId) return;
+    setReassignLoading(true);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/validators/reassign/${assignId}`, {
+        method: "POST", headers: getAuthHeaders(),
+      });
+      if (res.ok) { setAssignMsg({ text: "Reassigned!", ok: true }); fetchMyData(); }
+      else { const err = await res.text(); setAssignMsg({ text: err || "Failed", ok: false }); }
+    } catch (e: any) { setAssignMsg({ text: e.message || "Failed", ok: false }); }
+    finally { setReassignLoading(false); }
+  };
+
+  const handleSensitivity = async () => {
+    if (!sensitivityId || !sensitivityValue) return;
+    setSensitivityLoading(true);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/validators/set-sensitivity/${sensitivityId}`, {
+        method: "POST", headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({ sensitivity: parseFloat(sensitivityValue) }),
+      });
+      if (res.ok) { setAssignMsg({ text: "Sensitivity updated!", ok: true }); setSensitivityId(""); setSensitivityValue(""); }
+      else { const err = await res.text(); setAssignMsg({ text: err || "Failed", ok: false }); }
+    } catch (e: any) { setAssignMsg({ text: e.message || "Failed", ok: false }); }
+    finally { setSensitivityLoading(false); }
   };
 
   // ─── Stats ──────────────────────────────────────────────────────────────
@@ -271,7 +366,7 @@ export default function ValidatorPanelPage() {
         {/* ─── Tabs ─────────────────────────────────────────────────────── */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
           <div className="flex flex-wrap gap-1.5">
-            {(["overview", "leaderboard", "activity", "mywork"] as const).map((tab) => (
+            {(["overview", "leaderboard", "activity", "mywork", "dashboard", "history"] as const).map((tab) => (
               <button key={tab} onClick={() => setActiveTab(tab)}
                 className={`px-3 py-1.5 rounded-md text-xs font-semibold transition capitalize ${
                   activeTab === tab ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white" : "bg-white/5 text-gray-400 hover:text-white border border-white/10"
@@ -558,7 +653,143 @@ export default function ValidatorPanelPage() {
                     </div>
                   )}
                 </div>
+
+                {/* Validator Actions */}
+                <div className="bg-white/5 border border-white/10 rounded-lg p-4 mt-4">
+                  <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Zap size={14} className="text-cyan-400" /> Validator Actions</h3>
+                  {assignMsg && <div className={`mb-3 p-2 rounded-lg text-xs font-semibold ${assignMsg.ok ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`}>{assignMsg.text}</div>}
+
+                  {/* Apply / Register */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    <button onClick={handleApply} disabled={applyLoading} className="px-3 py-1.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-xs font-semibold disabled:opacity-50">{applyLoading ? "Applying..." : "Apply"}</button>
+                    <button onClick={handleRegister} disabled={registerLoading} className="px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-cyan-600 rounded-lg text-xs font-semibold disabled:opacity-50">{registerLoading ? "Registering..." : "Register"}</button>
+                  </div>
+                  {applyMsg && <div className={`mb-2 p-1.5 rounded text-[10px] font-semibold ${applyMsg.ok ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`}>{applyMsg.text}</div>}
+                  {registerMsg && <div className={`mb-2 p-1.5 rounded text-[10px] font-semibold ${registerMsg.ok ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`}>{registerMsg.text}</div>}
+
+                  {/* Assign / Reassign / View Assignments */}
+                  <div className="space-y-2 mb-4">
+                    <div className="text-[10px] text-gray-400 font-semibold uppercase">Assign / Reassign</div>
+                    <div className="flex gap-2">
+                      <input value={assignId} onChange={e => setAssignId(e.target.value)} placeholder="Submission ID" className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                      <button onClick={handleAssign} disabled={assignLoading || !assignId} className="px-3 py-2 bg-cyan-500/20 text-cyan-400 rounded-lg text-xs font-semibold disabled:opacity-50">{assignLoading ? "..." : "Assign"}</button>
+                      <button onClick={handleReassign} disabled={reassignLoading || !assignId} className="px-3 py-2 bg-orange-500/20 text-orange-400 rounded-lg text-xs font-semibold disabled:opacity-50">{reassignLoading ? "..." : "Reassign"}</button>
+                      <button onClick={handleFetchAssignments} disabled={!assignId} className="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs font-semibold text-gray-400">View</button>
+                    </div>
+                    {assignmentsData && (
+                      <div className="bg-white/[0.03] rounded-lg p-2.5">
+                        <pre className="text-[10px] text-gray-400 overflow-x-auto">{JSON.stringify(assignmentsData, null, 2)}</pre>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Sensitivity */}
+                  <div className="space-y-2">
+                    <div className="text-[10px] text-gray-400 font-semibold uppercase">Set Sensitivity</div>
+                    <div className="flex gap-2">
+                      <input value={sensitivityId} onChange={e => setSensitivityId(e.target.value)} placeholder="Submission ID" className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                      <input value={sensitivityValue} onChange={e => setSensitivityValue(e.target.value)} placeholder="Value (0-1)" type="number" step="0.1" min="0" max="1" className="w-24 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                      <button onClick={handleSensitivity} disabled={sensitivityLoading || !sensitivityId || !sensitivityValue} className="px-3 py-2 bg-purple-500/20 text-purple-400 rounded-lg text-xs font-semibold disabled:opacity-50">{sensitivityLoading ? "..." : "Set"}</button>
+                    </div>
+                  </div>
+
+                  {/* Validator Me Data */}
+                  {validatorMe && (
+                    <div className="mt-4 bg-white/[0.03] rounded-lg p-3">
+                      <div className="text-[10px] text-gray-400 font-semibold uppercase mb-2">My Validator Profile</div>
+                      <pre className="text-[10px] text-gray-400 overflow-x-auto">{JSON.stringify(validatorMe, null, 2)}</pre>
+                    </div>
+                  )}
+                </div>
               </>
+            )}
+          </section>
+        )}
+
+        {/* ─── Dashboard Tab ─────────────────────────────────────────────── */}
+        {activeTab === "dashboard" && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+            {!connected ? (
+              <div className="text-center py-16">
+                <Shield className="w-10 h-10 text-gray-700 mx-auto mb-3" />
+                <h3 className="text-base font-bold mb-1">Connect Your Wallet</h3>
+                <button onClick={() => connect()} className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-sm font-semibold">Connect Wallet</button>
+              </div>
+            ) : valDashboard ? (
+              <div className="space-y-4">
+                {valLevelInfo && (
+                  <div className="bg-gradient-to-br from-cyan-500/10 to-blue-600/10 border border-cyan-500/20 rounded-xl p-4">
+                    <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Star size={14} className="text-cyan-400" /> Level Info</h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      {valLevelInfo.current_level != null && (
+                        <div className="bg-white/5 rounded-lg p-2.5">
+                          <div className="text-[10px] text-gray-500">Current Level</div>
+                          <div className="text-base font-bold">{VALIDATOR_LEVELS[valLevelInfo.current_level]?.label || valLevelInfo.current_level}</div>
+                        </div>
+                      )}
+                      {valLevelInfo.required_score != null && (
+                        <div className="bg-white/5 rounded-lg p-2.5">
+                          <div className="text-[10px] text-gray-500">Required Score</div>
+                          <div className="text-base font-bold">{valLevelInfo.required_score}</div>
+                        </div>
+                      )}
+                      {valLevelInfo.next_level && (
+                        <div className="bg-white/5 rounded-lg p-2.5">
+                          <div className="text-[10px] text-gray-500">Next Level</div>
+                          <div className="text-base font-bold">{valLevelInfo.next_level}</div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                  <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><BarChart3 size={14} className="text-cyan-400" /> My Validator Dashboard</h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {Object.entries(valDashboard).map(([key, val]) => (
+                      <div key={key} className="bg-white/[0.03] rounded-lg p-2.5">
+                        <div className="text-[10px] text-gray-500 capitalize">{key.replace(/_/g, " ")}</div>
+                        <div className="text-sm font-bold">{typeof val === "number" ? val.toLocaleString() : String(val)}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8 bg-white/5 border border-white/10 rounded-xl">
+                <p className="text-sm text-gray-400">No dashboard data available</p>
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* ─── History Tab ─────────────────────────────────────────────── */}
+        {activeTab === "history" && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+            {!connected ? (
+              <div className="text-center py-16">
+                <Shield className="w-10 h-10 text-gray-700 mx-auto mb-3" />
+                <button onClick={() => connect()} className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-sm font-semibold">Connect Wallet</button>
+              </div>
+            ) : (
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Clock size={14} className="text-cyan-400" /> Validation History</h3>
+                {valHistory.length === 0 ? (
+                  <p className="text-xs text-gray-500 text-center py-6">No validation history</p>
+                ) : (
+                  <div className="space-y-2 max-h-96 overflow-y-auto">
+                    {valHistory.map((h: any, i: number) => (
+                      <div key={i} className="flex items-center gap-2 bg-white/[0.03] rounded-lg p-2.5">
+                        <CheckCircle size={12} className="text-emerald-400 flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-semibold">{h.submission_id ? `Submission #${h.submission_id.slice(0, 8)}` : "Validation"}</div>
+                          <div className="text-[10px] text-gray-500">{h.vote_type || h.result || ""} {h.consensus != null ? `— ${h.consensus}% consensus` : ""}</div>
+                        </div>
+                        {h.created_at && <div className="text-[9px] text-gray-500">{new Date(h.created_at).toLocaleDateString()}</div>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             )}
           </section>
         )}

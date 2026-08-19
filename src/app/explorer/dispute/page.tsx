@@ -1,9 +1,10 @@
 'use client';
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { AlertTriangle, Shield, ArrowLeft, Scale, Vote, Eye, Clock, FileText, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { AlertTriangle, Shield, ArrowLeft, Scale, Vote, Eye, Clock, FileText, ThumbsUp, ThumbsDown, Search, Upload } from 'lucide-react';
 import Link from 'next/link';
 import { useWallet } from '@/lib/wallet';
+import DarkSelect from '@/components/DarkSelect';
 
 const BACKEND_API = 'https://popp.thharko.com';
 
@@ -33,6 +34,23 @@ export default function DisputePage() {
   const [loading, setLoading] = useState(true);
   const [voteLoading, setVoteLoading] = useState<string | null>(null);
   const [voteMsg, setVoteMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [newSubmissionId, setNewSubmissionId] = useState("");
+  const [newReason, setNewReason] = useState("");
+  const [createLoading, setCreateLoading] = useState(false);
+  const [createMsg, setCreateMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [resolveId, setResolveId] = useState("");
+  const [resolveAction, setResolveAction] = useState("uphold");
+  const [resolveLoading, setResolveLoading] = useState(false);
+  const [resolveMsg, setResolveMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  // Dispute detail
+  const [detailId, setDetailId] = useState("");
+  const [detailData, setDetailData] = useState<any>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+  // Escalate to DAO
+  const [escalateId, setEscalateId] = useState("");
+  const [escalateLoading, setEscalateLoading] = useState(false);
+  const [escalateMsg, setEscalateMsg] = useState<{ text: string; ok: boolean } | null>(null);
 
   const fetchDisputes = useCallback(async () => {
     try {
@@ -87,6 +105,123 @@ export default function DisputePage() {
 
         {voteMsg && (
           <div className={`mb-4 p-2 rounded-lg text-xs font-semibold ${voteMsg.ok ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>{voteMsg.text}</div>
+        )}
+
+        {/* Create Dispute */}
+        <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-4">
+          <button onClick={() => setShowCreate(!showCreate)} className="text-sm font-bold flex items-center gap-1.5 text-orange-400">
+            <AlertTriangle size={14} /> {showCreate ? "Cancel" : "Raise New Dispute"}
+          </button>
+          {showCreate && (
+            <div className="mt-3 space-y-2">
+              {createMsg && <div className={`p-2 rounded-lg text-xs font-semibold ${createMsg.ok ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`}>{createMsg.text}</div>}
+              {!connected ? (
+                <p className="text-xs text-gray-400">Connect wallet to raise a dispute</p>
+              ) : (
+                <>
+                  <input value={newSubmissionId} onChange={e => setNewSubmissionId(e.target.value)} placeholder="Submission ID" className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                  <textarea value={newReason} onChange={e => setNewReason(e.target.value)} placeholder="Reason for dispute" rows={2} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                  <button onClick={async () => {
+                    if (!newSubmissionId || !newReason) return;
+                    setCreateLoading(true); setCreateMsg(null);
+                    try {
+                      const res = await fetch(`${BACKEND_API}/api/disputes`, {
+                        method: "POST", headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+                        body: JSON.stringify({ submission_id: newSubmissionId, reason: newReason }),
+                      });
+                      if (res.ok) { setCreateMsg({ text: "Dispute raised!", ok: true }); setNewSubmissionId(""); setNewReason(""); fetchDisputes(); }
+                      else { const err = await res.text(); setCreateMsg({ text: err || "Failed", ok: false }); }
+                    } catch (e: any) { setCreateMsg({ text: e.message || "Failed", ok: false }); }
+                    finally { setCreateLoading(false); }
+                  }} disabled={createLoading || !newSubmissionId || !newReason} className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg text-xs font-semibold disabled:opacity-50">
+                    {createLoading ? "Creating..." : "Raise Dispute"}
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Resolve Dispute */}
+        {connected && (
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-4">
+            <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Scale size={14} className="text-emerald-400" /> Resolve Dispute</h3>
+            {resolveMsg && <div className={`mb-3 p-2 rounded-lg text-xs font-semibold ${resolveMsg.ok ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`}>{resolveMsg.text}</div>}
+            <div className="space-y-2">
+              <input value={resolveId} onChange={e => setResolveId(e.target.value)} placeholder="Dispute ID" className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+              <DarkSelect value={resolveAction} onChange={e => setResolveAction(e.target.value)}
+                options={[
+                  { value: 'uphold', label: 'Uphold' },
+                  { value: 'overturn', label: 'Overturn' },
+                  { value: 'escalate_to_dao', label: 'Escalate to DAO' },
+                ]}
+              />
+              <button onClick={async () => {
+                if (!resolveId) return;
+                setResolveLoading(true); setResolveMsg(null);
+                try {
+                  const res = await fetch(`${BACKEND_API}/api/disputes/${resolveId}/resolve`, {
+                    method: "POST", headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+                    body: JSON.stringify({ action: resolveAction }),
+                  });
+                  if (res.ok) { setResolveMsg({ text: "Dispute resolved!", ok: true }); fetchDisputes(); }
+                  else { const err = await res.text(); setResolveMsg({ text: err || "Failed", ok: false }); }
+                } catch (e: any) { setResolveMsg({ text: e.message || "Failed", ok: false }); }
+                finally { setResolveLoading(false); }
+              }} disabled={resolveLoading || !resolveId} className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-600 rounded-lg text-xs font-semibold disabled:opacity-50">
+                {resolveLoading ? "Resolving..." : "Resolve"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Dispute Detail */}
+        <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-4">
+          <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Search size={14} className="text-orange-400" /> Dispute Detail</h3>
+          <div className="flex gap-2 mb-3">
+            <input value={detailId} onChange={e => setDetailId(e.target.value)} placeholder="Dispute ID" className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+            <button onClick={async () => {
+              if (!detailId) return;
+              setDetailLoading(true);
+              try {
+                const res = await fetch(`${BACKEND_API}/api/disputes/${detailId}`);
+                if (res.ok) setDetailData(await res.json());
+              } catch { /* ignore */ }
+              setDetailLoading(false);
+            }} disabled={detailLoading || !detailId} className="px-4 py-2 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg text-xs font-semibold disabled:opacity-50">{detailLoading ? "Loading..." : "Load"}</button>
+          </div>
+          {detailData && (
+            <div className="bg-white/[0.03] rounded-lg p-3 space-y-1">
+              {Object.entries(detailData).map(([k, v]) => (
+                <div key={k} className="flex gap-2 text-[10px]"><span className="text-gray-500 w-28 flex-shrink-0">{k}:</span><span className="text-gray-300 break-all">{typeof v === 'object' ? JSON.stringify(v) : String(v ?? "")}</span></div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Escalate to DAO */}
+        {connected && (
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 mb-4">
+            <h3 className="text-sm font-bold mb-3 flex items-center gap-1.5"><Upload size={14} className="text-purple-400" /> Escalate to DAO</h3>
+            {escalateMsg && <div className={`mb-3 p-2 rounded-lg text-xs font-semibold ${escalateMsg.ok ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>{escalateMsg.text}</div>}
+            <div className="flex gap-2">
+              <input value={escalateId} onChange={e => setEscalateId(e.target.value)} placeholder="Dispute ID to escalate" className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+              <button onClick={async () => {
+                if (!escalateId) return;
+                setEscalateLoading(true); setEscalateMsg(null);
+                try {
+                  const res = await fetch(`${BACKEND_API}/api/disputes/${escalateId}/escalate-to-dao`, {
+                    method: "POST", headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+                  });
+                  if (res.ok) { setEscalateMsg({ text: "Escalated to DAO!", ok: true }); setEscalateId(""); fetchDisputes(); }
+                  else { setEscalateMsg({ text: await res.text() || "Failed", ok: false }); }
+                } catch (e: any) { setEscalateMsg({ text: e.message || "Failed", ok: false }); }
+                finally { setEscalateLoading(false); }
+              }} disabled={escalateLoading || !escalateId} className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-600 rounded-lg text-xs font-semibold disabled:opacity-50">
+                {escalateLoading ? "Escalating..." : "Escalate"}
+              </button>
+            </div>
+          </div>
         )}
 
         {loading ? (

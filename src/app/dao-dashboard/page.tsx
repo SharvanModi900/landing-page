@@ -19,6 +19,7 @@ import {
   Shield,
   Layers,
   Wallet,
+  Settings,
 } from "lucide-react";
 import Link from "next/link";
 import { useWallet } from "@/lib/wallet";
@@ -111,6 +112,15 @@ export default function DAODashboardPage() {
   const [voteOption, setVoteOption] = useState<string>("");
   const [voteLoading, setVoteLoading] = useState(false);
   const [voteMsg, setVoteMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [govParams, setGovParams] = useState<any>(null);
+  const [govFeatures, setGovFeatures] = useState<any[]>([]);
+  const [govExecutions, setGovExecutions] = useState<any[]>([]);
+  const [executeMsg, setExecuteMsg] = useState<{ text: string; ok: boolean } | null>(null);
+  const [executeLoading, setExecuteLoading] = useState<string | null>(null);
+  const [paramDetail, setParamDetail] = useState<any>(null);
+  const [paramKey, setParamKey] = useState("");
+  const [featureDetail, setFeatureDetail] = useState<any>(null);
+  const [featureKey, setFeatureKey] = useState("");
 
   // ─── Fetch ──────────────────────────────────────────────────────────────
 
@@ -140,6 +150,22 @@ export default function DAODashboardPage() {
       if (backendProposalsRes.status === "fulfilled" && Array.isArray(backendProposalsRes.value)) {
         setBackendProposals(backendProposalsRes.value);
       }
+
+      // Fetch governance extras
+      const [paramsRes, featuresRes, executionsRes] = await Promise.allSettled([
+        fetch(`${BACKEND_API}/api/governance/parameters`),
+        fetch(`${BACKEND_API}/api/governance/features`),
+        fetch(`${BACKEND_API}/api/governance/executions`),
+      ]);
+      if (paramsRes.status === "fulfilled" && paramsRes.value.ok) setGovParams(await paramsRes.value.json());
+      if (featuresRes.status === "fulfilled" && featuresRes.value.ok) {
+        const d = await featuresRes.value.json();
+        setGovFeatures(Array.isArray(d) ? d : d.features || []);
+      }
+      if (executionsRes.status === "fulfilled" && executionsRes.value.ok) {
+        const d = await executionsRes.value.json();
+        setGovExecutions(Array.isArray(d) ? d : d.executions || []);
+      }
     } catch {
       // Silent
     }
@@ -147,6 +173,34 @@ export default function DAODashboardPage() {
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  const handleExecuteProposal = async (proposalId: string) => {
+    setExecuteLoading(proposalId); setExecuteMsg(null);
+    try {
+      const res = await fetch(`${BACKEND_API}/api/governance/proposals/${proposalId}/execute`, {
+        method: "POST", headers: getAuthHeaders(),
+      });
+      if (res.ok) setExecuteMsg({ text: "Proposal executed!", ok: true });
+      else { const err = await res.text(); setExecuteMsg({ text: err || "Failed", ok: false }); }
+    } catch (e: any) { setExecuteMsg({ text: e.message || "Failed", ok: false }); }
+    finally { setExecuteLoading(null); }
+  };
+
+  const handleFetchParam = async () => {
+    if (!paramKey) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/governance/parameters/${paramKey}`);
+      if (res.ok) setParamDetail(await res.json());
+    } catch { /* ignore */ }
+  };
+
+  const handleFetchFeature = async () => {
+    if (!featureKey) return;
+    try {
+      const res = await fetch(`${BACKEND_API}/api/governance/features/${featureKey}`);
+      if (res.ok) setFeatureDetail(await res.json());
+    } catch { /* ignore */ }
+  };
 
   // ─── Cast Vote ────────────────────────────────────────────────────────
 
@@ -428,6 +482,12 @@ export default function DAODashboardPage() {
                           Vote <ArrowUpRight size={10} />
                         </button>
                       )}
+                      {proposal.status === "PROPOSAL_STATUS_PASSED" && connected && (
+                        <button onClick={() => handleExecuteProposal(proposal.proposal_id)} disabled={executeLoading === proposal.proposal_id}
+                          className="px-2.5 py-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 rounded-md text-[10px] font-semibold">
+                          {executeLoading === proposal.proposal_id ? "Executing..." : "Execute"}
+                        </button>
+                      )}
                     </div>
                   </motion.div>
                 );
@@ -528,6 +588,86 @@ export default function DAODashboardPage() {
                 )}
               </div>
             </div>
+          </section>
+        )}
+
+        {/* ─── Governance Parameters ─────────────────────────────────────── */}
+        {govParams && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              className="bg-white/5 border border-white/10 rounded-lg p-4">
+              <h2 className="text-base font-bold mb-3 flex items-center gap-2"><Settings size={16} className="text-cyan-400" /> Governance Parameters</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {Object.entries(govParams).map(([key, val]) => (
+                  <div key={key} className="bg-white/[0.03] rounded-lg p-2.5">
+                    <div className="text-[10px] text-gray-500 capitalize">{key.replace(/_/g, " ")}</div>
+                    <div className="text-sm font-bold">{typeof val === "number" ? val.toLocaleString() : String(val)}</div>
+                  </div>
+                ))}
+              </div>
+              {/* Param Detail Lookup */}
+              <div className="mt-4 flex gap-2">
+                <input value={paramKey} onChange={e => setParamKey(e.target.value)} placeholder="Parameter key" className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                <button onClick={handleFetchParam} className="px-3 py-2 bg-cyan-500/20 text-cyan-400 rounded-lg text-xs font-semibold">Lookup</button>
+              </div>
+              {paramDetail && (
+                <div className="mt-3 bg-white/[0.03] rounded-lg p-3">
+                  <pre className="text-[10px] text-gray-400 overflow-x-auto">{JSON.stringify(paramDetail, null, 2)}</pre>
+                </div>
+              )}
+            </motion.div>
+          </section>
+        )}
+
+        {/* ─── Feature Flags ─────────────────────────────────────────────── */}
+        {govFeatures.length > 0 && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              className="bg-white/5 border border-white/10 rounded-lg p-4">
+              <h2 className="text-base font-bold mb-3 flex items-center gap-2"><Layers size={16} className="text-purple-400" /> Feature Flags</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {govFeatures.map((f: any, i: number) => (
+                  <div key={i} className="bg-white/[0.03] rounded-lg p-2.5 flex items-center justify-between">
+                    <span className="text-xs font-semibold">{f.name || f.feature || "Feature"}</span>
+                    <span className={`px-1.5 py-0.5 text-[9px] rounded-full font-semibold ${f.enabled ? "bg-emerald-500/20 text-emerald-400" : "bg-red-500/20 text-red-400"}`}>
+                      {f.enabled ? "ON" : "OFF"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              {/* Feature Detail Lookup */}
+              <div className="mt-4 flex gap-2">
+                <input value={featureKey} onChange={e => setFeatureKey(e.target.value)} placeholder="Feature key" className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder:text-gray-500" />
+                <button onClick={handleFetchFeature} className="px-3 py-2 bg-purple-500/20 text-purple-400 rounded-lg text-xs font-semibold">Lookup</button>
+              </div>
+              {featureDetail && (
+                <div className="mt-3 bg-white/[0.03] rounded-lg p-3">
+                  <pre className="text-[10px] text-gray-400 overflow-x-auto">{JSON.stringify(featureDetail, null, 2)}</pre>
+                </div>
+              )}
+            </motion.div>
+          </section>
+        )}
+
+        {/* ─── Execution Log ─────────────────────────────────────────────── */}
+        {govExecutions.length > 0 && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-6">
+            <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              className="bg-white/5 border border-white/10 rounded-lg p-4">
+              <h2 className="text-base font-bold mb-3 flex items-center gap-2"><Activity size={16} className="text-emerald-400" /> Execution Log</h2>
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {govExecutions.map((e: any, i: number) => (
+                  <div key={i} className="flex items-center gap-2 bg-white/[0.03] rounded-lg p-2.5">
+                    <CheckCircle size={12} className="text-emerald-400 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-semibold truncate">{e.action || e.type || "Execution"}</div>
+                      <div className="text-[10px] text-gray-500">{e.executed_at ? new Date(e.executed_at).toLocaleString() : ""}</div>
+                    </div>
+                    {e.proposal_id && <span className="text-[9px] text-gray-500 font-mono">#{e.proposal_id}</span>}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           </section>
         )}
 

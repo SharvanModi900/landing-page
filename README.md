@@ -114,11 +114,33 @@ The app can be deployed to any platform that supports Next.js:
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+We welcome contributions of all kinds — bug fixes, features, documentation, and design improvements.
+
+Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting a pull request.
+
+### Quick Start
+
+```bash
+# 1. Fork the repository
+# 2. Clone your fork
+git clone https://github.com/<your-username>/popp-landing-page.git
+cd popp-landing-page
+
+# 3. Install dependencies
+npm install
+
+# 4. Start dev server (port 3021)
+npm run dev
+```
+
+### Before Submitting a PR
+
+```bash
+npm run lint    # Must pass with zero errors
+npm run build   # Must build successfully
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for coding standards, commit conventions, and the full PR checklist.
 
 ## 📄 License
 
