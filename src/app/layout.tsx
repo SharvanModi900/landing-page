@@ -54,6 +54,9 @@ export const metadata: Metadata = {
     shortcut: "/icon.png",
     apple: [{ url: "/icon.png", sizes: "180x180", type: "image/png" }],
   },
+  other: {
+    "google-adsense-account": "ca-pub-1974085005262731",
+  },
 };
 
 export default function RootLayout({
