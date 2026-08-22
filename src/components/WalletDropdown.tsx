@@ -7,6 +7,7 @@ import {
   ArrowRightLeft, Plus, Globe, LogOut, Key
 } from "lucide-react";
 import { useWallet } from "@/lib/wallet";
+import { conversions } from "@/lib/analytics";
 
 type Screen = "main" | "backup" | "import" | "home" | "delete-confirm" | "settings" | "receive";
 
@@ -80,13 +81,14 @@ export default function WalletDropdown({ onClose }: { onClose: () => void }) {
 
   const handleCreate = async () => {
     setCreating(true);
-    try { const w = await createWallet(); setMnemonic(w.mnemonic); setScreen("backup"); }
+    try { const w = await createWallet(); setMnemonic(w.mnemonic); setScreen("backup"); conversions.walletCreated(); }
     catch { /* handled in context */ }
     finally { setCreating(false); }
   };
 
   const handleConfirmBackup = async () => {
     await connect();
+    conversions.walletConnected();
     setMnemonic(""); setShowMnemonic(false);
     setScreen("home");
   };
@@ -98,7 +100,7 @@ export default function WalletDropdown({ onClose }: { onClose: () => void }) {
       setImportError(`Please enter all ${words.length < 15 ? 12 : 24} words`);
       return;
     }
-    try { await importWallet(words.join(" ")); await connect(); setImportWords(Array(24).fill("")); setScreen("home"); }
+    try { await importWallet(words.join(" ")); await connect(); conversions.walletImported(); setImportWords(Array(24).fill("")); setScreen("home"); }
     catch (err: any) { setImportError(err.message || "Failed to import"); }
   };
 

@@ -1,0 +1,5 @@
+# ads.txt — Proof of Problem Protocol (PoPP)
+# https://pops.thharko.com/ads.txt
+#
+# Google AdSense
+google.com, pub-1974085005262731, DIRECT, f08c47fec0942fa0

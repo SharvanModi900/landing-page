@@ -6,6 +6,7 @@ import {
   RefreshCw, Shield, Fingerprint, ChevronRight, ChevronLeft, Send,
   Sparkles, Globe, Lock,
 } from "lucide-react";
+import { conversions } from "@/lib/analytics";
 
 // ─── Dynamic Leaflet import (avoids SSR issues) ─────────────────────────────
 function MapClickHandler({ onClick }: { onClick: (lat: number, lng: number) => void }) {
@@ -199,6 +200,7 @@ export default function SubmissionForm({ onSuccess }: { onSuccess: (data: any) =
       if (!res.ok) throw new Error("Submission failed");
       const data = await res.json();
       onSuccess(data);
+      conversions.reportSubmitted(category);
       setTitle(""); setDescription(""); setCategory(null); setIsAnonymous(true);
       setFiles([]); setFilePreviews([]); setStep(1);
     } catch (err: any) { setError(err.message || "Unknown error"); }

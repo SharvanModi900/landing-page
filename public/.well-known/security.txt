@@ -1,0 +1,8 @@
+# security.txt — Proof of Problem Protocol (PoPP)
+# https://pops.thharko.com/.well-known/security.txt
+
+Contact: mailto:contact@popp.thharko.com
+Preferred-Languages: en
+Canonical: https://pops.thharko.com/.well-known/security.txt
+Policy: https://pops.thharko.com/vulnerability-disclosures
+Expires: 2027-08-22T00:00:00.000Z

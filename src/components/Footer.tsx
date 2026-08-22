@@ -1,7 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { Mail, Twitter, Linkedin, Github, Instagram } from 'lucide-react';
+import { conversions } from '@/lib/analytics';
 
 function DiscordIcon({ className }: { className?: string }) {
   return (
@@ -133,6 +135,67 @@ function getParticleProperties(index: number): { top: string; left: string; dura
   };
 }
 
+/* ------------------------------------------------------------------ */
+/*  Newsletter subscription form with GA4 tracking                    */
+/* ------------------------------------------------------------------ */
+function NewsletterForm() {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://popp.thharko.com';
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setStatus('error');
+      return;
+    }
+    setStatus('loading');
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/newsletter/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source: 'landing_page_footer' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        conversions.newsletterSignup('footer');
+        setStatus('success');
+        setEmail('');
+        setTimeout(() => setStatus('idle'), 4000);
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start max-w-lg mx-auto md:mx-0">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => { setEmail(e.target.value); setStatus('idle'); }}
+        placeholder={status === 'success' ? 'Subscribed!' : 'Enter your email'}
+        className={`px-4 py-3 rounded-xl bg-black/40 border focus:outline-none focus:ring-2 text-sm w-full placeholder-gray-500 text-white ${
+          status === 'success'
+            ? 'border-green-500/60 focus:ring-green-500/60 text-green-400'
+            : status === 'error'
+            ? 'border-red-500/60 focus:ring-red-500/60'
+            : 'border-amber-500/30 focus:ring-amber-500/60'
+        }`}
+      />
+      <button
+        type="submit"
+        disabled={status === 'loading'}
+        className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-xl shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 hover:scale-105 transition font-semibold whitespace-nowrap text-black disabled:opacity-50 disabled:hover:scale-100"
+      >
+        {status === 'loading' ? '...' : status === 'success' ? '✓ Subscribed' : 'Subscribe'}
+      </button>
+    </form>
+  );
+}
+
 export default function Footer() {
   return (
     <>
@@ -207,16 +270,7 @@ export default function Footer() {
               </div>
 
               {/* Newsletter Input */}
-              <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start max-w-lg mx-auto md:mx-0">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="px-4 py-3 rounded-xl bg-black/40 border border-amber-500/30 focus:outline-none focus:ring-2 focus:ring-amber-500/60 text-sm w-full placeholder-gray-500 text-white"
-                />
-                <button className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-xl shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 hover:scale-105 transition font-semibold whitespace-nowrap text-black">
-                  Subscribe
-                </button>
-              </div>
+              <NewsletterForm />
 
               {/* Social Links */}
               <div className="flex justify-center md:justify-start gap-3 mt-6">

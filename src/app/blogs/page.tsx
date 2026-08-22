@@ -65,8 +65,36 @@ const blogs = [
 const categories = ["All", "Protocol", "Validators", "Story", "Technical", "Governance", "Impact", "News"];
 
 export default function BlogsPage() {
+  // BlogPosting structured data for SEO
+  const blogSchema = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "PoPP Blog",
+    description: "Insights, technical deep-dives, and updates from the Proof-of-Problem Protocol ecosystem.",
+    url: "https://pops.thharko.com/blogs",
+    blogPost: blogs.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.excerpt,
+      datePublished: post.date,
+      articleSection: post.category,
+      url: `https://pops.thharko.com/blogs#${encodeURIComponent(post.title.toLowerCase().replace(/\s+/g, "-"))}`,
+      author: {
+        "@type": "Organization",
+        name: "Proof of Problem Protocol",
+        url: "https://pops.thharko.com",
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "PoPP",
+        url: "https://pops.thharko.com",
+      },
+    })),
+  };
+
   return (
     <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }} />
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         {/* Hero */}
