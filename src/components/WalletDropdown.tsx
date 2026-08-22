@@ -177,7 +177,7 @@ export default function WalletDropdown({ onClose }: { onClose: () => void }) {
               >
                 <Upload className="w-4 h-4" /> Import Existing Wallet
               </button>
-              <div className="flex items-center justify-center gap-1.5 pt-1 text-[10px] text-gray-600">
+              <div className="flex items-center justify-center gap-1.5 pt-1 text-[10px] text-gray-400">
                 <Shield className="w-3 h-3" /> AES-256 encrypted · Non-custodial · Stored locally
               </div>
             </div>
@@ -211,10 +211,10 @@ export default function WalletDropdown({ onClose }: { onClose: () => void }) {
                     }
                   </button>
                   <div className="flex items-center gap-1">
-                    <button onClick={() => connect()} className="p-1.5 hover:bg-white/[0.08] rounded-lg transition-colors" title="Refresh">
+                    <button onClick={() => connect()} className="p-1.5 hover:bg-white/[0.08] rounded-lg transition-colors" aria-label="Refresh wallet" title="Refresh">
                       <RefreshCw className="w-3.5 h-3.5 text-gray-400" />
                     </button>
-                    <button onClick={() => setScreen("settings")} className="p-1.5 hover:bg-white/[0.08] rounded-lg transition-colors">
+                    <button onClick={() => setScreen("settings")} className="p-1.5 hover:bg-white/[0.08] rounded-lg transition-colors" aria-label="Wallet settings">
                       <Settings className="w-3.5 h-3.5 text-gray-400" />
                     </button>
                   </div>
@@ -260,7 +260,7 @@ export default function WalletDropdown({ onClose }: { onClose: () => void }) {
               <div>
                 <div className="flex items-center justify-between px-2 mb-1.5">
                   <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Tokens</span>
-                  <span className="text-[9px] text-gray-600">PoPP Chain</span>
+                  <span className="text-[9px] text-gray-400">PoPP Chain</span>
                 </div>
                 <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden">
                   <div className="flex items-center gap-2.5 px-3 py-3 hover:bg-white/[0.03] transition-colors cursor-pointer">
@@ -286,8 +286,8 @@ export default function WalletDropdown({ onClose }: { onClose: () => void }) {
                 </div>
                 <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl overflow-hidden">
                   <div className="flex items-center gap-2.5 px-3 py-4 justify-center">
-                    <Clock className="w-3.5 h-3.5 text-gray-600" />
-                    <span className="text-[11px] text-gray-500">No recent activity</span>
+                    <Clock className="w-3.5 h-3.5 text-gray-400" />
+                    <span className="text-[11px] text-gray-400">No recent activity</span>
                   </div>
                 </div>
               </div>
@@ -299,7 +299,7 @@ export default function WalletDropdown({ onClose }: { onClose: () => void }) {
               >
                 <Globe className="w-3.5 h-3.5 text-gray-500" />
                 <span className="text-[11px] text-gray-400 flex-1">Problem Explorer</span>
-                <ChevronRight className="w-3 h-3 text-gray-600 group-hover:text-gray-400 transition-colors" />
+                <ChevronRight className="w-3 h-3 text-gray-400 group-hover:text-gray-300 transition-colors" />
               </a>
             </div>
           </div>
@@ -311,7 +311,7 @@ export default function WalletDropdown({ onClose }: { onClose: () => void }) {
         {screen === "receive" && (
           <>
             <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.06] flex-shrink-0">
-              <button onClick={() => setScreen("home")} className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors">
+              <button onClick={() => setScreen("home")} className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors" aria-label="Go back">
                 <ArrowLeft className="w-4 h-4" />
               </button>
               <h2 className="text-sm font-bold text-white">Receive</h2>
@@ -343,7 +343,7 @@ export default function WalletDropdown({ onClose }: { onClose: () => void }) {
         {screen === "settings" && (
           <>
             <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.06] flex-shrink-0">
-              <button onClick={() => setScreen("home")} className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors">
+              <button onClick={() => setScreen("home")} className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors" aria-label="Go back">
                 <ArrowLeft className="w-4 h-4" />
               </button>
               <h2 className="text-sm font-bold text-white">Settings</h2>
@@ -422,7 +422,7 @@ export default function WalletDropdown({ onClose }: { onClose: () => void }) {
             <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.06] flex-shrink-0">
               <div className="w-7" />
               <h2 className="text-sm font-bold text-white">Recovery Phrase</h2>
-              <button onClick={onClose} className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors">
+              <button onClick={onClose} className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors" aria-label="Close">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -493,11 +493,11 @@ export default function WalletDropdown({ onClose }: { onClose: () => void }) {
         {screen === "import" && (
           <>
             <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.06] flex-shrink-0">
-              <button onClick={() => setScreen("main")} className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors">
+              <button onClick={() => setScreen("main")} className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors" aria-label="Go back">
                 <ArrowLeft className="w-4 h-4" />
               </button>
               <h2 className="text-sm font-bold text-white">Import Wallet</h2>
-              <button onClick={onClose} className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors">
+              <button onClick={onClose} className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors" aria-label="Close">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -564,7 +564,7 @@ export default function WalletDropdown({ onClose }: { onClose: () => void }) {
         {screen === "delete-confirm" && (
           <>
             <div className="flex items-center justify-between px-5 py-3 border-b border-white/[0.06] flex-shrink-0">
-              <button onClick={() => setScreen("settings")} className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors">
+              <button onClick={() => setScreen("settings")} className="p-1.5 text-gray-500 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors" aria-label="Go back">
                 <ArrowLeft className="w-4 h-4" />
               </button>
               <h2 className="text-sm font-bold text-red-400">Delete Wallet</h2>

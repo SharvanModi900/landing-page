@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: 'export',
   reactStrictMode: false,
+  images: {
+    formats: ['image/avif', 'image/webp'],
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },

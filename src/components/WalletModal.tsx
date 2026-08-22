@@ -157,7 +157,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
               >
                 <Upload className="w-4 h-4" /> Import Existing Wallet
               </button>
-              <div className="flex items-center justify-center gap-1.5 pt-2 text-[10px] text-gray-600">
+              <div className="flex items-center justify-center gap-1.5 pt-2 text-[10px] text-gray-400">
                 <Shield className="w-3 h-3" /> AES-256 encrypted · Non-custodial · Stored locally
               </div>
             </div>
@@ -192,13 +192,13 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
                     }
                   </button>
                   <div className="flex items-center gap-2">
-                    <button onClick={() => connect()} className="p-2 hover:bg-white/[0.08] rounded-xl transition-colors" title="Refresh">
+                    <button onClick={() => connect()} className="p-2 hover:bg-white/[0.08] rounded-xl transition-colors" aria-label="Refresh wallet" title="Refresh">
                       <RefreshCw className="w-4 h-4 text-gray-400" />
                     </button>
-                    <button onClick={() => setScreen("settings")} className="p-2 hover:bg-white/[0.08] rounded-xl transition-colors">
+                    <button onClick={() => setScreen("settings")} className="p-2 hover:bg-white/[0.08] rounded-xl transition-colors" aria-label="Wallet settings">
                       <Settings className="w-4 h-4 text-gray-400" />
                     </button>
-                    <button onClick={onClose} className="p-2 hover:bg-white/[0.08] rounded-xl transition-colors">
+                    <button onClick={onClose} className="p-2 hover:bg-white/[0.08] rounded-xl transition-colors" aria-label="Close wallet">
                       <X className="w-4 h-4 text-gray-500" />
                     </button>
                   </div>

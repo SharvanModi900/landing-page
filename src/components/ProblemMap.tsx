@@ -273,6 +273,7 @@ export default function ProblemMap({ markers, roadSegments = [], onMarkerClick, 
       {/* Settings Menu Button */}
       <button
         onClick={() => setShowSettings(!showSettings)}
+        aria-label="Map settings"
         className={`absolute top-4 right-14 z-[1000] w-10 h-10 flex items-center justify-center rounded-xl transition-all backdrop-blur-md ${
           showSettings
             ? "bg-cyan-500/20 border border-cyan-500/30 text-cyan-400"
@@ -289,6 +290,7 @@ export default function ProblemMap({ markers, roadSegments = [], onMarkerClick, 
       <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-1">
         <button
           onClick={() => mapRef.current?.zoomIn()}
+          aria-label="Zoom in"
           className="w-10 h-10 bg-black/70 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center text-white hover:bg-black/90 transition"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -298,6 +300,7 @@ export default function ProblemMap({ markers, roadSegments = [], onMarkerClick, 
         </button>
         <button
           onClick={() => mapRef.current?.zoomOut()}
+          aria-label="Zoom out"
           className="w-10 h-10 bg-black/70 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center text-white hover:bg-black/90 transition"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -312,7 +315,7 @@ export default function ProblemMap({ markers, roadSegments = [], onMarkerClick, 
           {/* Header */}
           <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
             <h3 className="text-sm font-bold text-white">Map Settings</h3>
-            <button onClick={() => setShowSettings(false)} className="text-gray-400 hover:text-white">
+            <button onClick={() => setShowSettings(false)} className="text-gray-400 hover:text-white" aria-label="Close settings">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -331,6 +334,7 @@ export default function ProblemMap({ markers, roadSegments = [], onMarkerClick, 
               </div>
               <button
                 onClick={() => setShowHeatmap(!showHeatmap)}
+                aria-label={showHeatmap ? "Disable heatmap" : "Enable heatmap"}
                 className={`w-11 h-6 rounded-full transition-all ${
                   showHeatmap ? "bg-cyan-500" : "bg-white/10"
                 }`}
@@ -355,6 +359,7 @@ export default function ProblemMap({ markers, roadSegments = [], onMarkerClick, 
               </div>
               <button
                 onClick={() => setShowLegend(!showLegend)}
+                aria-label={showLegend ? "Hide legend" : "Show legend"}
                 className={`w-11 h-6 rounded-full transition-all ${
                   showLegend ? "bg-cyan-500" : "bg-white/10"
                 }`}

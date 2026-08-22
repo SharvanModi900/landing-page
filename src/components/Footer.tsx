@@ -182,21 +182,21 @@ export default function Footer() {
                   </svg>
                   SEE IT.
                 </span>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-400">|</span>
                 <span className="flex items-center gap-1.5 text-green-300">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
                   REPORT IT.
                 </span>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-400">|</span>
                 <span className="flex items-center gap-1.5 text-emerald-300">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                   VERIFY IT.
                 </span>
-                <span className="text-gray-600">|</span>
+                <span className="text-gray-400">|</span>
                 <span className="flex items-center gap-1.5 text-amber-400">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -255,7 +255,7 @@ export default function Footer() {
                     <div className="text-[10px] text-gray-300 leading-none">Download for</div>
                     <div className="text-sm font-semibold text-green-300 leading-tight">Android</div>
                   </div>
-                  <span className="text-xs text-gray-500 border-l border-white/10 pl-3">Free · Open Source</span>
+                  <span className="text-xs text-gray-400 border-l border-white/10 pl-3">Free · Open Source</span>
                 </a>
               </div>
             </div>
@@ -267,8 +267,8 @@ export default function Footer() {
       <footer className="relative bg-[#010519] text-gray-300 overflow-hidden">
       {/* Gradient Background */}
       <div className="absolute inset-0">
-        <div className="absolute -top-40 left-0 w-[600px] h-[600px] rounded-full bg-purple-600/20 blur-3xl animate-pulse-slow"></div>
-        <div className="absolute -bottom-40 right-0 w-[700px] h-[700px] rounded-full bg-blue-500/20 blur-3xl animate-pulse-slower"></div>
+        <div className="absolute -top-40 left-0 w-[600px] h-[600px] rounded-full bg-purple-600/20 blur-3xl animate-pulse-slow" style={{ willChange: 'opacity' }}></div>
+        <div className="absolute -bottom-40 right-0 w-[700px] h-[700px] rounded-full bg-blue-500/20 blur-3xl animate-pulse-slower" style={{ willChange: 'opacity' }}></div>
       </div>
 
       {/* ✨ Animated Particles */}
@@ -295,9 +295,9 @@ export default function Footer() {
       <div className="relative max-w-7xl mx-auto px-6 md:px-16 py-12 grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-10 border-t border-white/10 z-10">
         {footerSections.map((section) => (
           <div key={section.label}>
-            <h6 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">
+            <div className="text-sm font-bold text-white mb-4 uppercase tracking-wider">
               {section.label}
-            </h6>
+            </div>
             <ul className="space-y-2.5">
               {section.links.map((item) => (
                 <li key={item.title}>
@@ -322,7 +322,7 @@ export default function Footer() {
             <img src="/logo.png" alt="Proof of Problem Protocol PoPP logo" width={24} height={24} className="h-6 w-6 rounded object-cover" />
             <span className="text-sm font-bold text-white">PoPP</span>
           </div>
-          <p className="text-xs text-gray-500">© {new Date().getFullYear()} Proof of Problem Protocol. All rights reserved.</p>
+          <p className="text-xs text-gray-400">© {new Date().getFullYear()} Proof of Problem Protocol. All rights reserved.</p>
           <p className="text-xs text-gray-400">Built with 🔮 to reimagine problem-solving.</p>
         </div>
       </div>

@@ -115,7 +115,7 @@ export default function Home() {
                 className="bg-white/[0.03] border border-white/[0.07] rounded-xl p-6 hover:border-white/[0.13] transition-colors"
               >
                 <div className="text-3xl mb-4">{cs.icon}</div>
-                <h4 className="text-lg font-bold text-white mb-3">{cs.title}</h4>
+                <h3 className="text-lg font-bold text-white mb-3">{cs.title}</h3>
                 <div className="space-y-2 text-sm">
                   <div className="text-gray-300">
                     <span className="text-gray-500">Location:</span>{" "}
@@ -250,7 +250,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-400">
             <span>Open Source</span>
             <span className="hidden sm:inline">&middot;</span>
             <span>Audited</span>
