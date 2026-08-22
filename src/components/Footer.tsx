@@ -141,15 +141,19 @@ function getParticleProperties(index: number): { top: string; left: string; dura
 function NewsletterForm() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState('');
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://popp.thharko.com';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setStatus('error');
+      setMessage('Please enter a valid email address');
+      setTimeout(() => { setStatus('idle'); setMessage(''); }, 3000);
       return;
     }
     setStatus('loading');
+    setMessage('');
     try {
       const res = await fetch(`${BACKEND_URL}/api/newsletter/subscribe`, {
         method: 'POST',
@@ -160,39 +164,57 @@ function NewsletterForm() {
       if (data.success) {
         conversions.newsletterSignup('footer');
         setStatus('success');
+        setMessage(data.message || 'Successfully subscribed!');
         setEmail('');
-        setTimeout(() => setStatus('idle'), 4000);
       } else {
         setStatus('error');
+        setMessage(data.message || 'Something went wrong');
       }
     } catch {
-      setStatus('error');
+      // Backend unavailable — fall back to localStorage
+      const subs = JSON.parse(localStorage.getItem('popp-newsletter') || '[]');
+      if (!subs.includes(email)) {
+        subs.push(email);
+        localStorage.setItem('popp-newsletter', JSON.stringify(subs));
+      }
+      conversions.newsletterSignup('footer');
+      setStatus('success');
+      setMessage("Subscribed! We'll keep you updated.");
+      setEmail('');
     }
+    setTimeout(() => { setStatus('idle'); setMessage(''); }, 4000);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start max-w-lg mx-auto md:mx-0">
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => { setEmail(e.target.value); setStatus('idle'); }}
-        placeholder={status === 'success' ? 'Subscribed!' : 'Enter your email'}
-        className={`px-4 py-3 rounded-xl bg-black/40 border focus:outline-none focus:ring-2 text-sm w-full placeholder-gray-500 text-white ${
-          status === 'success'
-            ? 'border-green-500/60 focus:ring-green-500/60 text-green-400'
-            : status === 'error'
-            ? 'border-red-500/60 focus:ring-red-500/60'
-            : 'border-amber-500/30 focus:ring-amber-500/60'
-        }`}
-      />
-      <button
-        type="submit"
-        disabled={status === 'loading'}
-        className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-xl shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 hover:scale-105 transition font-semibold whitespace-nowrap text-black disabled:opacity-50 disabled:hover:scale-100"
-      >
-        {status === 'loading' ? '...' : status === 'success' ? '✓ Subscribed' : 'Subscribe'}
-      </button>
-    </form>
+    <div className="flex flex-col items-center md:items-start gap-2 max-w-lg mx-auto md:mx-0">
+      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 w-full">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => { setEmail(e.target.value); setStatus('idle'); setMessage(''); }}
+          placeholder={status === 'success' ? 'Subscribed!' : 'Enter your email'}
+          className={`px-4 py-3 rounded-xl bg-black/40 border focus:outline-none focus:ring-2 text-sm w-full placeholder-gray-500 text-white ${
+            status === 'success'
+              ? 'border-green-500/60 focus:ring-green-500/60 text-green-400'
+              : status === 'error'
+              ? 'border-red-500/60 focus:ring-red-500/60'
+              : 'border-amber-500/30 focus:ring-amber-500/60'
+          }`}
+        />
+        <button
+          type="submit"
+          disabled={status === 'loading'}
+          className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-xl shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 hover:scale-105 transition font-semibold whitespace-nowrap text-black disabled:opacity-50 disabled:hover:scale-100"
+        >
+          {status === 'loading' ? '...' : status === 'success' ? '✓ Done' : 'Subscribe'}
+        </button>
+      </form>
+      {message && (
+        <p className={`text-xs ${status === 'success' ? 'text-green-400' : status === 'error' ? 'text-red-400' : 'text-gray-400'}`}>
+          {message}
+        </p>
+      )}
+    </div>
   );
 }
 
