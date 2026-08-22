@@ -177,7 +177,7 @@ export default function HeroSection() {
                 <div className="text-sm font-semibold text-white leading-tight">Early Access</div>
               </div>
             </a>
-            <span className="text-xs text-gray-500">Free &middot; Open Source</span>
+            <span className="text-xs text-gray-400">Free &middot; Open Source</span>
           </div>
         </div>
 

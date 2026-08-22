@@ -318,7 +318,7 @@ export default function SubmissionForm({ onSuccess }: { onSuccess: (data: any) =
                     <MapPin className="w-4 h-4 text-cyan-400" />
                   </div>
                   <span className="text-sm text-gray-300 flex-1 truncate">{location.address}</span>
-                  <button type="button" onClick={detectLocation} className="p-2 rounded-lg hover:bg-white/[0.04] transition-colors text-cyan-400 hover:text-cyan-300">
+                  <button type="button" onClick={detectLocation} className="p-2 rounded-lg hover:bg-white/[0.04] transition-colors text-cyan-400 hover:text-cyan-300" aria-label="Redetect location">
                     <RefreshCw className="w-4 h-4" />
                   </button>
                 </>

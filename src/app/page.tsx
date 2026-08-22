@@ -1,15 +1,18 @@
 "use client";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import HeroSection from "@/components/HeroSection";
-import PipelineSection from "@/components/PipelineSection";
-import ValidatorSection from "@/components/validators/validators";
-import WhoNeedsPoPP from "@/components/WhoNeedsPoPP/WhoNeedsPoPP";
-import LiveMapSection from "@/components/LiveMapSection";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import LiveVisitorCounter from "@/components/LiveVisitorCounter";
-import VisitorChart from "@/components/VisitorChart";
-import LiveActivityFeed from "@/components/LiveActivityFeed";
+
+// Dynamically import below-fold sections to reduce initial JS bundle (mobile LCP fix)
+const PipelineSection = dynamic(() => import("@/components/PipelineSection"), { ssr: false });
+const ValidatorSection = dynamic(() => import("@/components/validators/validators"), { ssr: false });
+const WhoNeedsPoPP = dynamic(() => import("@/components/WhoNeedsPoPP/WhoNeedsPoPP"), { ssr: false });
+const LiveMapSection = dynamic(() => import("@/components/LiveMapSection"), { ssr: false });
+const TestimonialsSection = dynamic(() => import("@/components/TestimonialsSection"), { ssr: false });
+const LiveVisitorCounter = dynamic(() => import("@/components/LiveVisitorCounter"), { ssr: false });
+const VisitorChart = dynamic(() => import("@/components/VisitorChart"), { ssr: false });
+const LiveActivityFeed = dynamic(() => import("@/components/LiveActivityFeed"), { ssr: false });
 
 /* ------------------------------------------------------------------ */
 /*  Case Studies data                                                 */

@@ -188,7 +188,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
                     <span className="text-xs text-gray-300 font-medium">{name || shortAddr}</span>
                     {copied && copiedField === "address"
                       ? <Check className="w-3 h-3 text-emerald-400" />
-                      : <Copy className="w-3 h-3 text-gray-500" />
+                      : <Copy className="w-3 h-3 text-gray-400" />
                     }
                   </button>
                   <div className="flex items-center gap-2">
@@ -199,7 +199,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
                       <Settings className="w-4 h-4 text-gray-400" />
                     </button>
                     <button onClick={onClose} className="p-2 hover:bg-white/[0.08] rounded-xl transition-colors" aria-label="Close wallet">
-                      <X className="w-4 h-4 text-gray-500" />
+                      <X className="w-4 h-4 text-gray-400" />
                     </button>
                   </div>
                 </div>
@@ -244,7 +244,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
               <div className="mb-2">
                 <div className="flex items-center justify-between px-2 mb-2">
                   <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Tokens</span>
-                  <span className="text-[10px] text-gray-600">PoPP Chain</span>
+                  <span className="text-[10px] text-gray-400">PoPP Chain</span>
                 </div>
                 <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden">
                   <div className="flex items-center gap-3 px-4 py-3.5 hover:bg-white/[0.03] transition-colors cursor-pointer">
@@ -253,11 +253,11 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-semibold text-white">Sat Mudra</div>
-                      <div className="text-xs text-gray-500">satmudtra</div>
+                      <div className="text-xs text-gray-400">satmudtra</div>
                     </div>
                     <div className="text-right">
                       <div className="text-sm font-semibold text-white">{balance !== null ? balance : "—"}</div>
-                      <div className="text-xs text-gray-500">satmudtra</div>
+                      <div className="text-xs text-gray-400">satmudtra</div>
                     </div>
                   </div>
                 </div>
@@ -271,8 +271,8 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
                 </div>
                 <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden">
                   <div className="flex items-center gap-3 px-4 py-6 justify-center">
-                    <Clock className="w-4 h-4 text-gray-600" />
-                    <span className="text-xs text-gray-500">No recent activity</span>
+                    <Clock className="w-4 h-4 text-gray-400" />
+                    <span className="text-xs text-gray-400">No recent activity</span>
                   </div>
                 </div>
               </div>
@@ -283,9 +283,9 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
                   href={`/explorer`}
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.04] transition-colors group"
                 >
-                  <Globe className="w-4 h-4 text-gray-500" />
+                  <Globe className="w-4 h-4 text-gray-400" />
                   <span className="text-xs text-gray-400 flex-1">Problem Explorer</span>
-                  <ChevronRight className="w-3 h-3 text-gray-600 group-hover:text-gray-400 transition-colors" />
+                  <ChevronRight className="w-3 h-3 text-gray-400 group-hover:text-gray-300 transition-colors" />
                 </a>
               </div>
             </div>
@@ -298,7 +298,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
         {screen === "receive" && (
           <>
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] flex-shrink-0">
-              <button onClick={() => setScreen("home")} className="p-1.5 text-gray-500 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors">
+              <button onClick={() => setScreen("home")} className="p-1.5 text-gray-400 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors" aria-label="Go back">
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <h2 className="text-base font-bold text-white">Receive</h2>
@@ -331,7 +331,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
         {screen === "settings" && (
           <>
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] flex-shrink-0">
-              <button onClick={() => setScreen("home")} className="p-1.5 text-gray-500 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors">
+              <button onClick={() => setScreen("home")} className="p-1.5 text-gray-400 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors" aria-label="Go back">
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <h2 className="text-base font-bold text-white">Settings</h2>
@@ -340,7 +340,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
             <div className="px-4 py-4 space-y-1 overflow-y-auto">
               {/* Account section */}
               <div className="px-2 mb-2">
-                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Account</span>
+                <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Account</span>
               </div>
               <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden mb-4">
                 <div className="flex items-center gap-3 px-4 py-3.5">
@@ -349,30 +349,30 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold text-white">{name || "Wallet"}</div>
-                    <div className="text-xs text-gray-500 font-mono truncate">{shortAddr}</div>
+                    <div className="text-xs text-gray-400 font-mono truncate">{shortAddr}</div>
                   </div>
                 </div>
               </div>
 
               {/* Security section */}
               <div className="px-2 mb-2">
-                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Security</span>
+                <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Security</span>
               </div>
               <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden mb-4">
                 <button
                   onClick={copyAddress}
                   className="flex items-center gap-3 px-4 py-3.5 w-full hover:bg-white/[0.03] transition-colors"
                 >
-                  <Key className="w-4 h-4 text-gray-500" />
+                  <Key className="w-4 h-4 text-gray-400" />
                   <span className="text-sm text-gray-300 flex-1 text-left">Copy Address</span>
                   {copied && copiedField === "address"
                     ? <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    : <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
+                    : <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
                   }
                 </button>
                 <div className="h-px bg-white/[0.04] mx-4" />
                 <div className="flex items-center gap-3 px-4 py-3">
-                  <Shield className="w-4 h-4 text-gray-500" />
+                  <Shield className="w-4 h-4 text-gray-400" />
                   <span className="text-sm text-gray-300 flex-1">Encryption</span>
                   <span className="text-xs text-emerald-400 font-medium">AES-256-GCM</span>
                 </div>
@@ -380,25 +380,25 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
 
               {/* Danger zone */}
               <div className="px-2 mb-2">
-                <span className="text-[10px] font-semibold text-red-400/60 uppercase tracking-wider">Danger Zone</span>
+                <span className="text-[10px] font-semibold text-red-400/80 uppercase tracking-wider">Danger Zone</span>
               </div>
               <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl overflow-hidden">
                 <button
                   onClick={() => { disconnect(); setScreen("main"); }}
                   className="flex items-center gap-3 px-4 py-3.5 w-full hover:bg-white/[0.03] transition-colors"
                 >
-                  <LogOut className="w-4 h-4 text-gray-500" />
+                  <LogOut className="w-4 h-4 text-gray-400" />
                   <span className="text-sm text-gray-300 flex-1 text-left">Disconnect Session</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-gray-600" />
+                  <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
                 </button>
                 <div className="h-px bg-white/[0.04] mx-4" />
                 <button
                   onClick={() => { setDeleteConfirmText(""); setScreen("delete-confirm"); }}
                   className="flex items-center gap-3 px-4 py-3.5 w-full hover:bg-red-500/[0.04] transition-colors"
                 >
-                  <Trash2 className="w-4 h-4 text-red-400/60" />
+                  <Trash2 className="w-4 h-4 text-red-400/80" />
                   <span className="text-sm text-red-400 flex-1 text-left">Delete Wallet</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-red-400/40" />
+                  <ChevronRight className="w-3.5 h-3.5 text-red-400/70" />
                 </button>
               </div>
             </div>
@@ -413,7 +413,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] flex-shrink-0">
               <div className="w-8" />
               <h2 className="text-base font-bold text-white">Recovery Phrase</h2>
-              <button onClick={onClose} className="p-1.5 text-gray-500 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors">
+              <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors" aria-label="Close">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -431,7 +431,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
                     <div className={`grid grid-cols-3 gap-1.5 ${!showMnemonic ? "blur-lg select-none" : ""}`}>
                       {mnemonic.split(" ").map((word, i) => (
                         <div key={i} className="flex items-center gap-1.5 px-2.5 py-2 bg-white/[0.04] border border-white/[0.06] rounded-xl">
-                          <span className="text-[9px] text-gray-600 w-4 text-right font-mono">{i + 1}</span>
+                          <span className="text-[9px] text-gray-400 w-4 text-right font-mono">{i + 1}</span>
                           <span className="text-xs text-white/90 font-mono">{word}</span>
                         </div>
                       ))}
@@ -451,10 +451,10 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
                   <button onClick={copyMnemonic} className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-white/[0.04] border border-white/[0.06] rounded-xl text-xs text-gray-400 hover:bg-white/[0.06] transition">
                     {copied && copiedField === "mnemonic" ? <><Check className="w-3 h-3 text-emerald-400" /> Copied!</> : <><Copy className="w-3 h-3" /> Copy to Clipboard</>}
                   </button>
-                  <p className="text-[10px] text-gray-600 text-center">Clipboard auto-clears after 30 seconds</p>
+                  <p className="text-[10px] text-gray-400 text-center">Clipboard auto-clears after 30 seconds</p>
                 </>
               ) : (
-                <div className="text-center py-6 text-sm text-gray-500">
+                <div className="text-center py-6 text-sm text-gray-400">
                   Recovery phrase cleared from memory for security.
                 </div>
               )}
@@ -484,11 +484,11 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
         {screen === "import" && (
           <>
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] flex-shrink-0">
-              <button onClick={() => setScreen("main")} className="p-1.5 text-gray-500 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors">
+              <button onClick={() => setScreen("main")} className="p-1.5 text-gray-400 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors" aria-label="Go back">
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <h2 className="text-base font-bold text-white">Import Wallet</h2>
-              <button onClick={onClose} className="p-1.5 text-gray-500 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors">
+              <button onClick={onClose} className="p-1.5 text-gray-400 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors" aria-label="Close">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -501,11 +501,11 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className={`h-1 rounded-full transition-all duration-300 ${filledWords >= 24 ? "w-16 bg-emerald-500" : filledWords >= 12 ? "w-12 bg-violet-500" : "w-8 bg-violet-500/40"}`} />
-                  <span className="text-xs text-gray-500 font-medium">{filledWords} / 24</span>
+                  <span className="text-xs text-gray-400 font-medium">{filledWords} / 24</span>
                 </div>
                 <button
                   onClick={() => { setImportWords(Array(24).fill("")); setImportError(""); inputRefs.current[0]?.focus(); }}
-                  className="text-xs text-gray-500 hover:text-gray-300 transition-colors px-2 py-1 rounded-lg hover:bg-white/[0.04]"
+                  className="text-xs text-gray-400 hover:text-gray-300 transition-colors px-2 py-1 rounded-lg hover:bg-white/[0.04]"
                 >Clear</button>
               </div>
 
@@ -513,7 +513,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
               <div className="grid grid-cols-3 gap-1.5">
                 {importWords.map((word, i) => (
                   <div key={i} className={`flex items-center gap-1 px-2 py-1.5 rounded-xl border transition-all duration-150 ${word ? "bg-violet-500/[0.06] border-violet-500/20" : "bg-white/[0.03] border-white/[0.06]"} focus-within:border-violet-500/40 focus-within:ring-1 focus-within:ring-violet-500/20`}>
-                    <span className="text-[9px] text-gray-600 w-4 flex-shrink-0 text-right font-mono">{i + 1}</span>
+                    <span className="text-[9px] text-gray-400 w-4 flex-shrink-0 text-right font-mono">{i + 1}</span>
                     <input
                       ref={el => { inputRefs.current[i] = el; }}
                       type="text"
@@ -555,7 +555,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
         {screen === "delete-confirm" && (
           <>
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/[0.06] flex-shrink-0">
-              <button onClick={() => setScreen("settings")} className="p-1.5 text-gray-500 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors">
+              <button onClick={() => setScreen("settings")} className="p-1.5 text-gray-400 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors" aria-label="Go back">
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <h2 className="text-base font-bold text-red-400">Delete Wallet</h2>
@@ -576,7 +576,7 @@ export default function WalletModal({ onClose }: { onClose: () => void }) {
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder="Type DELETE"
-                className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-sm text-white placeholder:text-gray-600 focus:ring-1 focus:ring-red-500/40 focus:border-red-500/40 outline-none transition"
+                className="w-full px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-2xl text-sm text-white placeholder:text-gray-400 focus:ring-1 focus:ring-red-500/40 focus:border-red-500/40 outline-none transition"
                 autoFocus
               />
               <button

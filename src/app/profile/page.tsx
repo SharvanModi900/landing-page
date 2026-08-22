@@ -253,7 +253,7 @@ export default function ProfilePage() {
                   {referralCode ? (
                     <div className="flex items-center gap-2">
                       <span className="text-lg font-mono font-bold text-violet-400">{referralCode}</span>
-                      <button onClick={copyCode} className="p-1.5 bg-white/10 rounded-lg hover:bg-white/20 transition">
+                      <button onClick={copyCode} className="p-1.5 bg-white/10 rounded-lg hover:bg-white/20 transition" aria-label="Copy referral code">
                         {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} className="text-gray-400" />}
                       </button>
                     </div>

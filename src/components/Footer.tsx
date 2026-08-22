@@ -319,7 +319,7 @@ export default function Footer() {
       <div className="relative border-t border-white/10 py-6 z-10">
         <div className="flex flex-col items-center gap-3">
           <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="Proof of Problem Protocol PoPP logo" width={24} height={24} className="h-6 w-6 rounded object-cover" />
+            <img src="/logo-192.webp" alt="Proof of Problem Protocol PoPP logo" width={24} height={24} className="h-6 w-6 rounded object-cover" />
             <span className="text-sm font-bold text-white">PoPP</span>
           </div>
           <p className="text-xs text-gray-400">© {new Date().getFullYear()} Proof of Problem Protocol. All rights reserved.</p>

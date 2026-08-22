@@ -235,7 +235,7 @@ export default function Navigation() {
       <div className="w-full max-w-7xl mx-auto px-5 py-2 flex items-start gap-4">
         {/* ---- Col 1: Logo ---- */}
         <Link href="/" className="flex-shrink-0 group">
-          <img src="/logo.png" alt="Proof of Problem Protocol PoPP logo" width={96} height={96} className="h-full w-full max-h-24 rounded-xl object-contain shadow-lg shadow-black/30 group-hover:shadow-cyan-500/10 transition-shadow" />
+          <img src="/logo-192.webp" alt="Proof of Problem Protocol PoPP logo" width={96} height={96} className="h-full w-full max-h-24 rounded-xl object-contain shadow-lg shadow-black/30 group-hover:shadow-cyan-500/10 transition-shadow" />
         </Link>
 
         {/* ---- Col 2: Banner strip + Nav row ---- */}
@@ -400,12 +400,12 @@ export default function Navigation() {
                         onMouseEnter={() => router.prefetch(sub.href)}
                         className="group flex items-start gap-2.5 px-2 py-1.5 rounded-lg hover:bg-white/[0.05] transition-colors"
                       >
-                        <sub.icon className="w-3.5 h-3.5 text-gray-500 group-hover:text-cyan-400 mt-0.5 flex-shrink-0 transition-colors" />
+                        <sub.icon className="w-3.5 h-3.5 text-gray-400 group-hover:text-cyan-400 mt-0.5 flex-shrink-0 transition-colors" />
                         <div className="min-w-0">
                           <div className="text-sm text-gray-300 group-hover:text-white transition-colors leading-tight">
                             {sub.title}
                           </div>
-                          <div className="text-[11px] text-gray-500 leading-tight truncate">
+                          <div className="text-[11px] text-gray-400 leading-tight truncate">
                             {sub.desc}
                           </div>
                         </div>
@@ -503,7 +503,7 @@ function MobileSection({
         className="flex items-center justify-between w-full py-3 text-left"
       >
         <span className="text-sm font-semibold text-white">{section.label}</span>
-        <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
+        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open && (
@@ -515,10 +515,10 @@ function MobileSection({
               onClick={onClose}
               className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/[0.04] transition-colors"
             >
-              <sub.icon className="w-4 h-4 text-gray-500 flex-shrink-0" />
+              <sub.icon className="w-4 h-4 text-gray-400 flex-shrink-0" />
               <div>
                 <div className="text-sm text-gray-300">{sub.title}</div>
-                <div className="text-[11px] text-gray-500">{sub.desc}</div>
+                <div className="text-[11px] text-gray-400">{sub.desc}</div>
               </div>
             </Link>
           ))}
