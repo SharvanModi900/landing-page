@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Staking Mechanics — PoPP", description: "How staking, bonding, and rewards work in PoPP." },
 };
 
-export default function StakingMechanicsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Staking Mechanics" }]} />{children}</>; }
+const stakingmechanicsJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Staking Mechanics - PoPP","url":"https://pops.thharko.com/staking-mechanics","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function StakingMechanicsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Staking Mechanics" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(stakingmechanicsJsonLd) }} />{children}</>; }

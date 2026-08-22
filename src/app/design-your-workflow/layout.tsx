@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/design-your-workflow" },
 };
 
-export default function DesignWorkflowLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Design Your Workflow" }]} />{children}</>; }
+const designyourworkflowJsonLd = {"@context":"https://schema.org","@type":"WebApplication","name":"Design Your Workflow - PoPP","url":"https://pops.thharko.com/design-your-workflow","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"},"applicationCategory":"DesignApplication","operatingSystem":"Web"};
+
+export default function DesignWorkflowLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Design Your Workflow" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(designyourworkflowJsonLd) }} />{children}</>; }

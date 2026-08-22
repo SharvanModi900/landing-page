@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Webhooks — PoPP", description: "Subscribe to real-time PoPP protocol events via webhooks." },
 };
 
-export default function WebhooksLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Webhooks" }]} />{children}</>; }
+const webhooksJsonLd = {"@context":"https://schema.org","@type":"TechArticle","name":"Webhooks - PoPP Developer Portal","url":"https://pops.thharko.com/webhooks","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function WebhooksLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Webhooks" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webhooksJsonLd) }} />{children}</>; }

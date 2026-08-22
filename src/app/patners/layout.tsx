@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/patners" },
 };
 
-export default function PatnersLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Partners" }]} />{children}</>; }
+const patnersJsonLd = {"@context":"https://schema.org","@type":"AboutPage","name":"Partners - PoPP","url":"https://pops.thharko.com/patners","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function PatnersLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Partners" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(patnersJsonLd) }} />{children}</>; }

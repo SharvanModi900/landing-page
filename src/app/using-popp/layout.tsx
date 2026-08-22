@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Using PoPP — Getting Started", description: "A practical guide to reporting, validating, and earning on PoPP." },
 };
 
-export default function UsingPoppLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Using PoPP" }]} />{children}</>; }
+const usingpoppJsonLd = {"@context":"https://schema.org","@type":"Article","name":"Using PoPP - Getting Started","url":"https://pops.thharko.com/using-popp","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function UsingPoppLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Using PoPP" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(usingpoppJsonLd) }} />{children}</>; }

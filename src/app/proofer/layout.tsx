@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   },
 };
 
+const prooferJsonLd = {"@context":"https://schema.org","@type":"SoftwareApplication","name":"PoPP Proofer - Problem Validation Tool","url":"https://pops.thharko.com/proofer","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"},"applicationCategory":"DeveloperApplication","operatingSystem":"Web"};
+
 export default function ProoferLayout({ children }: { children: React.ReactNode }) {
-  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Proofer" }]} />{children}</>;
+  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Proofer" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(prooferJsonLd) }} />{children}</>;
 }

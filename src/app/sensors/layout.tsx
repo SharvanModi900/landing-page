@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/sensors" },
 };
 
-export default function SensorsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Sensors" }]} />{children}</>; }
+const sensorsJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"sensors","url":"https://pops.thharko.com/sensors","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function SensorsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Sensors" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(sensorsJsonLd) }} />{children}</>; }

@@ -27,6 +27,8 @@ export const metadata: Metadata = {
   },
 };
 
+const reportJsonLd = {"@context":"https://schema.org","@type":"WebApplication","name":"Report a Problem - PoPP","url":"https://pops.thharko.com/report","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"},"applicationCategory":"BlockchainApplication","operatingSystem":"Web"};
+
 export default function ReportLayout({ children }: { children: React.ReactNode }) {
-  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Report a Problem" }]} />{children}</>;
+  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Report a Problem" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reportJsonLd) }} />{children}</>;
 }

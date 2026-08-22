@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Audit Reports — PoPP", description: "Independent security audits and smart contract assessments." },
 };
 
-export default function AuditReportsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Audit Reports" }]} />{children}</>; }
+const auditreportsJsonLd = {"@context":"https://schema.org","@type":"Report","name":"Audit Reports - PoPP","url":"https://pops.thharko.com/audit-reports","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function AuditReportsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Audit Reports" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(auditreportsJsonLd) }} />{children}</>; }

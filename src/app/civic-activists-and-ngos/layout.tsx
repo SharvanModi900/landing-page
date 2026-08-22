@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Civic Activists & NGOs — PoPP", description: "Decentralized tools for civic activists and NGOs." },
 };
 
-export default function CivicActivistsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Civic Activists & NGOs" }]} />{children}</>; }
+const civicactivistsandngosJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Civic Activists & NGOs - PoPP","url":"https://pops.thharko.com/civic-activists-and-ngos","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function CivicActivistsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Civic Activists & NGOs" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(civicactivistsandngosJsonLd) }} />{children}</>; }

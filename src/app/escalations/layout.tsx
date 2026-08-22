@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/escalations" },
 };
 
-export default function EscalationsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Escalations" }]} />{children}</>; }
+const escalationsJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Escalations - PoPP","url":"https://pops.thharko.com/escalations","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function EscalationsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Escalations" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(escalationsJsonLd) }} />{children}</>; }

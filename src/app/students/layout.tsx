@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Students — PoPP", description: "Learn blockchain governance and earn rewards through civic participation." },
 };
 
-export default function StudentsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Students" }]} />{children}</>; }
+const studentsJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Students - PoPP","url":"https://pops.thharko.com/students","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function StudentsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Students" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(studentsJsonLd) }} />{children}</>; }

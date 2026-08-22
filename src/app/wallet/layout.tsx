@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/wallet" },
 };
 
-export default function WalletLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Wallet" }]} />{children}</>; }
+const walletJsonLd = {"@context":"https://schema.org","@type":"WebApplication","name":"Wallet - PoPP","url":"https://pops.thharko.com/wallet","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"},"applicationCategory":"BlockchainApplication","operatingSystem":"Web"};
+
+export default function WalletLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Wallet" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(walletJsonLd) }} />{children}</>; }

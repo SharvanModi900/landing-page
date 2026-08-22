@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Learning Resources — PoPP", description: "Tutorials, guides, and videos to master PoPP." },
 };
 
-export default function LearningResourcesLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Learning Resources" }]} />{children}</>; }
+const learningresourcesJsonLd = {"@context":"https://schema.org","@type":"CollectionPage","name":"Learning Resources - PoPP","url":"https://pops.thharko.com/learning-resources","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function LearningResourcesLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Learning Resources" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(learningresourcesJsonLd) }} />{children}</>; }

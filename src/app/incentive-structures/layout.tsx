@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/incentive-structures" },
 };
 
-export default function IncentiveStructuresLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Incentive Structures" }]} />{children}</>; }
+const incentivestructuresJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Incentive Structures - PoPP","url":"https://pops.thharko.com/incentive-structures","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function IncentiveStructuresLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Incentive Structures" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(incentivestructuresJsonLd) }} />{children}</>; }

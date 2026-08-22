@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/vision" },
 };
 
-export default function VisionLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Our Vision" }]} />{children}</>; }
+const visionJsonLd = {"@context":"https://schema.org","@type":"AboutPage","name":"PoPP Vision - Decentralized Truth","url":"https://pops.thharko.com/vision","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function VisionLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Our Vision" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(visionJsonLd) }} />{children}</>; }

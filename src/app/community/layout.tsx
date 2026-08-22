@@ -26,6 +26,8 @@ export const metadata: Metadata = {
   },
 };
 
+const communityJsonLd = {"@context":"https://schema.org","@type":"Organization","name":"PoPP Community","url":"https://pops.thharko.com/community","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
 export default function CommunityLayout({ children }: { children: React.ReactNode }) {
-  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Community" }]} />{children}</>;
+  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Community" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(communityJsonLd) }} />{children}</>;
 }

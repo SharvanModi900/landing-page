@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Academia & Research — PoPP", description: "Partnerships and collaboration for decentralized governance research." },
 };
 
-export default function AcademiaResearchLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Academia & Research" }]} />{children}</>; }
+const academiaandresearchJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Academia & Research - PoPP","url":"https://pops.thharko.com/academia-and-research","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function AcademiaResearchLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Academia & Research" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(academiaandresearchJsonLd) }} />{children}</>; }

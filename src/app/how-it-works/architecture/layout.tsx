@@ -7,4 +7,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/how-it-works/architecture" },
 };
 
-export default function ArchitectureLayout({ children }: { children: React.ReactNode }) { return <>{children}</>; }
+const howitworksarchitectureJsonLd = {"@context":"https://schema.org","@type":"Article","name":"Architecture - How PoPP Works","url":"https://pops.thharko.com/how-it-works/architecture","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function ArchitectureLayout({ children }: { children: React.ReactNode }) { return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howitworksarchitectureJsonLd) }} />{children}</>; }

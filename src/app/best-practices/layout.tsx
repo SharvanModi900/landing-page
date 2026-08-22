@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Best Practices — PoPP", description: "Guidelines for effective reporting, evidence, and validator conduct." },
 };
 
-export default function BestPracticesLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Best Practices" }]} />{children}</>; }
+const bestpracticesJsonLd = {"@context":"https://schema.org","@type":"Article","name":"Best Practices - PoPP","url":"https://pops.thharko.com/best-practices","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function BestPracticesLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Best Practices" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(bestpracticesJsonLd) }} />{children}</>; }

@@ -27,10 +27,12 @@ export const metadata: Metadata = {
   },
 };
 
+const roadmapJsonLd = {"@context":"https://schema.org","@type":"ItemList","name":"PoPP Roadmap","url":"https://pops.thharko.com/roadmap","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
 export default function RoadmapLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Roadmap" }]} />{children}</>;
+  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Roadmap" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(roadmapJsonLd) }} />{children}</>;
 }

@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Policy & Governance — PoPP", description: "Decentralized governance framework and protocol policies." },
 };
 
-export default function PolicyGovernanceLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Policy & Governance" }]} />{children}</>; }
+const policyandgovernanceJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Policy & Governance - PoPP","url":"https://pops.thharko.com/policy-and-governance","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function PolicyGovernanceLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Policy & Governance" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(policyandgovernanceJsonLd) }} />{children}</>; }

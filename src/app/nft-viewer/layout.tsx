@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/nft-viewer" },
 };
 
-export default function NftViewerLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "NFT Viewer" }]} />{children}</>; }
+const nftviewerJsonLd = {"@context":"https://schema.org","@type":"WebApplication","name":"NFT Viewer - PoPP","url":"https://pops.thharko.com/nft-viewer","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"},"applicationCategory":"BlockchainApplication","operatingSystem":"Web"};
+
+export default function NftViewerLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "NFT Viewer" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(nftviewerJsonLd) }} />{children}</>; }

@@ -9,4 +9,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-export default function TermsOfUseLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Terms of Use" }]} />{children}</>; }
+const termsofuseJsonLd = {"@context":"https://schema.org","@type":"CreativeWork","name":"Terms of Use - PoPP","url":"https://pops.thharko.com/terms-of-use","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function TermsOfUseLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Terms of Use" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(termsofuseJsonLd) }} />{children}</>; }

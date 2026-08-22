@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Sandbox & Testnet — PoPP", description: "Experiment with PoPP in a risk-free testnet environment." },
 };
 
-export default function SandboxLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Sandbox & Testnet" }]} />{children}</>; }
+const sandboxortestnetJsonLd = {"@context":"https://schema.org","@type":"TechArticle","name":"Sandbox & Testnet - PoPP","url":"https://pops.thharko.com/sandbox-or-testnet","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function SandboxLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Sandbox & Testnet" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(sandboxortestnetJsonLd) }} />{children}</>; }

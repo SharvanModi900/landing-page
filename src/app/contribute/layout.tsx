@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contribute" },
 };
 
-export default function ContributeLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Contribute" }]} />{children}</>; }
+const contributeJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Contribute to PoPP","url":"https://pops.thharko.com/contribute","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function ContributeLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Contribute" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(contributeJsonLd) }} />{children}</>; }

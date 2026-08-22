@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/validators/exam" },
 };
 
-export default function ValidatorsExamLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Validators", href: "/validators" }, { label: "Exam" }]} />{children}</>; }
+const validatorsexamJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Validator Exam - PoPP","url":"https://pops.thharko.com/validators/exam","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function ValidatorsExamLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Validators", href: "/validators" }, { label: "Exam" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(validatorsexamJsonLd) }} />{children}</>; }

@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   },
 };
 
+const resolutionsJsonLd = {"@context":"https://schema.org","@type":"ItemList","name":"Resolutions - PoPP","url":"https://pops.thharko.com/resolutions","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
 export default function ResolutionsLayout({ children }: { children: React.ReactNode }) {
-  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Resolutions" }]} />{children}</>;
+  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Resolutions" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(resolutionsJsonLd) }} />{children}</>;
 }

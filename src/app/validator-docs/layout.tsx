@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/validator-docs" },
 };
 
-export default function ValidatorDocsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Validator Documentation" }]} />{children}</>; }
+const validatordocsJsonLd = {"@context":"https://schema.org","@type":"TechArticle","name":"Validator Documentation - PoPP","url":"https://pops.thharko.com/validator-docs","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function ValidatorDocsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Validator Documentation" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(validatordocsJsonLd) }} />{children}</>; }

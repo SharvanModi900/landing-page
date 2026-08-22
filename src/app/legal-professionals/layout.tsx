@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Legal Professionals — PoPP", description: "Verified evidence and tamper-proof documentation for legal professionals." },
 };
 
-export default function LegalProfessionalsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Legal Professionals" }]} />{children}</>; }
+const legalprofessionalsJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Legal Professionals - PoPP","url":"https://pops.thharko.com/legal-professionals","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function LegalProfessionalsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Legal Professionals" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(legalprofessionalsJsonLd) }} />{children}</>; }

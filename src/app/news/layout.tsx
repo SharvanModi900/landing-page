@@ -7,4 +7,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/news" },
 };
 
-export default function NewsLayout({ children }: { children: React.ReactNode }) { return <>{children}</>; }
+const newsJsonLd = {"@context":"https://schema.org","@type":"CollectionPage","name":"News - PoPP","url":"https://pops.thharko.com/news","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function NewsLayout({ children }: { children: React.ReactNode }) { return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(newsJsonLd) }} />{children}</>; }

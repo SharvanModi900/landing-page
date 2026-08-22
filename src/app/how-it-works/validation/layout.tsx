@@ -7,4 +7,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/how-it-works/validation" },
 };
 
-export default function ValidationLayout({ children }: { children: React.ReactNode }) { return <>{children}</>; }
+const howitworksvalidationJsonLd = {"@context":"https://schema.org","@type":"Article","name":"Validation - How PoPP Works","url":"https://pops.thharko.com/how-it-works/validation","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function ValidationLayout({ children }: { children: React.ReactNode }) { return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howitworksvalidationJsonLd) }} />{children}</>; }

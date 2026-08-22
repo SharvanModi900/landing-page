@@ -22,4 +22,6 @@ export const metadata: Metadata = {
   twitter: { title: "Developer Documentation — PoPP", description: "Get started building with PoPP — API guides, SDK references, and tutorials." },
 };
 
-export default function DeveloperDocsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Developer Documentation" }]} />{children}</>; }
+const developerdocsJsonLd = {"@context":"https://schema.org","@type":"TechArticle","name":"Developer Documentation - PoPP","url":"https://pops.thharko.com/developer-docs","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function DeveloperDocsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Developer Documentation" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(developerdocsJsonLd) }} />{children}</>; }

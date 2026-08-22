@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Security — PoPP", description: "Cryptographic safeguards and network security measures protecting PoPP." },
 };
 
-export default function SecurityLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Security" }]} />{children}</>; }
+const securityJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Security - PoPP","url":"https://pops.thharko.com/security","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function SecurityLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Security" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(securityJsonLd) }} />{children}</>; }

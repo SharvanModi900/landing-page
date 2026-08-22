@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Learn — PoPP", description: "Learn about decentralized problem validation and civic tech." },
 };
 
-export default function LearnLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Learn" }]} />{children}</>; }
+const learnJsonLd = {"@context":"https://schema.org","@type":"CollectionPage","name":"Learn - PoPP","url":"https://pops.thharko.com/learn","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function LearnLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Learn" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(learnJsonLd) }} />{children}</>; }

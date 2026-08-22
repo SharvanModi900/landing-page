@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Example Workflows — PoPP", description: "Step-by-step PoPP workflow demonstrations." },
 };
 
-export default function ExampleWorkflowsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Example Workflows" }]} />{children}</>; }
+const exampleworkflowsJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Example Workflows - PoPP","url":"https://pops.thharko.com/example-workflows","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function ExampleWorkflowsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Example Workflows" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(exampleworkflowsJsonLd) }} />{children}</>; }

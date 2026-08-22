@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   },
 };
 
+const explorerJsonLd = {"@context":"https://schema.org","@type":"WebApplication","name":"Block Explorer - PoPP","url":"https://pops.thharko.com/explorer","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"},"applicationCategory":"BlockchainApplication","operatingSystem":"Web"};
+
 export default function ExplorerLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(explorerJsonLd) }} />{children}</>;
 }

@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "API Keys — PoPP", description: "Manage your PoPP API keys for protocol integration." },
 };
 
-export default function ApiKeysLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "API Keys" }]} />{children}</>; }
+const apikeysJsonLd = {"@context":"https://schema.org","@type":"TechArticle","name":"API Keys - PoPP Developer Portal","url":"https://pops.thharko.com/api-keys","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function ApiKeysLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "API Keys" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(apikeysJsonLd) }} />{children}</>; }

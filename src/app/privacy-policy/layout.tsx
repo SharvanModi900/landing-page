@@ -9,4 +9,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-export default function PrivacyPolicyLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Privacy Policy" }]} />{children}</>; }
+const privacypolicyJsonLd = {"@context":"https://schema.org","@type":"CreativeWork","name":"Privacy Policy - PoPP","url":"https://pops.thharko.com/privacy-policy","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function PrivacyPolicyLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Privacy Policy" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(privacypolicyJsonLd) }} />{children}</>; }

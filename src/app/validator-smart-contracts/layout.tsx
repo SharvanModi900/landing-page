@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/validator-smart-contracts" },
 };
 
-export default function ValidatorSmartContractsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Validator Smart Contracts" }]} />{children}</>; }
+const validatorsmartcontractsJsonLd = {"@context":"https://schema.org","@type":"TechArticle","name":"Validator Smart Contracts - PoPP","url":"https://pops.thharko.com/validator-smart-contracts","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function ValidatorSmartContractsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Validator Smart Contracts" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(validatorsmartcontractsJsonLd) }} />{children}</>; }

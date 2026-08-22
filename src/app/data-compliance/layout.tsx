@@ -9,4 +9,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-export default function DataComplianceLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Data Compliance" }]} />{children}</>; }
+const datacomplianceJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Data Compliance - PoPP","url":"https://pops.thharko.com/data-compliance","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function DataComplianceLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Data Compliance" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(datacomplianceJsonLd) }} />{children}</>; }

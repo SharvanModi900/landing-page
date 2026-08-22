@@ -9,4 +9,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function DeleteAccountLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Delete Account" }]} />{children}</>; }
+const deleteaccountJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Delete Account - PoPP","url":"https://pops.thharko.com/delete-account","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function DeleteAccountLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Delete Account" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(deleteaccountJsonLd) }} />{children}</>; }

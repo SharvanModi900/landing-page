@@ -26,6 +26,8 @@ export const metadata: Metadata = {
   },
 };
 
+const leaderboardJsonLd = {"@context":"https://schema.org","@type":"ItemList","name":"Leaderboard - PoPP","url":"https://pops.thharko.com/leaderboard","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
 export default function LeaderboardLayout({ children }: { children: React.ReactNode }) {
-  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Leaderboard" }]} />{children}</>;
+  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Leaderboard" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(leaderboardJsonLd) }} />{children}</>;
 }

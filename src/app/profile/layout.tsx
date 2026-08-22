@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/profile" },
 };
 
-export default function ProfileLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Profile" }]} />{children}</>; }
+const profileJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Profile - PoPP","url":"https://pops.thharko.com/profile","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function ProfileLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Profile" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(profileJsonLd) }} />{children}</>; }

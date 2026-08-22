@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/support" },
 };
 
-export default function SupportLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Support" }]} />{children}</>; }
+const supportJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Support - PoPP","url":"https://pops.thharko.com/support","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function SupportLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Support" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(supportJsonLd) }} />{children}</>; }

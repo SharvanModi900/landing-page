@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/feedback" },
 };
 
-export default function FeedbackLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Feedback" }]} />{children}</>; }
+const feedbackJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Feedback - PoPP","url":"https://pops.thharko.com/feedback","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function FeedbackLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Feedback" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(feedbackJsonLd) }} />{children}</>; }

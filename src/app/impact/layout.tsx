@@ -26,6 +26,8 @@ export const metadata: Metadata = {
   },
 };
 
+const impactJsonLd = {"@context":"https://schema.org","@type":"AboutPage","name":"PoPP Impact - Civic Participation","url":"https://pops.thharko.com/impact","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
 export default function ImpactLayout({ children }: { children: React.ReactNode }) {
-  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Impact" }]} />{children}</>;
+  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Impact" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(impactJsonLd) }} />{children}</>;
 }

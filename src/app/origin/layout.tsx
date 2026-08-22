@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/origin" },
 };
 
-export default function OriginLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Origin" }]} />{children}</>; }
+const originJsonLd = {"@context":"https://schema.org","@type":"AboutPage","name":"Origin of PoPP","url":"https://pops.thharko.com/origin","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function OriginLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Origin" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(originJsonLd) }} />{children}</>; }

@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/notifications" },
 };
 
-export default function NotificationsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Notifications" }]} />{children}</>; }
+const notificationsJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Notifications - PoPP","url":"https://pops.thharko.com/notifications","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function NotificationsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Notifications" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(notificationsJsonLd) }} />{children}</>; }

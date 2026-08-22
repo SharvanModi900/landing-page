@@ -8,4 +8,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "/validator-leaderboards" },
 };
 
-export default function ValidatorLeaderboardsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Validator Leaderboards" }]} />{children}</>; }
+const validatorleaderboardsJsonLd = {"@context":"https://schema.org","@type":"ItemList","name":"Validator Leaderboards - PoPP","url":"https://pops.thharko.com/validator-leaderboards","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function ValidatorLeaderboardsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Validator Leaderboards" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(validatorleaderboardsJsonLd) }} />{children}</>; }

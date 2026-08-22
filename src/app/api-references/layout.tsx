@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "API Reference — PoPP", description: "Complete REST API reference for PoPP protocol integration." },
 };
 
-export default function ApiReferencesLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "API Reference" }]} />{children}</>; }
+const apireferencesJsonLd = {"@context":"https://schema.org","@type":"TechArticle","name":"API Reference - PoPP Developer Portal","url":"https://pops.thharko.com/api-references","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function ApiReferencesLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "API Reference" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(apireferencesJsonLd) }} />{children}</>; }

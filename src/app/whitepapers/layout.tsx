@@ -27,10 +27,12 @@ export const metadata: Metadata = {
   },
 };
 
+const whitepapersJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"whitepapers","url":"https://pops.thharko.com/whitepapers","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
 export default function WhitepapersLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Research Papers" }]} />{children}</>;
+  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Research Papers" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(whitepapersJsonLd) }} />{children}</>;
 }

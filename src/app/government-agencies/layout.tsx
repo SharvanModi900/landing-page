@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Government Agencies — PoPP", description: "Verified civic data for government agencies." },
 };
 
-export default function GovernmentAgenciesLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Government Agencies" }]} />{children}</>; }
+const governmentagenciesJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Government Agencies - PoPP","url":"https://pops.thharko.com/government-agencies","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function GovernmentAgenciesLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Government Agencies" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(governmentagenciesJsonLd) }} />{children}</>; }

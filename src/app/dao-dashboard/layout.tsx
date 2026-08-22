@@ -27,6 +27,8 @@ export const metadata: Metadata = {
   },
 };
 
+const daodashboardJsonLd = {"@context":"https://schema.org","@type":"WebApplication","name":"DAO Dashboard - PoPP Governance","url":"https://pops.thharko.com/dao-dashboard","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"},"applicationCategory":"BlockchainApplication","operatingSystem":"Web"};
+
 export default function DaoDashboardLayout({ children }: { children: React.ReactNode }) {
-  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "DAO Dashboard" }]} />{children}</>;
+  return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "DAO Dashboard" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(daodashboardJsonLd) }} />{children}</>;
 }

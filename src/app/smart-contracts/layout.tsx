@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Smart Contracts — PoPP", description: "On-chain smart contracts for validation, staking, and governance." },
 };
 
-export default function SmartContractsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Smart Contracts" }]} />{children}</>; }
+const smartcontractsJsonLd = {"@context":"https://schema.org","@type":"TechArticle","name":"Smart Contracts - PoPP","url":"https://pops.thharko.com/smart-contracts","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function SmartContractsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Smart Contracts" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(smartcontractsJsonLd) }} />{children}</>; }

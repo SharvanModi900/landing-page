@@ -10,4 +10,6 @@ export const metadata: Metadata = {
   twitter: { title: "Media Organizations — PoPP", description: "Verified evidence and validated data for journalism." },
 };
 
-export default function MediaOrganizationsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Media Organizations" }]} />{children}</>; }
+const mediaorganizationsJsonLd = {"@context":"https://schema.org","@type":"WebPage","name":"Media Organizations - PoPP","url":"https://pops.thharko.com/media-organizations","publisher":{"@type":"Organization","name":"Proof of Problem Protocol","url":"https://pops.thharko.com"}};
+
+export default function MediaOrganizationsLayout({ children }: { children: React.ReactNode }) { return <><Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Media Organizations" }]} /><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(mediaorganizationsJsonLd) }} />{children}</>; }
