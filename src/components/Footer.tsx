@@ -93,6 +93,7 @@ const footerSections = [
     links: [
       { title: "Terms of Use", href: "/terms-of-use" },
       { title: "Privacy Policy", href: "/privacy-policy" },
+      { title: "Cookie Policy", href: "/cookies" },
       { title: "Data Compliance", href: "/data-compliance" },
       { title: "Audit Reports", href: "/audit-reports" },
     ],

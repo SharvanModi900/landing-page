@@ -26,9 +26,7 @@ const coreValues = [
 
 const teamMembers = [
   { name: "Sharvan Modi", role: "R & D Reseacher", initials: "SM" },
-  { name: "AJit Singh", role: "", initials: "SM" },
-   { name: "Sachine", role: "", initials: "SM" },
-    { name: "Lalan Kumar", role: "", initials: "LK" },
+  
   
 ];
 

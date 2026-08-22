@@ -188,7 +188,7 @@ export default function TestimonialsSection() {
                   >
                     {/* Quote */}
                     <div className="flex items-start gap-3 mb-4">
-                      <Quote className="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" />
+                      <Quote className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
                       <p className="text-sm text-gray-300 leading-relaxed">{t.quote}</p>
                     </div>
 

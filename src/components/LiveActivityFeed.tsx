@@ -149,7 +149,7 @@ export default function LiveActivityFeed() {
               <Zap className="w-3.5 h-3.5 text-cyan-400" />
             </div>
             <h3 className="text-sm font-semibold text-white">Recent Activity</h3>
-            <span className="ml-auto text-[10px] text-gray-600 flex items-center gap-1">
+            <span className="ml-auto text-[10px] text-gray-400 flex items-center gap-1">
               <Clock className="w-3 h-3" /> auto-refreshing
             </span>
           </div>
@@ -183,11 +183,11 @@ export default function LiveActivityFeed() {
                         {submissions[activeIdx]?.category}
                       </span>
                       {submissions[activeIdx]?.landmark_name && (
-                        <span className="text-[10px] text-gray-500 truncate">
+                        <span className="text-[10px] text-gray-400 truncate">
                           near {submissions[activeIdx]?.landmark_name}
                         </span>
                       )}
-                      <span className="text-[10px] text-gray-600 ml-auto flex-shrink-0">
+                      <span className="text-[10px] text-gray-400 ml-auto flex-shrink-0">
                         {timeAgo(submissions[activeIdx]?.created_at || "")}
                       </span>
                     </div>
@@ -201,6 +201,7 @@ export default function LiveActivityFeed() {
                   <button
                     key={i}
                     onClick={() => setActiveIdx(i)}
+                    aria-label={`View activity ${i + 1}`}
                     className={`w-1.5 h-1.5 rounded-full transition-all ${
                       i === activeIdx ? "bg-cyan-400 w-3" : "bg-white/10 hover:bg-white/20"
                     }`}
@@ -210,7 +211,7 @@ export default function LiveActivityFeed() {
             </div>
           ) : (
             <div className="h-20 flex items-center justify-center">
-              <p className="text-xs text-gray-600">Waiting for first submission...</p>
+              <p className="text-xs text-gray-400">Waiting for first submission...</p>
             </div>
           )}
         </motion.div>
@@ -264,8 +265,8 @@ export default function LiveActivityFeed() {
                 <span className="text-[11px] text-emerald-400/70">
                   {stats.fixed_count} fixed
                 </span>
-                <span className="text-[11px] text-gray-600">·</span>
-                <span className="text-[11px] text-gray-500">
+                <span className="text-[11px] text-gray-400">·</span>
+                <span className="text-[11px] text-gray-400">
                   {stats.total_resolutions} total actions
                 </span>
               </>

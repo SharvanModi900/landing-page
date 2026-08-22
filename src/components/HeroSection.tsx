@@ -21,7 +21,7 @@ function PipelineTeaser() {
             <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.9" />
           </linearGradient>
           <filter id="nodeGlow">
-            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feGaussianBlur stdDeviation="2" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
@@ -44,7 +44,6 @@ function PipelineTeaser() {
         <motion.circle
           r="4"
           fill="#22d3ee"
-          filter="url(#nodeGlow)"
           animate={{ cy: [50, 130, 210, 290, 50] }}
           transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
           cx="150"
@@ -75,7 +74,6 @@ function PipelineTeaser() {
                 r="15"
                 fill={stage.color}
                 opacity="0.9"
-                filter="url(#nodeGlow)"
               />
               {/* Stage number */}
               <text
@@ -122,9 +120,9 @@ function PipelineTeaser() {
 export default function HeroSection() {
   return (
     <section className="relative bg-gradient-to-b from-[#0a0e1a] via-[#0d1526] to-[#0a0f1a] text-white min-h-screen flex flex-col justify-center font-sans overflow-hidden">
-      {/* Ambient glow orbs */}
-      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-cyan-500/[0.04] blur-[160px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-blue-500/[0.03] blur-[140px] pointer-events-none" />
+      {/* Ambient glow orbs — radial gradients (composited, no blur) */}
+      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.06) 0%, transparent 70%)' }} />
+      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.05) 0%, transparent 70%)' }} />
 
       <div className="w-full max-w-7xl mx-auto px-6 lg:px-12 flex flex-col lg:flex-row items-center gap-12 lg:gap-16 pt-20 lg:pt-0 relative z-10">
         {/* Left Side — text content */}

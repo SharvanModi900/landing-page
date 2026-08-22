@@ -126,16 +126,16 @@ export default function VisitorChart() {
             <div className="flex justify-between mt-1 px-1">
               {data.length > 0 && (
                 <>
-                  <span className="text-[9px] text-gray-600">{data[0]?.hour}:00</span>
-                  <span className="text-[9px] text-gray-600">{data[Math.floor(data.length / 2)]?.hour}:00</span>
-                  <span className="text-[9px] text-gray-600">{data[data.length - 1]?.hour}:00</span>
+                  <span className="text-[9px] text-gray-400">{data[0]?.hour}:00</span>
+                  <span className="text-[9px] text-gray-400">{data[Math.floor(data.length / 2)]?.hour}:00</span>
+                  <span className="text-[9px] text-gray-400">{data[data.length - 1]?.hour}:00</span>
                 </>
               )}
             </div>
           </div>
         ) : (
           <div className="h-[120px] flex items-center justify-center bg-white/[0.02] rounded-lg border border-dashed border-white/[0.06]">
-            <p className="text-xs text-gray-600">No visitor data yet</p>
+            <p className="text-xs text-gray-400">No visitor data yet</p>
           </div>
         )}
       </div>

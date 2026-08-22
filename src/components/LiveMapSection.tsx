@@ -280,8 +280,8 @@ export default function LiveMapSection() {
 
   return (
     <section className="py-16 sm:py-24 px-4 sm:px-6 bg-[#0a0e1a] relative overflow-hidden">
-      {/* Ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-cyan-500/[0.02] rounded-full blur-[120px] pointer-events-none" />
+      {/* Ambient glow — radial gradient (composited) */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, rgba(6,182,212,0.04) 0%, transparent 70%)' }} />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
@@ -351,8 +351,8 @@ export default function LiveMapSection() {
           ) : error ? (
             <div className="w-full h-full flex items-center justify-center bg-[#0a0f1a]">
               <div className="flex flex-col items-center gap-3 text-center px-6">
-                <MapPin className="w-8 h-8 text-gray-600" />
-                <span className="text-sm text-gray-500">{error}</span>
+                <MapPin className="w-8 h-8 text-gray-400" />
+                <span className="text-sm text-gray-400">{error}</span>
               </div>
             </div>
           ) : (

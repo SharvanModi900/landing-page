@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "../components/Navigation";
 import Footer from "../components/Footer";
+import CookieConsent from "@/components/CookieConsent";
 import ReduxProvider from "./Provider";
 import { WalletProvider } from "@/lib/wallet";
 
@@ -176,6 +177,7 @@ export default function RootLayout({
             </main>
           </ReduxProvider>
           <Footer />
+          <CookieConsent />
         </WalletProvider>
       </body>
     </html>
