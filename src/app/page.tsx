@@ -9,6 +9,7 @@ import LiveMapSection from "@/components/LiveMapSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import LiveVisitorCounter from "@/components/LiveVisitorCounter";
 import VisitorChart from "@/components/VisitorChart";
+import LiveActivityFeed from "@/components/LiveActivityFeed";
 
 /* ------------------------------------------------------------------ */
 /*  Case Studies data                                                 */
@@ -75,6 +76,9 @@ export default function Home() {
       <div className="">
         <HeroSection />
       </div>
+
+      {/* 1.2 Live Activity Feed */}
+      <LiveActivityFeed />
 
       {/* 1.5 Testimonials & Contributions */}
       <TestimonialsSection />
