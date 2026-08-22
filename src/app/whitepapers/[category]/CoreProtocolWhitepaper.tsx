@@ -107,7 +107,7 @@ function WhitepaperCard({ title, description, image }: Whitepaper) {
     >
       {image && (
         <div className="h-40 w-full relative">
-          <img src={image} alt={title} className="object-cover w-full h-full rounded-t-xl" />
+          <img src={image} alt={`${title} - PoPP whitepaper cover`} className="object-cover w-full h-full rounded-t-xl" loading="lazy" width={400} height={160} />
         </div>
       )}
       <div className="p-4">

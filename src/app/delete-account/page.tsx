@@ -38,7 +38,7 @@ export default function DeleteAccountPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="">
         {/* Hero */}
         <section className="relative py-6 px-4 sm:px-6 text-center overflow-hidden border-b border-white/10">
@@ -263,6 +263,6 @@ export default function DeleteAccountPage() {
           </div>
         </section>
       </div>
-    </main>
+    </div>
   );
 }

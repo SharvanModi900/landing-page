@@ -11,6 +11,8 @@ import {
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import DarkSelect from "@/components/DarkSelect";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import RelatedPages from "@/components/RelatedPages";
 const ProblemMap = dynamic(() => import("@/components/ProblemMap"), { ssr: false });
 
 const CHAIN_API = "https://chain.thharko.com";
@@ -295,6 +297,7 @@ export default function ExplorerPage() {
 
   return (
     <div className="min-h-screen bg-[#030712] text-white flex">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Explorer" }]} />
 
       {/* ═══════════════════════════════════════════════════════════
           SIDEBAR
@@ -645,7 +648,7 @@ export default function ExplorerPage() {
                                 {/* Icon */}
                                 <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center text-base overflow-hidden">
                                   {item.media_url ? (
-                                    <img src={item.media_url} alt="" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; (e.target as HTMLImageElement).parentElement!.textContent = getCategoryIcon(item.category); }} />
+                                    <img src={item.media_url} alt={`Media for ${item.title || 'problem report'}`} className="w-full h-full object-cover" loading="lazy" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; (e.target as HTMLImageElement).parentElement!.textContent = getCategoryIcon(item.category); }} />
                                   ) : getCategoryIcon(item.category)}
                                 </div>
 
@@ -801,6 +804,13 @@ export default function ExplorerPage() {
           )}
         </div>
       </div>
+
+      <RelatedPages pages={[
+        { label: "Report a Problem", href: "/report", description: "Submit a civic issue with evidence" },
+        { label: "Case Studies", href: "/case-studies", description: "Real-world impact stories" },
+        { label: "Resolutions", href: "/resolutions", description: "View resolved problems" },
+        { label: "Validators", href: "/validators", description: "How problems get verified" },
+      ]} />
     </div>
   );
 }

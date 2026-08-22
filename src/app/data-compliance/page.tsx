@@ -47,7 +47,7 @@ export default function DataCompliancePage() {
         </header>
 
         {/* BODY: sticky toc + content */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 md:grid-cols-[280px_1fr] gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 md:grid-cols-[280px_1fr] gap-8">
           {/* TOC */}
           <aside className="hidden md:block">
             <div className="sticky top-24 rounded-xl border border-white/10 bg-white/5 p-3">
@@ -303,7 +303,7 @@ export default function DataCompliancePage() {
               (e.g., DPA) or jurisdiction-specific notices.
             </div>
           </section>
-        </main>
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import RelatedPages from "@/components/RelatedPages";
 import {
   MapPin,
   Clock,
@@ -216,7 +218,8 @@ export default function CaseStudiesPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Case Studies" }]} />
       <div className="">
         {/* ─── Hero ─────────────────────────────────────────────────────── */}
         <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
@@ -511,7 +514,14 @@ export default function CaseStudiesPage() {
             </div>
           </div>
         </section>
+
+        <RelatedPages pages={[
+          { label: "How It Works", href: "/how-it-works", description: "Understand the verification process" },
+          { label: "Explorer", href: "/explorer", description: "Browse all verified problems" },
+          { label: "Whitepaper", href: "/whitepaper", description: "Read the technical protocol" },
+          { label: "Impact", href: "/impact", description: "View community impact metrics" },
+        ]} />
       </div>
-    </main>
+    </div>
   );
 }

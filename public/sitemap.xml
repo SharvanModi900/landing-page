@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Home -->
+  <url><loc>https://pops.thharko.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+
+  <!-- Tier 1: Core Pages -->
+  <url><loc>https://pops.thharko.com/how-it-works</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://pops.thharko.com/about-us</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://pops.thharko.com/whitepaper</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://pops.thharko.com/whitepapers</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://pops.thharko.com/roadmap</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pops.thharko.com/tokenomics</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Tier 2: Key Feature Pages -->
+  <url><loc>https://pops.thharko.com/validators</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pops.thharko.com/report</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pops.thharko.com/explorer</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pops.thharko.com/community</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/case-studies</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pops.thharko.com/proofer</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/resolutions</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/leaderboard</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/testimonials</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/impact</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/mission</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Tier 3: Developer & Technical -->
+  <url><loc>https://pops.thharko.com/developer-docs</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/sdk</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/api-keys</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/api-references</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/cli</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/infrastructure</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/smart-contracts</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/docs</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/sandbox-or-testnet</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/webhooks</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+
+  <!-- Tier 4: Educational & Content -->
+  <url><loc>https://pops.thharko.com/learn</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/learning-resources</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/blogs</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/faqs</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pops.thharko.com/videos</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/workshops</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/events</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/academia-and-research</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/best-practices</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/example-workflows</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+
+  <!-- Tier 5: Audience Landing Pages -->
+  <url><loc>https://pops.thharko.com/civic-activists-and-ngos</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/government-agencies</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/academic-researchers</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/legal-professionals</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/media-organizations</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://pops.thharko.com/students</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- Tier 6: Governance, Legal & Trust -->
+  <url><loc>https://pops.thharko.com/privacy-policy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://pops.thharko.com/terms-of-use</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://pops.thharko.com/data-compliance</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://pops.thharko.com/security</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/vulnerability-disclosures</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://pops.thharko.com/policy-and-governance</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/audit-reports</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/staking-mechanics</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/did</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/using-popp</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- Tier 7: Supporting Pages -->
+  <url><loc>https://pops.thharko.com/our-story</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/vision</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/origin</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/origin/story</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/origin/team</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/origin/mission</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/patners</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/contribute</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/support</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://pops.thharko.com/feedback</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://pops.thharko.com/zones</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/sensors</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/tools</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/datasets</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/escalations</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/design-your-workflow</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/incentive-structures</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/how-it-works/architecture</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/how-it-works/validation</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://pops.thharko.com/validator-leaderboards</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/validator-smart-contracts</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/validator-tools</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/validator-docs</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://pops.thharko.com/news</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+
+  <!-- Pillar Content Pages -->
+  <url><loc>https://pops.thharko.com/learn/decentralized-problem-validation</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pops.thharko.com/learn/civic-tech-blockchain</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://pops.thharko.com/learn/earn-rewards-reporting</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+</urlset>

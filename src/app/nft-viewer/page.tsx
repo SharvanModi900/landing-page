@@ -195,7 +195,7 @@ export default function NFTViewerPage() {
   // ─── Render ─────────────────────────────────────────────────────────────
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="">
         {/* ─── Hero ─────────────────────────────────────────────────────── */}
         <section className="relative py-6 px-4 sm:px-6 text-center overflow-hidden">
@@ -450,7 +450,7 @@ export default function NFTViewerPage() {
           </div>
         )}
       </AnimatePresence>
-    </main>
+    </div>
   );
 }
 

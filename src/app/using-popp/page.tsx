@@ -5,7 +5,7 @@ import { UserGroupIcon, ChartBarIcon, GlobeAltIcon, ArrowRightIcon } from '@hero
 
 export default function UsingPoppPage() {
   return (
-    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       {/* Hero Section */}
       <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 py-10">
         <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4">
@@ -160,6 +160,6 @@ export default function UsingPoppPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

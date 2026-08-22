@@ -42,7 +42,7 @@ export default function DocsPage() {
   const [activeSection, setActiveSection] = useState("overview");
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="flex">
         {/* ─── Sidebar ──────────────────────────────────────────────────── */}
         <aside className="w-56 border-r border-white/10 bg-white/[0.02] min-h-[calc(100vh-4rem)] sticky top-16 hidden md:block">
@@ -433,7 +433,7 @@ export default function DocsPage() {
           </div>
         </aside>
       </div>
-    </main>
+    </div>
   );
 }
 

@@ -3,10 +3,13 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck, Award, Users, Globe } from "lucide-react";
 import Link from "next/link";
+import RelatedPages from "@/components/RelatedPages";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default function ValidatorsPage() {
   return (
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Validators" }]} />
       <div className="">
         {/* Hero Section */}
         <section className="relative py-12 px-4 sm:px-6 text-center">
@@ -137,6 +140,13 @@ export default function ValidatorsPage() {
             </motion.button>
           </Link>
         </section>
+
+        <RelatedPages pages={[
+          { label: "Validator Exam", href: "/validators/exam", description: "Take the certification exam" },
+          { label: "Staking Mechanics", href: "/staking-mechanics", description: "Understand how staking works" },
+          { label: "Leaderboard", href: "/leaderboard", description: "View top validators" },
+          { label: "Report a Problem", href: "/report", description: "Submit problems for validation" },
+        ]} />
       </div>
     </div>
   );

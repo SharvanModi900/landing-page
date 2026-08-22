@@ -99,7 +99,7 @@ export default function WebhooksPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
         <Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition mb-4">
           <ArrowLeft size={14} /> Back to Home
@@ -238,6 +238,6 @@ export default function WebhooksPage() {
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }

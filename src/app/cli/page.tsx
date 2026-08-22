@@ -144,7 +144,7 @@ export default function CLIPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="">
         {/* ─── Hero ─────────────────────────────────────────────────────── */}
         <section className="relative py-8 px-4 sm:px-6 text-center overflow-hidden border-b border-white/10">
@@ -301,6 +301,6 @@ export default function CLIPage() {
           </motion.div>
         </section>
       </div>
-    </main>
+    </div>
   );
 }

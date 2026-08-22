@@ -7,7 +7,7 @@ export default function DownloadPanel() {
         <button className="border border-cyan-600 text-cyan-300 hover:bg-cyan-700/20 px-4 py-2 rounded">
           View on Explorer
         </button>
-        <img src="/assets/qr-code.svg" alt="QR" className="w-16 h-16 mt-2" />
+        <img src="/assets/qr-code.svg" alt="QR code to download PoPP report" width={64} height={64} className="w-16 h-16 mt-2" loading="lazy" />
       </div>
     );
   }

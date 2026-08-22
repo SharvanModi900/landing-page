@@ -235,7 +235,7 @@ export default function Navigation() {
       <div className="w-full max-w-7xl mx-auto px-5 py-2 flex items-start gap-4">
         {/* ---- Col 1: Logo ---- */}
         <Link href="/" className="flex-shrink-0 group">
-          <img src="/logo.png" alt="PoPP" className="h-full w-full max-h-24 rounded-xl object-contain shadow-lg shadow-black/30 group-hover:shadow-cyan-500/10 transition-shadow" />
+          <img src="/logo.png" alt="Proof of Problem Protocol PoPP logo" width={96} height={96} className="h-full w-full max-h-24 rounded-xl object-contain shadow-lg shadow-black/30 group-hover:shadow-cyan-500/10 transition-shadow" />
         </Link>
 
         {/* ---- Col 2: Banner strip + Nav row ---- */}

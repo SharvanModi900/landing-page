@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Twitter, Instagram, Github, BookOpen } from "lucide-react";
+import RelatedPages from "@/components/RelatedPages";
 
 function DiscordIcon({ className }: { className?: string }) {
   return (
@@ -269,6 +270,13 @@ export default function AboutUsPage() {
             </div>
           </div>
         </section>
+
+        <RelatedPages pages={[
+          { label: "Our Story", href: "/our-story", description: "The journey behind PoPP" },
+          { label: "How It Works", href: "/how-it-works", description: "Understand the protocol" },
+          { label: "Whitepaper", href: "/whitepaper", description: "Read the technical paper" },
+          { label: "Contribute", href: "/contribute", description: "Join the open-source mission" },
+        ]} />
       </div>
     </div>
   );

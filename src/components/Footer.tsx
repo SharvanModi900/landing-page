@@ -134,7 +134,137 @@ function getParticleProperties(index: number): { top: string; left: string; dura
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[#010519] text-gray-300 overflow-hidden">
+    <>
+      {/* CTA Section - Outside footer with its own background */}
+      <div className="relative py-16 bg-black">
+        <div className="relative max-w-7xl mx-auto px-6 md:px-16">
+          {/* Background with gradient and glow */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-950 to-black rounded-3xl" />
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-600/5 via-transparent to-green-600/5 rounded-3xl" />
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/15 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-green-500/15 rounded-full blur-3xl" />
+
+          
+          {/* Content */}
+          <div className="relative flex flex-col md:flex-row items-center gap-10 p-8 md:p-12">
+            {/* Left: Logo */}
+            <div className="flex-shrink-0">
+              <img
+                src="/logo.png"
+                alt="PoPP"
+                className="w-[400px] h-[400px] rounded-2xl object-contain shadow-2xl shadow-amber-500/10"
+              />
+            </div>
+
+            {/* Right: Content */}
+            <div className="flex-1 text-center md:text-left">
+              {/* Tagline */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-600/10 border border-amber-500/30 rounded-full text-xs font-medium text-amber-300 mb-4">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+                PROOF OF PROBLEM PROTOCOL
+              </div>
+
+              <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 bg-clip-text text-transparent mb-4">
+                Join the PoPP Movement
+              </h2>
+              <p className="text-gray-300 mb-6 max-w-xl mx-auto md:mx-0">
+                Stay connected with the Proof of Problem Protocol. Get updates, insights, and exclusive community invitations.
+              </p>
+
+              {/* SEE IT. REPORT IT. VERIFY IT. PROVE IT. */}
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-8 text-xs font-semibold">
+                <span className="flex items-center gap-1.5 text-amber-300">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  SEE IT.
+                </span>
+                <span className="text-gray-600">|</span>
+                <span className="flex items-center gap-1.5 text-green-300">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  REPORT IT.
+                </span>
+                <span className="text-gray-600">|</span>
+                <span className="flex items-center gap-1.5 text-emerald-300">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                  VERIFY IT.
+                </span>
+                <span className="text-gray-600">|</span>
+                <span className="flex items-center gap-1.5 text-amber-400">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                  PROVE IT.
+                </span>
+              </div>
+
+              {/* Newsletter Input */}
+              <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start max-w-lg mx-auto md:mx-0">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="px-4 py-3 rounded-xl bg-black/40 border border-amber-500/30 focus:outline-none focus:ring-2 focus:ring-amber-500/60 text-sm w-full placeholder-gray-500 text-white"
+                />
+                <button className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-600 rounded-xl shadow-lg shadow-amber-500/30 hover:shadow-amber-500/50 hover:scale-105 transition font-semibold whitespace-nowrap text-black">
+                  Subscribe
+                </button>
+              </div>
+
+              {/* Social Links */}
+              <div className="flex justify-center md:justify-start gap-3 mt-6">
+                <a href="https://x.com/ShravanModi8" target="_blank" rel="noopener noreferrer"
+                  className="p-3 rounded-full bg-black/40 hover:bg-amber-500/20 border border-amber-500/30 transition" title="X (Twitter)">
+                  <Twitter className="w-5 h-5 text-amber-300" />
+                </a>
+                <a href="https://discord.gg/u6GqfJBsm" target="_blank" rel="noopener noreferrer"
+                  className="p-3 rounded-full bg-black/40 hover:bg-amber-500/20 border border-amber-500/30 transition" title="Discord">
+                  <DiscordIcon className="w-5 h-5 text-amber-300" />
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+                  className="p-3 rounded-full bg-black/40 hover:bg-amber-500/20 border border-amber-500/30 transition" title="Instagram">
+                  <Instagram className="w-5 h-5 text-amber-300" />
+                </a>
+                <a href="#" className="p-3 rounded-full bg-black/40 hover:bg-amber-500/20 border border-amber-500/30 transition" title="LinkedIn">
+                  <Linkedin className="w-5 h-5 text-amber-300" />
+                </a>
+                <a href="https://github.com/SharvanModi900/landing-page" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-black/40 hover:bg-amber-500/20 border border-amber-500/30 transition" title="GitHub">
+                  <Github className="w-5 h-5 text-amber-300" />
+                </a>
+                <a href="mailto:contact@popp.thharko.com" className="p-3 rounded-full bg-black/40 hover:bg-amber-500/20 border border-amber-500/30 transition" title="Email">
+                  <Mail className="w-5 h-5 text-amber-300" />
+                </a>
+              </div>
+
+              {/* App Download */}
+              <div className="mt-6 flex justify-center md:justify-start">
+                <a
+                  href="/app/popp.apk"
+                  className="inline-flex items-center gap-3 px-5 py-3 bg-gradient-to-r from-green-900/50 to-emerald-900/50 border border-green-500/40 rounded-xl hover:border-green-500/60 transition-colors"
+                >
+                  <svg viewBox="0 0 24 24" className="w-6 h-6 text-green-300 flex-shrink-0" fill="currentColor">
+                    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.01 5.732 7.708-8.034zm3.196-1.832l2.386 1.361a1 1 0 010 1.728l-2.386 1.361-2.533-2.533 2.533-2.917zM5.791 3.252l10.01 5.732-2.302 2.302-7.708-8.034z" />
+                  </svg>
+                  <div className="text-left">
+                    <div className="text-[10px] text-gray-300 leading-none">Download for</div>
+                    <div className="text-sm font-semibold text-green-300 leading-tight">Android</div>
+                  </div>
+                  <span className="text-xs text-gray-500 border-l border-white/10 pl-3">Free · Open Source</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="relative bg-[#010519] text-gray-300 overflow-hidden">
       {/* Gradient Background */}
       <div className="absolute inset-0">
         <div className="absolute -top-40 left-0 w-[600px] h-[600px] rounded-full bg-purple-600/20 blur-3xl animate-pulse-slow"></div>
@@ -159,85 +289,6 @@ export default function Footer() {
             />
           );
         })}
-      </div>
-
-      {/* CTA Section */}
-      <div className="relative max-w-7xl mx-auto px-6 md:px-16 py-16 z-10">
-        <div className="flex flex-col md:flex-row items-center gap-10">
-          {/* Left: Logo */}
-          <div className="flex-shrink-0">
-            <img
-              src="/logo.png"
-              alt="PoPP"
-              className="w-[400px] h-[400px] rounded-2xl object-contain shadow-2xl shadow-black/40"
-              style={{ mixBlendMode: 'multiply' }}
-            />
-          </div>
-
-          {/* Right: Content */}
-          <div className="flex-1 text-center md:text-left">
-            <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-              Join the PoPP Movement
-            </h2>
-            <p className="text-gray-400 mt-4 max-w-xl mx-auto md:mx-0">
-              Stay connected with the Proof of Problem Protocol. Get updates, insights, and exclusive community invitations.
-            </p>
-
-          {/* Newsletter Input */}
-          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center max-w-lg mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="px-4 py-3 rounded-xl bg-white/5 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm w-full"
-            />
-            <button className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg hover:scale-105 transition font-semibold whitespace-nowrap">
-              Subscribe
-            </button>
-          </div>
-
-          {/* Social Links */}
-          <div className="flex justify-center gap-3 mt-8">
-            <a href="https://x.com/ShravanModi8" target="_blank" rel="noopener noreferrer"
-              className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition" title="X (Twitter)">
-              <Twitter className="w-5 h-5" />
-            </a>
-            <a href="https://discord.gg/u6GqfJBsm" target="_blank" rel="noopener noreferrer"
-              className="p-3 rounded-full bg-white/5 hover:bg-indigo-600/30 border border-white/10 transition" title="Discord">
-              <DiscordIcon className="w-5 h-5" />
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
-              className="p-3 rounded-full bg-white/5 hover:bg-pink-600/30 border border-white/10 transition" title="Instagram">
-              <Instagram className="w-5 h-5" />
-            </a>
-            <a href="#" className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition" title="LinkedIn">
-              <Linkedin className="w-5 h-5" />
-            </a>
-            <a href="https://github.com/SharvanModi900/landing-page" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition" title="GitHub">
-              <Github className="w-5 h-5" />
-            </a>
-            <a href="mailto:contact@popp.thharko.com" className="p-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition" title="Email">
-              <Mail className="w-5 h-5" />
-            </a>
-          </div>
-
-          {/* App Download */}
-          <div className="mt-8 flex justify-center">
-            <a
-              href="/app/popp.apk"
-              className="inline-flex items-center gap-3 px-5 py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/[0.08] transition-colors"
-            >
-              <svg viewBox="0 0 24 24" className="w-6 h-6 text-green-400 flex-shrink-0" fill="currentColor">
-                <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 01-.61-.92V2.734a1 1 0 01.609-.92zm10.89 10.893l2.302 2.302-10.01 5.732 7.708-8.034zm3.196-1.832l2.386 1.361a1 1 0 010 1.728l-2.386 1.361-2.533-2.533 2.533-2.917zM5.791 3.252l10.01 5.732-2.302 2.302-7.708-8.034z" />
-              </svg>
-              <div className="text-left">
-                <div className="text-[10px] text-gray-400 leading-none">Download for</div>
-                <div className="text-sm font-semibold text-white leading-tight">Android</div>
-              </div>
-              <span className="text-xs text-gray-500 border-l border-white/10 pl-3">Free · Open Source</span>
-            </a>
-          </div>
-          </div>
-        </div>
       </div>
 
       {/* Footer Links — symmetric 3×3 grid */}
@@ -268,7 +319,7 @@ export default function Footer() {
       <div className="relative border-t border-white/10 py-6 z-10">
         <div className="flex flex-col items-center gap-3">
           <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="PoPP" className="h-6 w-6 rounded object-cover" />
+            <img src="/logo.png" alt="Proof of Problem Protocol PoPP logo" width={24} height={24} className="h-6 w-6 rounded object-cover" />
             <span className="text-sm font-bold text-white">PoPP</span>
           </div>
           <p className="text-xs text-gray-500">© {new Date().getFullYear()} Proof of Problem Protocol. All rights reserved.</p>
@@ -295,5 +346,6 @@ export default function Footer() {
         .animate-float { animation: float infinite ease-in-out; }
       `}</style>
     </footer>
+    </>
   );
 }

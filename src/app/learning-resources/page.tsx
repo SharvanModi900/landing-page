@@ -130,7 +130,7 @@ export default function LearningResourcesPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="">
         {/* HERO / SEARCH */}
         <section className="px-4 sm:px-6 py-10">
@@ -556,6 +556,6 @@ export default function LearningResourcesPage() {
           </motion.div>
         </div>
       )}
-    </main>
+    </div>
   );
 }

@@ -369,7 +369,7 @@ export default function SubmissionForm({ onSuccess }: { onSuccess: (data: any) =
                 {files.map((file, index) => (
                   <div key={index} className="relative group">
                     {filePreviews[index] ? (
-                      <img src={filePreviews[index]} alt={file.name} className="w-full h-24 object-cover rounded-xl border border-white/[0.06]" />
+                      <img src={filePreviews[index]} alt={`Uploaded evidence: ${file.name}`} className="w-full h-24 object-cover rounded-xl border border-white/[0.06]" loading="lazy" width={120} height={96} />
                     ) : (
                       <div className="w-full h-24 flex items-center justify-center bg-white/[0.03] rounded-xl border border-white/[0.06]">
                         <Upload className="w-6 h-6 text-cyan-400/40" />

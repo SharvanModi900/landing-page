@@ -6,7 +6,7 @@ import { ArrowLeftIcon, DocumentArrowDownIcon } from "@heroicons/react/24/outlin
 
 export default function WhitepaperPage() {
   return (
-    <main className="bg-[#030712] text-white min-h-screen pt-20 pb-24">
+    <div className="bg-[#030712] text-white min-h-screen pt-20 pb-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
         {/* Back + Download */}
@@ -43,6 +43,11 @@ export default function WhitepaperPage() {
               Community-Powered Data Economy
             </span>
           </h1>
+          <div className="flex items-center gap-4 mt-4 text-sm text-gray-500">
+            <span>By PoPP Research Team</span><span>&middot;</span>
+            <time dateTime="2025-06-01">June 2025</time><span>&middot;</span>
+            <span>Last updated: August 2025</span>
+          </div>
         </motion.div>
 
         {/* Content */}
@@ -356,6 +361,6 @@ export default function WhitepaperPage() {
           </div>
         </motion.div>
       </div>
-    </main>
+    </div>
   );
 }

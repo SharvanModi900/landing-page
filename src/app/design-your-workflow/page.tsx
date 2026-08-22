@@ -46,7 +46,7 @@ export default function DesignYourWorkflowPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       {/* ============= HERO (Split) ============= */}
       <section className="relative overflow-hidden">
         {/* subtle background grid lines */}
@@ -265,7 +265,7 @@ export default function DesignYourWorkflowPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

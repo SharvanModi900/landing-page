@@ -90,7 +90,7 @@ export default function LeaderboardPage() {
   const rest = leaderboard.slice(3);
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-6">
@@ -332,6 +332,6 @@ export default function LeaderboardPage() {
           </>
         )}
       </div>
-    </main>
+    </div>
   );
 }

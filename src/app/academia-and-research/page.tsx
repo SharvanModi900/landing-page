@@ -150,7 +150,7 @@ const studentPrograms = [
 
 export default function AcademiaResearchPage() {
   return (
-    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       {/* ─── Hero ─────────────────────────────────────────────────────── */}
       <header className="relative overflow-hidden border-b border-white/10">
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-cyan-600/10 blur-3xl" />
@@ -403,6 +403,6 @@ export default function AcademiaResearchPage() {
           </div>
         </motion.div>
       </section>
-    </main>
+    </div>
   );
 }

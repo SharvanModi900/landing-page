@@ -210,7 +210,7 @@ export default function PolicyGovernancePage() {
         </nav>
 
         {/* RIGHT CONTENT */}
-        <main className="lg:col-span-9 space-y-8">
+        <div className="lg:col-span-9 space-y-8">
           {SECTIONS.map((s, idx) => (
             <section key={s.id} id={s.id}>
               <motion.div
@@ -302,7 +302,7 @@ export default function PolicyGovernancePage() {
               </div>
             </div>
           </section>
-        </main>
+        </div>
       </div>
 
       {/* Sticky CTA */}

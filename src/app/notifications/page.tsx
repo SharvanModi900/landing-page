@@ -73,7 +73,7 @@ export default function NotificationsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between mb-6">
@@ -137,6 +137,6 @@ export default function NotificationsPage() {
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }

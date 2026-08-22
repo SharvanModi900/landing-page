@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { TrendingUp, Coins, Flame, BarChart3, Award, PieChart, RefreshCw } from 'lucide-react';
 import { useWallet } from '@/lib/wallet';
+import RelatedPages from '@/components/RelatedPages';
 
 const BACKEND_API = 'https://popp.thharko.com';
 
@@ -362,6 +363,13 @@ export default function TokenomicsPage() {
           </div>
         )}
       </div>
+
+      <RelatedPages pages={[
+        { label: "Staking Mechanics", href: "/staking-mechanics", description: "How staking and rewards work" },
+        { label: "Become a Validator", href: "/validators", description: "Verify problems and earn tokens" },
+        { label: "DAO Dashboard", href: "/dao-dashboard", description: "Governance and voting power" },
+        { label: "How It Works", href: "/how-it-works", description: "Understand the full protocol" },
+      ]} />
     </div>
   );
 }

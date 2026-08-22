@@ -16,6 +16,7 @@ import {
   SparklesIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import RelatedPages from "@/components/RelatedPages";
 
 /* ─── Flow Step ─── */
 function FlowStep({
@@ -70,7 +71,7 @@ function RevenueCard({
 
 export default function HowItWorksPage() {
   return (
-    <main className="bg-[#0A0E1A] text-white min-h-screen pt-24 pb-20">
+    <div className="bg-[#0A0E1A] text-white min-h-screen pt-24 pb-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
 
         {/* ─── Hero ─── */}
@@ -249,7 +250,14 @@ export default function HowItWorksPage() {
             </Link>
           </div>
         </section>
+
+        <RelatedPages pages={[
+          { label: "Become a Validator", href: "/validators", description: "Verify problems and earn rewards" },
+          { label: "Report a Problem", href: "/report", description: "Submit a civic issue with evidence" },
+          { label: "Explore Verified Problems", href: "/explorer", description: "Browse the problem database" },
+          { label: "Token Rewards", href: "/tokenomics", description: "Understand the reward economy" },
+        ]} />
       </div>
-    </main>
+    </div>
   );
 }

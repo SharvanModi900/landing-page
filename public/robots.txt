@@ -1,0 +1,21 @@
+# robots.txt — Proof of Problem Protocol (PoPP)
+# https://pops.thharko.com/robots.txt
+
+User-agent: *
+Allow: /
+
+# Utility / app pages — low SEO value
+Disallow: /wallet
+Disallow: /profile
+Disallow: /delete-account
+Disallow: /validator-panel
+Disallow: /validator-exam
+Disallow: /notifications
+Disallow: /nft-viewer
+Disallow: /dao-dashboard
+Disallow: /explorer/detail
+Disallow: /explorer/dispute
+Disallow: /validators/exam
+
+# Sitemap
+Sitemap: https://pops.thharko.com/sitemap.xml

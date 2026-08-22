@@ -231,7 +231,7 @@ export default function TestimonialsPage() {
   })();
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
 
         {/* ─── Header ─── */}
@@ -633,6 +633,6 @@ export default function TestimonialsPage() {
           </>
         )}
       </div>
-    </main>
+    </div>
   );
 }

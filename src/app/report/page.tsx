@@ -5,6 +5,7 @@ import StageProgressBar from "./StageProgressBar";
 import SubmissionForm from "./SubmissionForm";
 import { QRCodeCanvas } from "qrcode.react";
 import { motion } from "framer-motion";
+import RelatedPages from "@/components/RelatedPages";
 import {
   CheckCircle2, Copy, Download, ExternalLink, Shield,
   FileText, ShieldCheck, Users, Vote, Rocket, Zap,
@@ -26,7 +27,7 @@ export default function SubmitPage() {
   }, [submitted, currentStage, STAGES.length, advanceStage]);
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white overflow-hidden overflow-x-hidden">
+    <div className="min-h-screen bg-[#030712] text-white overflow-hidden overflow-x-hidden">
       {/* Ambient background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-cyan-500/[0.03] rounded-full blur-[120px]" />
@@ -267,7 +268,14 @@ export default function SubmitPage() {
           </div>
         )}
       </div>
-    </main>
+
+      <RelatedPages pages={[
+        { label: "How It Works", href: "/how-it-works", description: "Understand the verification pipeline" },
+        { label: "Token Rewards", href: "/tokenomics", description: "Earn SAT MUDRA for reporting" },
+        { label: "Explorer", href: "/explorer", description: "Browse verified problems" },
+        { label: "Validators", href: "/validators", description: "How problems get verified" },
+      ]} />
+    </div>
   );
 }
 

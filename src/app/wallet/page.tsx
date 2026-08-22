@@ -110,7 +110,7 @@ export default function WalletPage() {
   const copyAddr = () => { if (address) { navigator.clipboard.writeText(address); setCopied(true); setTimeout(() => setCopied(false), 2000); } };
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between mb-6">
@@ -330,6 +330,6 @@ export default function WalletPage() {
         )}
       </div>
       {showWalletModal && <WalletModal onClose={() => { setShowWalletModal(false); fetchData(); }} />}
-    </main>
+    </div>
   );
 }

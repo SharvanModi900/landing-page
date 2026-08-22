@@ -62,7 +62,7 @@ export default function ResolutionsPage() {
   useEffect(() => { fetchData(); }, [fetchData]);
 
   return (
-    <main className="min-h-screen bg-[#030712] text-white">
+    <div className="min-h-screen bg-[#030712] text-white">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6">
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 mb-6">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500/20 to-cyan-600/20 ring-1 ring-emerald-500/30">
@@ -285,6 +285,6 @@ export default function ResolutionsPage() {
           </>
         )}
       </div>
-    </main>
+    </div>
   );
 }

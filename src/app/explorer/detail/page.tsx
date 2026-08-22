@@ -8,6 +8,7 @@ import {
   Coins, CheckCircle,
 } from "lucide-react";
 import Link from "next/link";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { useSearchParams } from "next/navigation";
 import { useWallet } from "@/lib/wallet";
 
@@ -1425,7 +1426,8 @@ function DetailContent() {
 
 export default function TicketDetailPage() {
   return (
-    <main className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Explorer", href: "/explorer" }, { label: "Problem Detail" }]} />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         {/* Back button */}
         <Link href="/explorer" className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition mb-6">
@@ -1440,6 +1442,6 @@ export default function TicketDetailPage() {
           <DetailContent />
         </Suspense>
       </div>
-    </main>
+    </div>
   );
 }
