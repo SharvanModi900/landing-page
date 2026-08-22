@@ -168,6 +168,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Google Search Console Verification */}
+        <meta name="google-site-verification" content="FzA5CCrnELCJ1mK3YviQ2kaci5uw3mGCxrK5pT6ndSw" />
         <link rel="preconnect" href="https://popp.thharko.com" />
         <link rel="dns-prefetch" href="https://popp.thharko.com" />
         <link rel="preconnect" href="https://chain.thharko.com" />
