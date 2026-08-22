@@ -231,89 +231,70 @@ export default function Navigation() {
           : "bg-transparent"
       }`}
     >
-      {/* Early Access Banner Strip */}
-      <div className="bg-gradient-to-r from-violet-600/90 via-indigo-600/90 to-cyan-600/90">
-        <div className="w-full max-w-7xl mx-auto px-5 py-2.5 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-white/20 border border-white/25 rounded-full text-[10px] font-bold text-white flex-shrink-0">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              BETA
-            </span>
-            <p className="text-xs text-white/90 truncate hidden sm:block">
-              Android app in <span className="text-white font-semibold">early testing</span>  join the waitlist
-            </p>
-          </div>
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSc1uzrlQPc3q_DngaVOK2yzKKaLgtGMQNvCx5iZmgmcx-VAeA/viewform"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex-shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white/20 hover:bg-white/30 border border-white/20 rounded-lg text-[11px] font-semibold text-white backdrop-blur-sm transition-all"
-          >
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
-            Join Waitlist
-          </a>
-        </div>
-      </div>
-
-      <div className="w-full max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
-        {/* ---- Logo + sparkline ---- */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-            PoPP
-          </span>
-          {sparkData.length > 0 && sparkData.some((v) => v > 0) && (
-            <svg viewBox="0 0 80 28" className="w-20 h-7 opacity-60 group-hover:opacity-100 transition-opacity" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.4" />
-                  <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-              {(() => {
-                const max = Math.max(...sparkData, 1);
-                const step = 80 / (sparkData.length - 1 || 1);
-                const pts = sparkData.map((v, i) => `${i * step},${28 - (v / max) * 24}`);
-                const line = `M${pts.join(" L")}`;
-                const area = `${line} L80,28 L0,28 Z`;
-                return (
-                  <>
-                    <path d={area} fill="url(#sparkGrad)" />
-                    <path d={line} fill="none" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </>
-                );
-              })()}
-            </svg>
-          )}
+      {/* Main navbar row: Logo (col 1) + Banner/Nav (col 2) */}
+      <div className="w-full max-w-7xl mx-auto px-5 py-2 flex items-start gap-4">
+        {/* ---- Col 1: Logo ---- */}
+        <Link href="/" className="flex-shrink-0 group">
+          <img src="/logo.png" alt="PoPP" className="h-full w-full max-h-24 rounded-xl object-contain shadow-lg shadow-black/30 group-hover:shadow-cyan-500/10 transition-shadow" />
         </Link>
 
-        {/* ---- Desktop nav ---- */}
-        <div className="hidden md:flex items-center gap-1" ref={dropdownRef}>
-          {mainNavLinks.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              prefetch={true}
-              className="px-3.5 py-2 text-sm font-medium text-gray-300 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors"
-            >
-              {item.label}
-            </Link>
-          ))}
+        {/* ---- Col 2: Banner strip + Nav row ---- */}
+        <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+          {/* Early Access Banner Strip */}
+          <div className="bg-gradient-to-r from-violet-600/90 via-indigo-600/90 to-cyan-600/90 rounded-lg">
+            <div className="px-4 py-1.5 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-white/20 border border-white/25 rounded-full text-[10px] font-bold text-white flex-shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                  BETA
+                </span>
+                <p className="text-[11px] text-white/90 truncate hidden sm:block">
+                  Android app in <span className="text-white font-semibold">early testing</span> — join the waitlist
+                </p>
+              </div>
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSc1uzrlQPc3q_DngaVOK2yzKKaLgtGMQNvCx5iZmgmcx-VAeA/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 hover:bg-white/30 border border-white/20 rounded-md text-[10px] font-semibold text-white backdrop-blur-sm transition-all"
+              >
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+                Join Waitlist
+              </a>
+            </div>
+          </div>
 
-          {/* More trigger — click toggle */}
-          <button
-            onClick={toggleMega}
-            className={`px-3.5 py-2 text-sm font-medium rounded-lg flex items-center gap-1 transition-colors ${
-              megaOpen ? "text-white bg-white/[0.08]" : "text-gray-300 hover:text-white hover:bg-white/[0.06]"
-            }`}
-          >
-            More
-            <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${megaOpen ? "rotate-180" : ""}`} />
-          </button>
+          {/* Nav row */}
+          <div className="flex items-center justify-between">
+            {/* Nav links */}
+            <div className="hidden md:flex items-center gap-0.5" ref={dropdownRef}>
+              {mainNavLinks.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  prefetch={true}
+                  className="px-3 py-1.5 text-sm font-medium text-gray-300 hover:text-white rounded-lg hover:bg-white/[0.06] transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ))}
 
-          {/* Right-side actions */}
-          <div className="flex items-center gap-3 ml-4">
+              {/* More trigger — click toggle */}
+              <button
+                onClick={toggleMega}
+                className={`px-3 py-1.5 text-sm font-medium rounded-lg flex items-center gap-1 transition-colors ${
+                  megaOpen ? "text-white bg-white/[0.08]" : "text-gray-300 hover:text-white hover:bg-white/[0.06]"
+                }`}
+              >
+                More
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${megaOpen ? "rotate-180" : ""}`} />
+              </button>
+            </div>
+
+            {/* Right-side actions */}
+            <div className="flex items-center gap-3 ml-4">
             <div className="relative">
               <button
                 onClick={(e) => {
@@ -358,6 +339,7 @@ export default function Navigation() {
               {walletModalOpen && <WalletDropdown onClose={() => setWalletModalOpen(false)} />}
             </div>
           </div>
+        </div>
         </div>
 
         {/* ---- Mobile hamburger ---- */}

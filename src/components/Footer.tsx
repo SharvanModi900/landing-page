@@ -163,13 +163,25 @@ export default function Footer() {
 
       {/* CTA Section */}
       <div className="relative max-w-7xl mx-auto px-6 md:px-16 py-16 z-10">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-            Join the PoPP Movement
-          </h2>
-          <p className="text-gray-400 mt-4 max-w-xl mx-auto">
-            Stay connected with the Proof of Problem Protocol. Get updates, insights, and exclusive community invitations.
-          </p>
+        <div className="flex flex-col md:flex-row items-center gap-10">
+          {/* Left: Logo */}
+          <div className="flex-shrink-0">
+            <img
+              src="/logo.png"
+              alt="PoPP"
+              className="w-[400px] h-[400px] rounded-2xl object-contain shadow-2xl shadow-black/40"
+              style={{ mixBlendMode: 'multiply' }}
+            />
+          </div>
+
+          {/* Right: Content */}
+          <div className="flex-1 text-center md:text-left">
+            <h2 className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              Join the PoPP Movement
+            </h2>
+            <p className="text-gray-400 mt-4 max-w-xl mx-auto md:mx-0">
+              Stay connected with the Proof of Problem Protocol. Get updates, insights, and exclusive community invitations.
+            </p>
 
           {/* Newsletter Input */}
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center items-center max-w-lg mx-auto">
@@ -224,6 +236,7 @@ export default function Footer() {
               <span className="text-xs text-gray-500 border-l border-white/10 pl-3">Free · Open Source</span>
             </a>
           </div>
+          </div>
         </div>
       </div>
 
@@ -252,9 +265,15 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="relative text-center text-xs text-gray-500 border-t border-white/10 py-6 z-10">
-        <p>© {new Date().getFullYear()} PoPP. All rights reserved.</p>
-        <p className="text-gray-400 mt-2">Built with 🔮 to reimagine problem-solving.</p>
+      <div className="relative border-t border-white/10 py-6 z-10">
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="PoPP" className="h-6 w-6 rounded object-cover" />
+            <span className="text-sm font-bold text-white">PoPP</span>
+          </div>
+          <p className="text-xs text-gray-500">© {new Date().getFullYear()} Proof of Problem Protocol. All rights reserved.</p>
+          <p className="text-xs text-gray-400">Built with 🔮 to reimagine problem-solving.</p>
+        </div>
       </div>
 
       <style jsx>{`
