@@ -117,7 +117,6 @@ export const megaMenuSections: MegaSection[] = [
     label: "Resources",
     submenu: [
       { title: "Whitepaper", desc: "Official protocol paper", href: "/whitepapers", icon: BookOpenIcon },
-      { title: "How It Works", desc: "From problems to data economy", href: "/how-it-works", icon: LightBulbIcon },
       { title: "Blogs & News", desc: "Updates and articles", href: "/blogs", icon: GlobeAltIcon },
       { title: "Learning Resources", desc: "Guides and videos", href: "/learning-resources", icon: BookOpenIcon },
       { title: "Example Workflows", desc: "Practical PoPP scenarios", href: "/example-workflows", icon: LightBulbIcon },
@@ -137,6 +136,7 @@ export const megaMenuSections: MegaSection[] = [
 
 const mainNavLinks = [
   { label: "Home", href: "/" },
+  { label: "How It Works", href: "/how-it-works" },
   { label: "About", href: "/about-us" },
   { label: "Report", href: "/report" },
   { label: "Validators", href: "/validators" },
