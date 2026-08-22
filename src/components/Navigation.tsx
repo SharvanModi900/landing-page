@@ -116,7 +116,7 @@ export const megaMenuSections: MegaSection[] = [
   {
     label: "Resources",
     submenu: [
-      { title: "Whitepaper", desc: "Official protocol paper", href: "/whitepapers", icon: BookOpenIcon },
+      { title: "Whitepaper", desc: "Official protocol paper", href: "/whitepaper", icon: BookOpenIcon },
       { title: "Blogs & News", desc: "Updates and articles", href: "/blogs", icon: GlobeAltIcon },
       { title: "Learning Resources", desc: "Guides and videos", href: "/learning-resources", icon: BookOpenIcon },
       { title: "Example Workflows", desc: "Practical PoPP scenarios", href: "/example-workflows", icon: LightBulbIcon },

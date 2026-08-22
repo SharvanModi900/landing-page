@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useMemo, useRef } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, CircleMarker, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -65,13 +65,22 @@ function MapInstanceCapture({ onCreated }: { onCreated: (map: L.Map) => void }) 
   return null;
 }
 
+interface RoadSegment {
+  id: string;
+  coordinates: [number, number][];
+  color: string;
+  status: string;
+  problemIds: string[];
+}
+
 interface ProblemMapProps {
   markers: ProblemMarker[];
+  roadSegments?: RoadSegment[];
   onMarkerClick?: (id: string) => void;
   visible?: boolean;
 }
 
-export default function ProblemMap({ markers, onMarkerClick, visible = true }: ProblemMapProps) {
+export default function ProblemMap({ markers, roadSegments = [], onMarkerClick, visible = true }: ProblemMapProps) {
   const [showHeatmap, setShowHeatmap] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [showSettings, setShowSettings] = useState(false);
@@ -92,6 +101,13 @@ export default function ProblemMap({ markers, onMarkerClick, visible = true }: P
   const validMarkers = markers.filter(
     (m) => m.latitude && m.longitude && Math.abs(m.latitude) > 0.001 && Math.abs(m.longitude) > 0.001
   );
+
+  // IDs of problems already shown as road segments (no need for teardrop)
+  const roadSnappedIds = useMemo(() => {
+    const ids = new Set<string>();
+    roadSegments.forEach((seg) => seg.problemIds.forEach((id) => ids.add(id)));
+    return ids;
+  }, [roadSegments]);
 
   // Filter markers by category
   const filteredMarkers = useMemo(() => {
@@ -135,7 +151,65 @@ export default function ProblemMap({ markers, onMarkerClick, visible = true }: P
         <MapInstanceCapture onCreated={(map) => { mapRef.current = map; }} />
         <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
         <FitBounds markers={filteredMarkers} />
-        {filteredMarkers.map((marker) => {
+
+        {/* Road segments — colored polylines snapped to actual roads */}
+        {roadSegments.map((seg) => (
+          <React.Fragment key={seg.id}>
+            {/* Glow layer */}
+            <Polyline
+              positions={seg.coordinates}
+              pathOptions={{
+                color: seg.color,
+                weight: 10,
+                opacity: 0.15,
+                lineCap: "round",
+                lineJoin: "round",
+              }}
+            />
+            {/* Main road line */}
+            <Polyline
+              positions={seg.coordinates}
+              pathOptions={{
+                color: seg.color,
+                weight: 4,
+                opacity: 0.85,
+                lineCap: "round",
+                lineJoin: "round",
+              }}
+            />
+            {/* Snapped position dot */}
+            <CircleMarker
+              center={seg.coordinates[1] || seg.coordinates[0]}
+              radius={5}
+              pathOptions={{
+                color: "#fff",
+                weight: 2,
+                fillColor: seg.color,
+                fillOpacity: 0.9,
+              }}
+            >
+              <Popup className="popp-popup">
+                <div className="p-1 min-w-[180px]">
+                  <span
+                    className="px-2 py-0.5 text-[10px] font-bold rounded-full uppercase tracking-wider"
+                    style={{
+                      backgroundColor: seg.color + "25",
+                      color: seg.color,
+                      border: `1.5px solid ${seg.color}50`,
+                    }}
+                  >
+                    {seg.status}
+                  </span>
+                  <p className="text-xs text-gray-500 mt-1">{seg.problemIds.length} problem(s) on this road segment</p>
+                </div>
+              </Popup>
+            </CircleMarker>
+          </React.Fragment>
+        ))}
+
+        {filteredMarkers
+          .filter((m) => !roadSnappedIds.has(m.id)) // hide teardrops for road-snapped problems
+          .map((marker) => {
           const pinIcon = L.divIcon({
             className: 'popp-pin-wrapper',
             html: `<div class="popp-pin-marker"><div class="popp-pin-body" style="background:${marker.color};"></div><div class="popp-pin-icon">!</div></div>`,

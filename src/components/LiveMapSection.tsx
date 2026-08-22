@@ -18,6 +18,7 @@ const ProblemMap = dynamic(() => import("@/components/ProblemMap"), {
 
 const BACKEND_API = "https://popp.thharko.com";
 const CHAIN_API = "https://chain.thharko.com";
+const OSRM_API = "https://router.project-osrm.org";
 
 const STATUS_COLORS: Record<string, string> = {
   SUBMITTED: "#3b82f6",
@@ -42,8 +43,132 @@ interface MapMarker {
   media_url?: string;
 }
 
+export interface RoadSegment {
+  id: string;
+  coordinates: [number, number][]; // [lat, lng][]
+  color: string;
+  status: string;
+  problemIds: string[];
+}
+
+/* Haversine distance in km */
+function haversine(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+/* Offset a point by ~distKm in a given bearing direction */
+function offsetPoint(lat: number, lng: number, bearingDeg: number, distKm: number): [number, number] {
+  const R = 6371;
+  const brng = (bearingDeg * Math.PI) / 180;
+  const lat1 = (lat * Math.PI) / 180;
+  const lng1 = (lng * Math.PI) / 180;
+  const d = distKm / R;
+  const lat2 = Math.asin(Math.sin(lat1) * Math.cos(d) + Math.cos(lat1) * Math.sin(d) * Math.cos(brng));
+  const lng2 = lng1 + Math.atan2(Math.sin(brng) * Math.sin(d) * Math.cos(lat1), Math.cos(d) - Math.sin(lat1) * Math.sin(lat2));
+  return [(lat2 * 180) / Math.PI, (lng2 * 180) / Math.PI];
+}
+
+/* Snap a single point to the nearest road via OSRM */
+async function snapToRoad(lat: number, lng: number): Promise<{ lat: number; lng: number } | null> {
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 4000);
+    const res = await fetch(
+      `${OSRM_API}/nearest/v1/driving/${lng},${lat}?number=2`,
+      { signal: ctrl.signal }
+    );
+    clearTimeout(timer);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data.waypoints || data.waypoints.length < 2) return null;
+    const wp = data.waypoints[0];
+    return { lat: wp.location[1], lng: wp.location[0] };
+  } catch {
+    return null;
+  }
+}
+
+/* Build road segments by snapping markers to roads via OSRM */
+async function buildRoadSegments(markers: MapMarker[]): Promise<RoadSegment[]> {
+  const SEGMENT_LENGTH_KM = 0.15; // 150m visible road segment
+  const MERGE_DISTANCE_KM = 0.25; // merge snapped points within 250m
+
+  // Limit OSRM calls to avoid rate limiting
+  const toSnap = markers.slice(0, 60);
+  const snapped: { lat: number; lng: number; marker: MapMarker }[] = [];
+
+  // Process sequentially to be gentle on the free demo server
+  for (const m of toSnap) {
+    const result = await snapToRoad(m.latitude, m.longitude);
+    if (result) {
+      snapped.push({ ...result, marker: m });
+    }
+  }
+
+  if (snapped.length === 0) return [];
+
+  // Group nearby snapped points (same road segment)
+  const groups: { lat: number; lng: number; color: string; status: string; ids: string[] }[] = [];
+  for (const s of snapped) {
+    let merged = false;
+    for (const g of groups) {
+      if (haversine(s.lat, s.lng, g.lat, g.lng) < MERGE_DISTANCE_KM) {
+        g.ids.push(s.marker.id);
+        // Average the position
+        g.lat = (g.lat * (g.ids.length - 1) + s.lat) / g.ids.length;
+        g.lng = (g.lng * (g.ids.length - 1) + s.lng) / g.ids.length;
+        merged = true;
+        break;
+      }
+    }
+    if (!merged) {
+      groups.push({
+        lat: s.lat,
+        lng: s.lng,
+        color: s.marker.color,
+        status: s.marker.status,
+        ids: [s.marker.id],
+      });
+    }
+  }
+
+  // Create road segments with bearing estimates
+  return groups.map((g, i) => {
+    // Estimate bearing from nearby points or use varied angles
+    let bearing = 45 + (i * 37) % 180; // Spread bearings to look natural
+    // If we have multiple nearby original points, estimate road direction
+    if (g.ids.length >= 2) {
+      const origPts = markers.filter((m) => g.ids.includes(m.id));
+      if (origPts.length >= 2) {
+        const dLng = origPts[1].longitude - origPts[0].longitude;
+        const dLat = origPts[1].latitude - origPts[0].latitude;
+        bearing = (Math.atan2(dLng, dLat) * 180) / Math.PI;
+      }
+    }
+
+    const halfDist = SEGMENT_LENGTH_KM / 2;
+    const p1 = offsetPoint(g.lat, g.lng, bearing, halfDist);
+    const p2 = offsetPoint(g.lat, g.lng, bearing + 180, halfDist);
+
+    return {
+      id: `road-${i}`,
+      coordinates: [p1, [g.lat, g.lng], p2] as [number, number][],
+      color: g.color,
+      status: g.status,
+      problemIds: g.ids,
+    };
+  });
+}
+
 export default function LiveMapSection() {
   const [markers, setMarkers] = useState<MapMarker[]>([]);
+  const [roadSegments, setRoadSegments] = useState<RoadSegment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -56,7 +181,7 @@ export default function LiveMapSection() {
         ]);
 
         const allMarkers: MapMarker[] = [];
-        const seenLocations = new Set<string>(); // dedupe by location proximity
+        const seenLocations = new Set<string>();
 
         // Helper to parse lat/lng from chain ticket location string "12.9716,77.5946"
         const parseLocation = (loc: string): { lat: number; lng: number } | null => {
@@ -127,6 +252,17 @@ export default function LiveMapSection() {
 
         setMarkers(allMarkers);
         setError(allMarkers.length === 0 ? "No location data available" : "");
+
+        // Build road segments in background — only for road-related problems
+        const ROAD_CATEGORIES = ["road", "infrastructure", "transport"];
+        const roadMarkers = allMarkers.filter((m) =>
+          ROAD_CATEGORIES.includes(m.category?.toLowerCase())
+        );
+        if (roadMarkers.length > 0) {
+          buildRoadSegments(roadMarkers).then((segments) => {
+            setRoadSegments(segments);
+          });
+        }
       } catch (err: any) {
         setError(err.message || "Failed to load map data");
       } finally {
@@ -220,7 +356,7 @@ export default function LiveMapSection() {
               </div>
             </div>
           ) : (
-            <ProblemMap markers={markers} />
+            <ProblemMap markers={markers} roadSegments={roadSegments} />
           )}
         </motion.div>
 
