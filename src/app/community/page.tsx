@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Users, Globe2, MessageCircle, Github, MessageSquare, BookOpen } from "lucide-react";
+import { Users, Globe2, MessageCircle, Github, MessageSquare } from "lucide-react";
 import Link from "next/link";
 
 const channels = [
@@ -14,15 +14,8 @@ const channels = [
   },
   {
     icon: <Github className="w-6 h-6 text-blue-400" />,
-    title: "GitHub — Website",
-    desc: "Browse issues, contribute code, and help improve the PoPP website.",
-    cta: "View Repo",
-    href: "https://github.com/SharvanModi900/landing-page",
-  },
-  {
-    icon: <BookOpen className="w-6 h-6 text-purple-400" />,
-    title: "GitHub — Research",
-    desc: "Explore the PoPP protocol research, whitepaper, chapters, and architectural documentation.",
+    title: "GitHub Repository",
+    desc: "Browse issues, contribute code, and help improve the PoPP protocol and website.",
     cta: "View Repo",
     href: "https://github.com/SharvanModi900/proof-of-problem-protocol",
   },

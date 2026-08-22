@@ -235,9 +235,9 @@ export default function Footer() {
                 <a href="#" className="p-3 rounded-full bg-black/40 hover:bg-amber-500/20 border border-amber-500/30 transition" title="LinkedIn">
                   <Linkedin className="w-5 h-5 text-amber-300" />
                 </a>
-                {/* <a href="https://github.com/SharvanModi900/landing-page" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-black/40 hover:bg-amber-500/20 border border-amber-500/30 transition" title="GitHub">
+                <a href="https://github.com/SharvanModi900/proof-of-problem-protocol" target="_blank" rel="noopener noreferrer" className="p-3 rounded-full bg-black/40 hover:bg-amber-500/20 border border-amber-500/30 transition" title="GitHub">
                   <Github className="w-5 h-5 text-amber-300" />
-                </a> */}
+                </a>
                 <a href="mailto:contact@popp.thharko.com" className="p-3 rounded-full bg-black/40 hover:bg-amber-500/20 border border-amber-500/30 transition" title="Email">
                   <Mail className="w-5 h-5 text-amber-300" />
                 </a>

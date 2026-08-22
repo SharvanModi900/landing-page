@@ -57,6 +57,7 @@
   <url><loc>https://pops.thharko.com/students</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <!-- Tier 6: Governance, Legal & Trust -->
+  <url><loc>https://pops.thharko.com/cookies</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://pops.thharko.com/privacy-policy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://pops.thharko.com/terms-of-use</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://pops.thharko.com/data-compliance</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>

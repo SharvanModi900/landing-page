@@ -59,9 +59,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/logo.png",
-        width: 512,
-        height: 512,
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
         alt: "Proof of Problem Protocol (PoPP)",
       },
     ],
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     description: "The protocol for verifiable, decentralized problem-solving and truth validation.",
     site: "@ShravanModi8",
     creator: "@ShravanModi8",
-    images: ["/logo.png"],
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -87,17 +87,23 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/logo.png", type: "image/png", sizes: "32x32" },
-      { url: "/logo.png", type: "image/png", sizes: "192x192" },
-      { url: "/logo.png", type: "image/png", sizes: "512x512" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
     ],
-    shortcut: "/logo.png",
-    apple: [{ url: "/logo.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon-32x32.png",
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
   category: "technology",
   other: {
     "google-adsense-account": "ca-pub-1974085005262731",
   },
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a14" },
+    { media: "(prefers-color-scheme: light)", color: "#0891b2" },
+  ],
+  manifest: "/manifest.json",
 };
 
 const jsonLd = {
@@ -119,7 +125,7 @@ const jsonLd = {
       },
       "sameAs": [
         "https://x.com/ShravanModi8",
-        "https://github.com/SharvanModi900"
+        "https://github.com/SharvanModi900/proof-of-problem-protocol"
       ],
       "knowsAbout": [
         "Decentralized Problem Validation",
@@ -164,6 +170,18 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        {/* Google Analytics (GA4) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-T7TT29W9YD" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-T7TT29W9YD', { anonymize_ip: true });
+            `,
+          }}
         />
       </head>
       <body

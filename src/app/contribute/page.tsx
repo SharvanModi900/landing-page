@@ -52,7 +52,7 @@ export default function ContributePage() {
                 Get Started
               </Link>
               <Link
-                href="https://github.com/SharvanModi900/landing-page"
+                href="https://github.com/SharvanModi900/proof-of-problem-protocol"
                 target="_blank"
                 rel="noreferrer"
                 className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/[0.07] transition"
@@ -127,7 +127,7 @@ export default function ContributePage() {
 
               <div className="mt-6 flex gap-3">
                 <Link
-                  href="https://github.com/SharvanModi900/landing-page/issues"
+                  href="https://github.com/SharvanModi900/proof-of-problem-protocol/issues"
                   className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-gray-300 hover:bg-white/[0.07] transition"
                   target="_blank"
                   rel="noreferrer"
@@ -205,7 +205,7 @@ export default function ContributePage() {
             <h3 className="text-2xl font-bold text-white mb-3">Ready to contribute?</h3>
             <p className="text-gray-400 mb-6">Pick an area above and start by opening an issue or joining the discussion.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <Link href="https://github.com/SharvanModi900/landing-page" target="_blank" rel="noreferrer" className="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 font-semibold hover:shadow-lg hover:shadow-cyan-500/20 transition">
+              <Link href="https://github.com/SharvanModi900/proof-of-problem-protocol" target="_blank" rel="noreferrer" className="px-6 py-3 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 font-semibold hover:shadow-lg hover:shadow-cyan-500/20 transition">
                 Go to GitHub
               </Link>
               <Link href="/support" className="px-6 py-3 rounded-lg bg-white/5 border border-white/10 text-gray-300 hover:bg-white/[0.07] transition">
