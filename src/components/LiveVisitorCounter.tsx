@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { Users } from "lucide-react";
 
 const BACKEND_API = "https://popp.thharko.com";
@@ -19,15 +20,16 @@ function getOrCreateVisitorId(): string {
 export default function LiveVisitorCounter() {
   const [count, setCount] = useState<number | null>(null);
   const visitorId = useRef<string>("");
+  const pathname = usePathname();
 
   useEffect(() => {
     visitorId.current = getOrCreateVisitorId();
 
-    const sendHeartbeat = () => {
+    const sendHeartbeat = (page: string) => {
       fetch(`${BACKEND_API}/api/visitors/heartbeat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ visitor_id: visitorId.current, page: "/" }),
+        body: JSON.stringify({ visitor_id: visitorId.current, page }),
       }).catch(() => {});
     };
 
@@ -42,19 +44,19 @@ export default function LiveVisitorCounter() {
         .catch(() => {});
     };
 
-    // Initial heartbeat + count fetch
-    sendHeartbeat();
+    // Send heartbeat for current page
+    sendHeartbeat(pathname);
     fetchCount();
 
-    // Set up intervals
-    const heartbeatTimer = setInterval(sendHeartbeat, HEARTBEAT_INTERVAL);
+    // Re-send heartbeat on interval
+    const heartbeatTimer = setInterval(() => sendHeartbeat(pathname), HEARTBEAT_INTERVAL);
     const countTimer = setInterval(fetchCount, COUNT_POLL_INTERVAL);
 
     return () => {
       clearInterval(heartbeatTimer);
       clearInterval(countTimer);
     };
-  }, []);
+  }, [pathname]);
 
   // Don't render until we have a count
   if (count === null) return null;
