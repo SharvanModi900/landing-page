@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "../components/Navigation";
@@ -99,11 +99,14 @@ export const metadata: Metadata = {
   other: {
     "google-adsense-account": "ca-pub-1974085005262731",
   },
+  manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: dark)", color: "#0a0a14" },
     { media: "(prefers-color-scheme: light)", color: "#0891b2" },
   ],
-  manifest: "/manifest.json",
 };
 
 const jsonLd = {
