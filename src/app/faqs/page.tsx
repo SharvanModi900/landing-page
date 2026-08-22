@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import RelatedPages from "@/components/RelatedPages";
 
 const faqs = [
   {
@@ -84,6 +85,7 @@ export default function FAQsPage() {
   };
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-x-hidden">
       <div className="container mx-auto px-4 sm:px-6 py-16">
         <div className="text-center mb-12">
@@ -122,5 +124,11 @@ export default function FAQsPage() {
         </div>
       </div>
     </div>
+    <RelatedPages pages={[
+      { label: "How It Works", href: "/how-it-works", description: "Understand the PoPP protocol flow" },
+      { label: "Validators", href: "/validators", description: "Learn about validation and proofing" },
+      { label: "Tokenomics", href: "/tokenomics", description: "Rewards, fees, and token economics" },
+    ]} />
+    </>
   );
 }

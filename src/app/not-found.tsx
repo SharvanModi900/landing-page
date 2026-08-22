@@ -1,6 +1,24 @@
+"use client";
+import { useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function NotFound() {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    // Track 404 page hit in GA4
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const w = window as any;
+    if (w.gtag) {
+      w.gtag("event", "page_not_found", {
+        page_path: pathname,
+        event_category: "Error",
+        event_label: "404",
+      });
+    }
+  }, [pathname]);
+
   return (
     <div className="min-h-screen bg-[#030712] text-white flex items-center justify-center px-4">
       <div className="text-center max-w-lg">

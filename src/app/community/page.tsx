@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Users, Globe2, MessageCircle, Github, MessageSquare } from "lucide-react";
 import Link from "next/link";
+import RelatedPages from "@/components/RelatedPages";
 
 const channels = [
   {
@@ -42,6 +43,7 @@ const waysToEngage = [
 
 export default function CommunityPage() {
   return (
+    <>
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="">
         {/* Hero */}
@@ -146,5 +148,11 @@ export default function CommunityPage() {
         </section>
       </div>
     </div>
+    <RelatedPages pages={[
+      { label: "Contribute", href: "/contribute", description: "How to contribute to PoPP" },
+      { label: "Events & Workshops", href: "/events", description: "Upcoming community events" },
+      { label: "Testimonials", href: "/testimonials", description: "What the community says" },
+    ]} />
+    </>
   );
 }

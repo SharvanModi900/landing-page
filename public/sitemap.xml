@@ -99,4 +99,7 @@
   <url><loc>https://pops.thharko.com/learn/decentralized-problem-validation</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://pops.thharko.com/learn/civic-tech-blockchain</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://pops.thharko.com/learn/earn-rewards-reporting</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- RSS Feed -->
+  <url><loc>https://pops.thharko.com/rss.xml</loc><changefreq>weekly</changefreq><priority>0.3</priority></url>
 </urlset>

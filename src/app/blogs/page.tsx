@@ -2,7 +2,8 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { FileText, Calendar, ArrowRight } from "lucide-react";
+import { FileText, Calendar, ArrowRight, Rss } from "lucide-react";
+import RelatedPages from "@/components/RelatedPages";
 
 const blogs = [
   {
@@ -65,18 +66,25 @@ const categories = ["All", "Protocol", "Validators", "Story", "Technical", "Gove
 
 export default function BlogsPage() {
   return (
+    <>
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         {/* Hero */}
-        <div className="mb-10">
-          <h1 className="text-2xl sm:text-4xl font-bold mb-3">
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-              PoPP Blog
-            </span>
-          </h1>
-          <p className="text-gray-400 max-w-2xl">
-            Insights, technical deep-dives, and updates from the Proof-of-Problem Protocol ecosystem.
-          </p>
+        <div className="mb-10 flex items-start justify-between">
+          <div>
+            <h1 className="text-2xl sm:text-4xl font-bold mb-3">
+              <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                PoPP Blog
+              </span>
+            </h1>
+            <p className="text-gray-400 max-w-2xl">
+              Insights, technical deep-dives, and updates from the Proof-of-Problem Protocol ecosystem.
+            </p>
+          </div>
+          <a href="/rss.xml" className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500/10 border border-orange-500/20 text-xs font-medium text-orange-400 hover:bg-orange-500/20 transition-colors flex-shrink-0" title="RSS Feed">
+            <Rss className="w-3.5 h-3.5" />
+            RSS
+          </a>
         </div>
 
         {/* Categories */}
@@ -172,5 +180,11 @@ export default function BlogsPage() {
         </div>
       </div>
     </div>
+    <RelatedPages pages={[
+      { label: "Learn & Resources", href: "/learn", description: "Explore guides, glossary, and learning materials" },
+      { label: "Case Studies", href: "/case-studies", description: "Real-world PoPP implementations" },
+      { label: "Whitepaper", href: "/whitepaper", description: "Full technical paper on PoPP protocol" },
+    ]} />
+    </>
   );
 }

@@ -6,6 +6,8 @@ import Footer from "../components/Footer";
 import CookieConsent from "@/components/CookieConsent";
 import ReduxProvider from "./Provider";
 import { WalletProvider } from "@/lib/wallet";
+import BreadcrumbSchema from "@/components/BreadcrumbSchema";
+import SocialBar from "@/components/SocialBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -170,6 +172,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://popp.thharko.com" />
         <link rel="preconnect" href="https://chain.thharko.com" />
         <link rel="dns-prefetch" href="https://chain.thharko.com" />
+        <link rel="alternate" type="application/rss+xml" title="PoPP Blog RSS Feed" href="/rss.xml" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -179,6 +182,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <WalletProvider>
+          <BreadcrumbSchema />
+          <SocialBar />
           <Navigation />
           <ReduxProvider>
             <main>

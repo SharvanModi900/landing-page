@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Proof of Problem Protocol (PoPP) Blog</title>
+    <link>https://pops.thharko.com/blogs</link>
+    <description>Latest news, insights, and technical updates from the PoPP protocol team and community.</description>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 22 Aug 2026 00:00:00 GMT</lastBuildDate>
+    <atom:link href="https://pops.thharko.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Why Decentralized Problem Verification Matters</title>
+      <link>https://pops.thharko.com/blogs</link>
+      <description>Current complaint systems let problems vanish into bureaucracy. PoPP changes that by making every problem cryptographically provable and auditable.</description>
+      <category>Protocol</category>
+      <pubDate>Tue, 15 Jul 2025 00:00:00 GMT</pubDate>
+      <guid>https://pops.thharko.com/blogs#why-decentralized-problem-verification-matters</guid>
+    </item>
+    <item>
+      <title>Understanding the Validator Role in PoPP</title>
+      <link>https://pops.thharko.com/blogs</link>
+      <description>Validators are the backbone of PoPP. Learn how they stake tokens, review evidence, and earn rewards for accurate problem validation.</description>
+      <category>Validators</category>
+      <pubDate>Tue, 08 Jul 2025 00:00:00 GMT</pubDate>
+      <guid>https://pops.thharko.com/blogs#understanding-the-validator-role-in-popp</guid>
+    </item>
+    <item>
+      <title>From Complaint to Protocol: The Origin of PoPP</title>
+      <link>https://pops.thharko.com/blogs</link>
+      <description>How a broken internet line and repeated unanswered complaints led to the creation of a decentralized truth verification protocol.</description>
+      <category>Story</category>
+      <pubDate>Sat, 28 Jun 2025 00:00:00 GMT</pubDate>
+      <guid>https://pops.thharko.com/blogs#from-complaint-to-protocol</guid>
+    </item>
+    <item>
+      <title>How PoPP Integrates with Cosmos SDK</title>
+      <link>https://pops.thharko.com/blogs</link>
+      <description>A technical deep-dive into how PoPP leverages the Cosmos SDK for its Layer-3 blockchain, including ticket submissions and on-chain proofs.</description>
+      <category>Technical</category>
+      <pubDate>Fri, 20 Jun 2025 00:00:00 GMT</pubDate>
+      <guid>https://pops.thharko.com/blogs#how-popp-integrates-with-cosmos-sdk</guid>
+    </item>
+    <item>
+      <title>DAO Governance: Shaping PoPP Together</title>
+      <link>https://pops.thharko.com/blogs</link>
+      <description>PoPP is community-governed. Learn how proposals are submitted, discussed, and voted on by token holders in the PoPP DAO.</description>
+      <category>Governance</category>
+      <pubDate>Thu, 12 Jun 2025 00:00:00 GMT</pubDate>
+      <guid>https://pops.thharko.com/blogs#dao-governance-shaping-popp-together</guid>
+    </item>
+    <item>
+      <title>Civic Tech and PoPP: Real-World Impact</title>
+      <link>https://pops.thharko.com/blogs</link>
+      <description>From water contamination reports to infrastructure hazards — how communities are using PoPP to turn verified problems into action.</description>
+      <category>Impact</category>
+      <pubDate>Sun, 01 Jun 2025 00:00:00 GMT</pubDate>
+      <guid>https://pops.thharko.com/blogs#civic-tech-and-popp-real-world-impact</guid>
+    </item>
+  </channel>
+</rss>

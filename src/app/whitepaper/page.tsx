@@ -3,9 +3,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeftIcon, DocumentArrowDownIcon } from "@heroicons/react/24/outline";
+import RelatedPages from "@/components/RelatedPages";
 
 export default function WhitepaperPage() {
   return (
+    <>
     <div className="bg-[#030712] text-white min-h-screen pt-20 pb-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
 
@@ -362,5 +364,11 @@ export default function WhitepaperPage() {
         </motion.div>
       </div>
     </div>
+    <RelatedPages pages={[
+      { label: "Tokenomics", href: "/tokenomics", description: "Fee recycling and reward model" },
+      { label: "Validators & Proofers", href: "/validators", description: "How validation works in PoPP" },
+      { label: "SDK & API Docs", href: "/sdk", description: "Build with the PoPP protocol" },
+    ]} />
+    </>
   );
 }

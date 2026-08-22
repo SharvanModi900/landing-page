@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ReactNode } from "react";
 import { Rocket, Sparkles, Shield, Globe, Layers, Users } from "lucide-react";
 import Link from "next/link";
+import RelatedPages from "@/components/RelatedPages";
 
 type Step = {
   quarter: string;
@@ -53,6 +54,7 @@ const roadmap: Step[] = [
 
 export default function RoadmapPage() {
   return (
+    <>
     <div className="min-h-screen bg-[#030712] text-white overflow-x-hidden">
       <div className="">
         {/* HERO */}
@@ -185,5 +187,11 @@ export default function RoadmapPage() {
         </section>
       </div>
     </div>
+    <RelatedPages pages={[
+      { label: "How It Works", href: "/how-it-works", description: "Understand the PoPP protocol flow" },
+      { label: "Validators", href: "/validators", description: "Validation and proofing mechanism" },
+      { label: "About Us", href: "/about-us", description: "Our mission and team" },
+    ]} />
+    </>
   );
 }
