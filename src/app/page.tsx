@@ -8,6 +8,7 @@ import WhoNeedsPoPP from "@/components/WhoNeedsPoPP/WhoNeedsPoPP";
 import LiveMapSection from "@/components/LiveMapSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import LiveVisitorCounter from "@/components/LiveVisitorCounter";
+import VisitorChart from "@/components/VisitorChart";
 
 /* ------------------------------------------------------------------ */
 /*  Case Studies data                                                 */
@@ -254,6 +255,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Visitor Activity Chart */}
+      <VisitorChart />
 
       {/* Live Visitor Counter */}
       <LiveVisitorCounter />
