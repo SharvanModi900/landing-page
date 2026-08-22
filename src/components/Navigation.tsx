@@ -263,7 +263,7 @@ export default function Navigation() {
             PoPP
           </span>
           {sparkData.length > 0 && sparkData.some((v) => v > 0) && (
-            <svg viewBox="0 0 48 14" className="w-12 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" preserveAspectRatio="none">
+            <svg viewBox="0 0 80 28" className="w-20 h-7 opacity-60 group-hover:opacity-100 transition-opacity" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.4" />
@@ -272,14 +272,14 @@ export default function Navigation() {
               </defs>
               {(() => {
                 const max = Math.max(...sparkData, 1);
-                const step = 48 / (sparkData.length - 1 || 1);
-                const pts = sparkData.map((v, i) => `${i * step},${14 - (v / max) * 12}`);
+                const step = 80 / (sparkData.length - 1 || 1);
+                const pts = sparkData.map((v, i) => `${i * step},${28 - (v / max) * 24}`);
                 const line = `M${pts.join(" L")}`;
-                const area = `${line} L48,14 L0,14 Z`;
+                const area = `${line} L80,28 L0,28 Z`;
                 return (
                   <>
                     <path d={area} fill="url(#sparkGrad)" />
-                    <path d={line} fill="none" stroke="#06b6d4" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d={line} fill="none" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </>
                 );
               })()}
