@@ -7,6 +7,7 @@ import ValidatorSection from "@/components/validators/validators";
 import WhoNeedsPoPP from "@/components/WhoNeedsPoPP/WhoNeedsPoPP";
 import LiveMapSection from "@/components/LiveMapSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import LiveVisitorCounter from "@/components/LiveVisitorCounter";
 
 /* ------------------------------------------------------------------ */
 /*  Case Studies data                                                 */
@@ -253,6 +254,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Live Visitor Counter */}
+      <LiveVisitorCounter />
     </div>
   );
 }
