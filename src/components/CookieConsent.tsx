@@ -6,6 +6,7 @@ import Link from "next/link";
 /*  Cookie consent helpers                                            */
 /* ------------------------------------------------------------------ */
 const CONSENT_KEY = "popp-cookie-consent";
+const GA_ID = "G-T7TT29W9YD";
 
 export interface CookiePreferences {
   essential: boolean;   // always true — cannot be disabled
@@ -35,6 +36,32 @@ export function saveCookiePrefs(prefs: CookiePreferences) {
 }
 
 /* ------------------------------------------------------------------ */
+/*  GA4 loader — only called when analytics consent is granted        */
+/* ------------------------------------------------------------------ */
+let gaLoaded = false;
+
+export function loadGA4() {
+  if (gaLoaded || typeof window === "undefined") return;
+  gaLoaded = true;
+
+  // Load gtag.js
+  const script = document.createElement("script");
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+  document.head.appendChild(script);
+
+  // Init dataLayer
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (window as any).dataLayer = (window as any).dataLayer || [];
+  function gtag(..._args: unknown[]) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((window as any).dataLayer = (window as any).dataLayer || []).push(arguments);
+  }
+  gtag("js", new Date());
+  gtag("config", GA_ID, { anonymize_ip: true });
+}
+
+/* ------------------------------------------------------------------ */
 /*  Banner component                                                  */
 /* ------------------------------------------------------------------ */
 export default function CookieConsent() {
@@ -42,11 +69,16 @@ export default function CookieConsent() {
 
   useEffect(() => {
     const prefs = getCookiePrefs();
-    if (!prefs) setShow(true); // no consent yet → show banner
+    if (!prefs) {
+      setShow(true); // no consent yet → show banner
+    } else if (prefs.analytics) {
+      loadGA4(); // already accepted analytics → load GA4
+    }
   }, []);
 
   const acceptAll = () => {
     saveCookiePrefs({ essential: true, analytics: true, marketing: true });
+    loadGA4();
     setShow(false);
   };
 

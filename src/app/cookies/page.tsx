@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { getCookiePrefs, saveCookiePrefs, type CookiePreferences } from "@/components/CookieConsent";
+import { getCookiePrefs, saveCookiePrefs, loadGA4, type CookiePreferences } from "@/components/CookieConsent";
 
 /* ------------------------------------------------------------------ */
 /*  Cookie category definitions                                       */
@@ -71,6 +71,7 @@ export default function CookiesPage() {
 
   const handleSave = () => {
     saveCookiePrefs(prefs);
+    if (prefs.analytics) loadGA4();
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
@@ -79,6 +80,7 @@ export default function CookiesPage() {
     const all: CookiePreferences = { essential: true, analytics: true, marketing: true };
     setPrefs(all);
     saveCookiePrefs(all);
+    loadGA4();
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
