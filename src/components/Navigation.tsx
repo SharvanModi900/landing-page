@@ -21,6 +21,8 @@ import { Wallet, ChevronDown, X } from "lucide-react";
 import { useWallet } from "@/lib/wallet";
 import WalletDropdown from "./WalletDropdown";
 
+const BACKEND_API = "https://popp.thharko.com";
+
 /* ------------------------------------------------------------------ */
 /*  Mega-menu data — consolidated into 7 logical groups               */
 /* ------------------------------------------------------------------ */
@@ -149,6 +151,7 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
+  const [sparkData, setSparkData] = useState<number[]>([]);
   const walletBtnJustClosed = useRef(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
@@ -171,6 +174,16 @@ export default function Navigation() {
     const onScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  /* fetch visitor sparkline for navbar */
+  useEffect(() => {
+    fetch(`${BACKEND_API}/api/visitors/analytics`)
+      .then((r) => (r.ok ? r.json() : []))
+      .then((d: { hour: string; visitors: number }[]) => {
+        if (Array.isArray(d)) setSparkData(d.map((x) => x.visitors));
+      })
+      .catch(() => {});
   }, []);
 
   /* open wallet modal when any page calls connect() without a wallet */
@@ -244,11 +257,34 @@ export default function Navigation() {
       </div>
 
       <div className="w-full max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
-        {/* ---- Logo ---- */}
-        <Link href="/" className="flex items-center group">
+        {/* ---- Logo + sparkline ---- */}
+        <Link href="/" className="flex items-center gap-2.5 group">
           <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
             PoPP
           </span>
+          {sparkData.length > 0 && sparkData.some((v) => v > 0) && (
+            <svg viewBox="0 0 48 14" className="w-12 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.4" />
+                  <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              {(() => {
+                const max = Math.max(...sparkData, 1);
+                const step = 48 / (sparkData.length - 1 || 1);
+                const pts = sparkData.map((v, i) => `${i * step},${14 - (v / max) * 12}`);
+                const line = `M${pts.join(" L")}`;
+                const area = `${line} L48,14 L0,14 Z`;
+                return (
+                  <>
+                    <path d={area} fill="url(#sparkGrad)" />
+                    <path d={line} fill="none" stroke="#06b6d4" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </>
+                );
+              })()}
+            </svg>
+          )}
         </Link>
 
         {/* ---- Desktop nav ---- */}
